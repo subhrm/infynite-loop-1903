@@ -1,1 +1,9 @@
-# List of required packages
+Flask >= 0.12.0
+gevent >= 1.2.0
+requests >= 2.18.0
+# for CORS
+flask-cors >= 3.0.3
+# for ssl
+cryptography >= 2.2.2
+# for DL
+keras >= 2.2.4
