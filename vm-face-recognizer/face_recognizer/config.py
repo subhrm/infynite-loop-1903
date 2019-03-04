@@ -21,28 +21,10 @@ class Config():
         # Server Details
         self.HOST = config_json["HOST"]
         self.PORT = config_json["PORT"]
-        self.HTTPS = config_json["HTTPS"]
         self.ENABLE_CORS = config_json["ENABLE_CORS"]
 
         self.SQLITE_DB = config_json["SQLITE_DB"]
         
-        if config_json.get("SSL_CERT_DIR"):
-            self.SSL_CERT_DIR = abspath(config_json["SSL_CERT_DIR"])
-        else:
-            self.SSL_CERT_DIR = abspath("./certificates")
-
-        if config_json.get("SSL_KEY_FILE"):
-            self.SSL_KEY_FILE = join(self.SSL_CERT_DIR,
-                                     config_json["SSL_KEY_FILE"])
-        else:
-            self.SSL_KEY_FILE = join(self.SSL_CERT_DIR, "ssl.key")
-
-        if config_json.get("SSL_CERT_FILE"):
-            self.SSL_CERT_FILE = join(self.SSL_CERT_DIR,
-                                      config_json["SSL_CERT_FILE"])
-        else:
-            self.SSL_CERT_FILE = join(self.SSL_CERT_DIR, "ssl.cer")
-
         # Logger Configs
         self.LOG_DIR = abspath(config_json["LOG_DIR"])
         self.LOG_FORMAT = config_json["LOG_FORMAT"]
@@ -57,4 +39,5 @@ class Config():
         self.HTTP_STATUS_ERROR = config_json["HTTP_STATUS_ERROR"]
 
         self.DATA_DIR = config_json["DATA_DIR"]
-
+        self.STATIC_DIR = config_json["STATIC_DIR"]
+        self.FACE_CASCADE_MODELS = config_json["FACE_CASCADE_MODELS"]

@@ -1,9 +1,13 @@
-Flask >= 0.12.0
-gevent >= 1.2.0
+numpy >= 1.16.0
+opencv-contrib-python >= 4.0.0.21
+scikit-learn >= 0.20.2
+Flask >= 1.0.2
+gevent >= 1.4.0
 requests >= 2.18.0
 # for CORS
 flask-cors >= 3.0.3
-# for ssl
-cryptography >= 2.2.2
 # for DL
+tensorflow >= 1.12.0
 keras >= 2.2.4
+# VGGface
+git+https://github.com/rcmalli/keras-vggface.git

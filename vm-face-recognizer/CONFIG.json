@@ -1,27 +1,23 @@
 {
     "HOST": "0.0.0.0",
     "PORT": "8000",
-
-    "HTTPS": false,
-    "SSL_CERT_DIR": "./certificates",
-    "SSL_KEY_FILE": "ssl.key",
-    "SSL_CERT_FILE": "ssl.cer",
-
-    "SQLITE_DB": "./data/tango.db",
-
     "ENABLE_CORS": true,
-
+    "SQLITE_DB": "./data/tango.db",
     "LOG_DIR": "./logs",
     "LOG_FORMAT": "%(asctime)s [%(levelname)s] %(module)s:%(lineno)d %(message)s",
     "LOG_DATE_FORMAT": "%Y-%m-%d %H:%M:%S",
     "LOG_LEVEL": "INFO",
-
     "HTTP_STATUS_OK": 200,
     "HTTP_STATUS_CREATED": 201,
     "HTTP_STATUS_ACCEPTED": 202,
     "HTTP_STATUS_UNAUTHORIZED": 403,
     "HTTP_STATUS_NOT_FOUND": 404,
     "HTTP_STATUS_ERROR": 500,
-
-    "DATA_DIR" : "./data"
+    "DATA_DIR": "./data",
+    "STATIC_DIR": "./static",
+    "FACE_CASCADE_MODELS": [
+        "haarcascade_profileface.xml",
+        "haarcascade_frontalface_alt.xml",
+        "haarcascade_frontalface_alt_tree.xml"
+    ]
 }

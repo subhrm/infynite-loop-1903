@@ -52,6 +52,7 @@ if config.ENABLE_CORS:
 logger.info("Initializing all API endpoints. ")
 # "/"
 import face_recognizer.endpoints.__root__
+import face_recognizer.endpoints.face_similarity
 
 logger.info("All API endpoints initialized. ")
 
