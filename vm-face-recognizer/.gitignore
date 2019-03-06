@@ -118,8 +118,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+pid.txt
 
 #image files
+/data/requests/
 /data/*/*.jpg
 /data/*/*.jpeg
 /data/*/*.png
@@ -127,4 +129,7 @@ dmypy.json
 /data/*/*.JPEG 
 /data/*/*.JPG
 /data/*/*.PNG
+
+#certificates
+*.pem
 

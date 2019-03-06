@@ -46,7 +46,7 @@ def do_post(request):
     n = datetime.now()
     dir_name = "{}-{:02d}-{:02d}_{:02d}-{:02d}-{:02d}".format(
         n.year, n.month, n.day, n.hour, n.minute, n.second)
-    full_dir_name = os.path.join(config.DATA_DIR, dir_name)
+    full_dir_name = os.path.join(config.DATA_DIR, "requests", dir_name)
     if not os.path.exists(full_dir_name):
         os.makedirs(full_dir_name)
 
