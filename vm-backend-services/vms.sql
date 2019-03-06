@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `vms`.`employee` (
   `photo` INT(11) NULL DEFAULT NULL,
   `password` VARCHAR(50) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `employee_images_photo` (`photo` ASC) VISIBLE,
+  INDEX `employee_images_photo` (`photo` ASC),
   CONSTRAINT `employee_images_photo`
     FOREIGN KEY (`photo`)
     REFERENCES `vms`.`images` (`image_id`))
@@ -73,8 +73,8 @@ DROP TABLE IF EXISTS `vms`.`employee_role` ;
 CREATE TABLE IF NOT EXISTS `vms`.`employee_role` (
   `emp_id` INT(10) NULL DEFAULT NULL,
   `role_code` VARCHAR(10) NULL DEFAULT NULL,
-  INDEX `employee_role_employee_emp_id` (`emp_id` ASC) VISIBLE,
-  INDEX `employee_role_all_roles_role_code` (`role_code` ASC) VISIBLE,
+  INDEX `employee_role_employee_emp_id` (`emp_id` ASC) ,
+  INDEX `employee_role_all_roles_role_code` (`role_code` ASC) ,
   CONSTRAINT `employee_role_all_roles_role_code`
     FOREIGN KEY (`role_code`)
     REFERENCES `vms`.`all_roles` (`role_code`),
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `vms`.`security` (
   `password` VARCHAR(50) NULL DEFAULT NULL,
   `location_id` INT(6) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `security_security_locations_location_id` (`location_id` ASC) VISIBLE,
+  INDEX `security_security_locations_location_id` (`location_id` ASC) ,
   CONSTRAINT `security_security_locations_location_id`
     FOREIGN KEY (`location_id`)
     REFERENCES `vms`.`security_locations` (`location_code`))
@@ -126,8 +126,8 @@ DROP TABLE IF EXISTS `vms`.`security_role` ;
 CREATE TABLE IF NOT EXISTS `vms`.`security_role` (
   `security_id` INT(10) NULL DEFAULT NULL,
   `role_code` VARCHAR(10) NULL DEFAULT NULL,
-  INDEX `security_role_security_security_id` (`security_id` ASC) VISIBLE,
-  INDEX `security_role_all_roles_role_code` (`role_code` ASC) VISIBLE,
+  INDEX `security_role_security_security_id` (`security_id` ASC) ,
+  INDEX `security_role_all_roles_role_code` (`role_code` ASC) ,
   CONSTRAINT `security_role_all_roles_role_code`
     FOREIGN KEY (`role_code`)
     REFERENCES `vms`.`all_roles` (`role_code`),
@@ -179,16 +179,16 @@ CREATE TABLE IF NOT EXISTS `vms`.`visitor` (
   `actual_photo` INT(11) NULL DEFAULT NULL,
   `refered_by` INT(10) NULL DEFAULT NULL,
   `expected_in_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `actual_in_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `expected_out_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `actual_out_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `actual_in_time` TIMESTAMP NULL DEFAULT NULL,
+  `expected_out_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `actual_out_time` TIMESTAMP NULL DEFAULT NULL,
   `status` INT(2) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `visitor_visitor_type_visitor_type_cd` (`visitor_type_cd` ASC) VISIBLE,
-  INDEX `visitor_images_uploaded_photo` (`uploaded_photo` ASC) VISIBLE,
-  INDEX `visitor_images_actual_photo` (`actual_photo` ASC) VISIBLE,
-  INDEX `visitor_employee_refered_by` (`refered_by` ASC) VISIBLE,
-  INDEX `visitor_visitor_status_status` (`status` ASC) VISIBLE,
+  INDEX `visitor_visitor_type_visitor_type_cd` (`visitor_type_cd` ASC) ,
+  INDEX `visitor_images_uploaded_photo` (`uploaded_photo` ASC) ,
+  INDEX `visitor_images_actual_photo` (`actual_photo` ASC) ,
+  INDEX `visitor_employee_refered_by` (`refered_by` ASC) ,
+  INDEX `visitor_visitor_status_status` (`status` ASC) ,
   CONSTRAINT `visitor_employee_refered_by`
     FOREIGN KEY (`refered_by`)
     REFERENCES `vms`.`employee` (`id`),
@@ -216,8 +216,8 @@ DROP TABLE IF EXISTS `vms`.`visitor_access` ;
 CREATE TABLE IF NOT EXISTS `vms`.`visitor_access` (
   `visitor_type_cd` VARCHAR(10) NOT NULL,
   `location_code` INT(6) NULL,
-  INDEX `visitor_access_visitor_type_visitor_type_cd` (`visitor_type_cd` ASC) VISIBLE,
-  INDEX `fk_visitor_access_security_locations1_idx` (`location_code` ASC) VISIBLE,
+  INDEX `visitor_access_visitor_type_visitor_type_cd` (`visitor_type_cd` ASC) ,
+  INDEX `fk_visitor_access_security_locations1_idx` (`location_code` ASC) ,
   CONSTRAINT `visitor_access_visitor_type_visitor_type_cd`
     FOREIGN KEY (`visitor_type_cd`)
     REFERENCES `vms`.`visitor_type` (`visitor_type_cd`),
@@ -254,9 +254,9 @@ CREATE TABLE IF NOT EXISTS `vms`.`visitor_movement_log` (
   `event_type` INT(2) NULL DEFAULT NULL,
   `event_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  INDEX `visitor_movement_log_visitor_visitor_id` (`visitor_id` ASC) VISIBLE,
-  INDEX `visitor_movement_log_security_locations_location_id` (`location_id` ASC) VISIBLE,
-  INDEX `fk_visitor_movement_log_event_codes1_idx` (`event_type` ASC) VISIBLE,
+  INDEX `visitor_movement_log_visitor_visitor_id` (`visitor_id` ASC) ,
+  INDEX `visitor_movement_log_security_locations_location_id` (`location_id` ASC) ,
+  INDEX `fk_visitor_movement_log_event_codes1_idx` (`event_type` ASC) ,
   CONSTRAINT `visitor_movement_log_security_locations_location_id`
     FOREIGN KEY (`location_id`)
     REFERENCES `vms`.`security_locations` (`location_code`),
