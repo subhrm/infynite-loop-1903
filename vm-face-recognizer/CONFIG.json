@@ -19,5 +19,6 @@
         "haarcascade_profileface.xml",
         "haarcascade_frontalface_alt.xml",
         "haarcascade_frontalface_alt_tree.xml"
-    ]
+    ],
+    "KEY_SIZE":640
 }

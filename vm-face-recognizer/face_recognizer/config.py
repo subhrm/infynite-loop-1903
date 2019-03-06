@@ -41,3 +41,4 @@ class Config():
         self.DATA_DIR = config_json["DATA_DIR"]
         self.STATIC_DIR = config_json["STATIC_DIR"]
         self.FACE_CASCADE_MODELS = config_json["FACE_CASCADE_MODELS"]
+        self.KEY_SIZE = config_json["KEY_SIZE"]

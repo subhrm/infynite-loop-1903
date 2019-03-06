@@ -10,9 +10,10 @@ from face_recognizer import logger, config
 
 class Encryption_Model:
     def __init__(self):
-        self.private_key_file = os.path.join(
+        self.altchars = "#!".encode("utf-8")
+        self.private_key_file=os.path.join(
             config.DATA_DIR, "private_key.pem")
-        self.public_key_file = os.path.join(config.DATA_DIR, "public_key.pem")
+        self.public_key_file=os.path.join(config.DATA_DIR, "public_key.pem")
         self.load_keys()
         logger.info("Encryption Model initialized")
 
@@ -21,10 +22,10 @@ class Encryption_Model:
         if os.path.exists(self.private_key_file) and os.path.exists(self.public_key_file):
             logger.info("Loading keys from file")
             with open(self.private_key_file, "rb") as key_file:
-                self.private_key = serialization.load_pem_private_key(
+                self.private_key=serialization.load_pem_private_key(
                     key_file.read(),
-                    password=None,
-                    backend=default_backend()
+                    password = None,
+                    backend = default_backend()
                 )
             with open(self.public_key_file, "rb") as key_file:
                 self.public_key = serialization.load_pem_public_key(
@@ -37,7 +38,7 @@ class Encryption_Model:
             logger.warn("key files does not exist. Creating them")
             self.private_key = rsa.generate_private_key(
                 public_exponent=65537,
-                key_size=2048,
+                key_size=config.KEY_SIZE,
                 backend=default_backend()
             )
             self.public_key = self.private_key.public_key()
@@ -71,11 +72,11 @@ class Encryption_Model:
                 label=None
             )
         )
-        return base64.b64encode(cipher).decode("utf-8")
+        return base64.b64encode(cipher, self.altchars).decode("utf-8")
 
     def decrypt(self, cipher_text):
         ''' decrypt the text '''
-        cipher_bytes = base64.b64decode(cipher_text.encode("utf-8"))
+        cipher_bytes = base64.b64decode(cipher_text.encode("utf-8"),altchars=self.altchars)
         plain_text = self.private_key.decrypt(
             cipher_bytes,
             padding.OAEP(
