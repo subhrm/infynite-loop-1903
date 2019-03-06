@@ -1,11 +1,12 @@
 const app = require('express')();
 const routes = require('./routes');
 var mysql = require('mysql');
+require('dotenv').config()
 var con = mysql.createConnection({
-    host: "35.207.12.149",
-    port: 8306,
-    user: "user",
-    password: "Infy123+"
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS
 });
 
 con.connect(function(err) {

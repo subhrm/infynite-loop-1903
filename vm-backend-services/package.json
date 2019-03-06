@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dateformat": "^3.0.3",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "mysql": "^2.16.0",
     "nodemailer": "^5.1.1",
