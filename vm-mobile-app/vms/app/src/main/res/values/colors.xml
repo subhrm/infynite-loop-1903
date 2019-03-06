@@ -5,4 +5,6 @@
     <color name="colorAccent">#E45287</color>
     <color name="bgColorStart">#0551ac</color>
     <color name="bgColorEnd">#1fcbd0</color>
+    <color name="lightBackground">#eeeeee</color>
+    <color name="darkTransparentBg">#41000000</color>
 </resources>

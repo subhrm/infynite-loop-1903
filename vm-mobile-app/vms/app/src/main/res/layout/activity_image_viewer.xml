@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightBackground"
+    tools:context=".ImageViewer">
+
+    <com.ortiz.touchview.TouchImageView
+        android:id="@+id/imv.image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/test_image_view" />
+
+    <LinearLayout
+        android:id="@+id/imv.loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/darkTransparentBg"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/darkTransparentBg"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/imv.btn.back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@android:color/transparent"
+            android:tint="@android:color/white"
+            app:srcCompat="@drawable/ic_arrow_back" />
+    </LinearLayout>
+</RelativeLayout>

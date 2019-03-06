@@ -28,7 +28,7 @@
                 android:layout_height="60dp"
                 android:contentDescription="@string/label.login"
                 android:tint="@android:color/holo_blue_dark"
-                app:srcCompat="@drawable/ic_person_black_24dp" />
+                app:srcCompat="@drawable/ic_person" />
         </LinearLayout>
     </LinearLayout>
 
