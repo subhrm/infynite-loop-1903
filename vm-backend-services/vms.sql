@@ -1,369 +1,330 @@
--- phpMyAdmin SQL Dump
--- version 4.8.3
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Mar 01, 2019 at 07:42 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 7.2.11
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `vms`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `all_roles`
---
-
-CREATE TABLE `all_roles` (
-  `role_code` varchar(10) NOT NULL,
-  `role_description` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `employee`
---
-
-CREATE TABLE `employee` (
-  `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL,
-  `mobile` varchar(20) DEFAULT NULL,
-  `photo` int(11) DEFAULT NULL,
-  `password` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `employee_role`
---
-
-CREATE TABLE `employee_role` (
-  `emp_id` int(11) DEFAULT NULL,
-  `role_code` varchar(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `images`
---
-
-CREATE TABLE `images` (
-  `id` int(11) NOT NULL,
-  `image_data` longtext
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `security`
---
-
-CREATE TABLE `security` (
-  `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL,
-  `password` varchar(50) DEFAULT NULL,
-  `location_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `security_locations`
---
-
-CREATE TABLE `security_locations` (
-  `id` int(11) NOT NULL,
-  `description` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `security_role`
---
-
-CREATE TABLE `security_role` (
-  `security_id` int(11) DEFAULT NULL,
-  `role_code` varchar(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `visitor`
---
-
-CREATE TABLE `visitor` (
-  `id` int(11) NOT NULL,
-  `visitor_type_cd` varchar(10) DEFAULT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL,
-  `mobile` varchar(20) DEFAULT NULL,
-  `uploaded_photo` int(11) DEFAULT NULL,
-  `actual_photo` int(11) DEFAULT NULL,
-  `refered_by` int(11) DEFAULT NULL,
-  `expected_in_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `actual_in_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `expected_out_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `actual_out_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `status` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `visitor_access`
---
-
-CREATE TABLE `visitor_access` (
-  `role_code` varchar(10) DEFAULT NULL,
-  `visitor_type_cd` varchar(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `visitor_movement_log`
---
-
-CREATE TABLE `visitor_movement_log` (
-  `id` int(11) NOT NULL,
-  `visitor_id` int(11) DEFAULT NULL,
-  `location_id` int(11) DEFAULT NULL,
-  `event` varchar(5) DEFAULT NULL,
-  `event_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `visitor_status`
---
-
-CREATE TABLE `visitor_status` (
-  `id` int(11) NOT NULL,
-  `description` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `visitor_type`
---
-
-CREATE TABLE `visitor_type` (
-  `visitor_type_cd` varchar(10) NOT NULL,
-  `visitor_type_desc` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `all_roles`
---
-ALTER TABLE `all_roles`
-  ADD PRIMARY KEY (`role_code`);
-
---
--- Indexes for table `employee`
---
-ALTER TABLE `employee`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `employee_images_photo` (`photo`);
-
---
--- Indexes for table `employee_role`
---
-ALTER TABLE `employee_role`
-  ADD KEY `employee_role_employee_emp_id` (`emp_id`),
-  ADD KEY `employee_role_all_roles_role_code` (`role_code`);
-
---
--- Indexes for table `images`
---
-ALTER TABLE `images`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `security`
---
-ALTER TABLE `security`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `security_security_locations_location_id` (`location_id`);
-
---
--- Indexes for table `security_locations`
---
-ALTER TABLE `security_locations`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `security_role`
---
-ALTER TABLE `security_role`
-  ADD KEY `security_role_security_security_id` (`security_id`),
-  ADD KEY `security_role_all_roles_role_code` (`role_code`);
-
---
--- Indexes for table `visitor`
---
-ALTER TABLE `visitor`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `visitor_visitor_type_visitor_type_cd` (`visitor_type_cd`),
-  ADD KEY `visitor_images_uploaded_photo` (`uploaded_photo`),
-  ADD KEY `visitor_images_actual_photo` (`actual_photo`),
-  ADD KEY `visitor_employee_refered_by` (`refered_by`),
-  ADD KEY `visitor_visitor_status_status` (`status`);
-
---
--- Indexes for table `visitor_access`
---
-ALTER TABLE `visitor_access`
-  ADD KEY `visitor_access_all_roles_role_code` (`role_code`),
-  ADD KEY `visitor_access_visitor_type_visitor_type_cd` (`visitor_type_cd`);
-
---
--- Indexes for table `visitor_movement_log`
---
-ALTER TABLE `visitor_movement_log`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `visitor_movement_log_visitor_visitor_id` (`visitor_id`),
-  ADD KEY `visitor_movement_log_security_locations_location_id` (`location_id`);
-
---
--- Indexes for table `visitor_status`
---
-ALTER TABLE `visitor_status`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `visitor_type`
---
-ALTER TABLE `visitor_type`
-  ADD PRIMARY KEY (`visitor_type_cd`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `employee`
---
-ALTER TABLE `employee`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `images`
---
-ALTER TABLE `images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `security`
---
-ALTER TABLE `security`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `security_locations`
---
-ALTER TABLE `security_locations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `visitor`
---
-ALTER TABLE `visitor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `visitor_movement_log`
---
-ALTER TABLE `visitor_movement_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `visitor_status`
---
-ALTER TABLE `visitor_status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `employee`
---
-ALTER TABLE `employee`
-  ADD CONSTRAINT `employee_images_photo` FOREIGN KEY (`photo`) REFERENCES `images` (`id`);
-
---
--- Constraints for table `employee_role`
---
-ALTER TABLE `employee_role`
-  ADD CONSTRAINT `employee_role_all_roles_role_code` FOREIGN KEY (`role_code`) REFERENCES `all_roles` (`role_code`),
-  ADD CONSTRAINT `employee_role_employee_emp_id` FOREIGN KEY (`emp_id`) REFERENCES `employee` (`id`);
-
---
--- Constraints for table `security`
---
-ALTER TABLE `security`
-  ADD CONSTRAINT `security_security_locations_location_id` FOREIGN KEY (`location_id`) REFERENCES `security_locations` (`id`);
-
---
--- Constraints for table `security_role`
---
-ALTER TABLE `security_role`
-  ADD CONSTRAINT `security_role_all_roles_role_code` FOREIGN KEY (`role_code`) REFERENCES `all_roles` (`role_code`),
-  ADD CONSTRAINT `security_role_security_security_id` FOREIGN KEY (`security_id`) REFERENCES `security` (`id`);
-
---
--- Constraints for table `visitor`
---
-ALTER TABLE `visitor`
-  ADD CONSTRAINT `visitor_employee_refered_by` FOREIGN KEY (`refered_by`) REFERENCES `employee` (`id`),
-  ADD CONSTRAINT `visitor_images_actual_photo` FOREIGN KEY (`actual_photo`) REFERENCES `images` (`id`),
-  ADD CONSTRAINT `visitor_images_uploaded_photo` FOREIGN KEY (`uploaded_photo`) REFERENCES `images` (`id`),
-  ADD CONSTRAINT `visitor_visitor_status_status` FOREIGN KEY (`status`) REFERENCES `visitor_status` (`id`),
-  ADD CONSTRAINT `visitor_visitor_type_visitor_type_cd` FOREIGN KEY (`visitor_type_cd`) REFERENCES `visitor_type` (`visitor_type_cd`);
-
---
--- Constraints for table `visitor_access`
---
-ALTER TABLE `visitor_access`
-  ADD CONSTRAINT `visitor_access_all_roles_role_code` FOREIGN KEY (`role_code`) REFERENCES `all_roles` (`role_code`),
-  ADD CONSTRAINT `visitor_access_visitor_type_visitor_type_cd` FOREIGN KEY (`visitor_type_cd`) REFERENCES `visitor_type` (`visitor_type_cd`);
-
---
--- Constraints for table `visitor_movement_log`
---
-ALTER TABLE `visitor_movement_log`
-  ADD CONSTRAINT `visitor_movement_log_security_locations_location_id` FOREIGN KEY (`location_id`) REFERENCES `security_locations` (`id`),
-  ADD CONSTRAINT `visitor_movement_log_visitor_visitor_id` FOREIGN KEY (`visitor_id`) REFERENCES `visitor` (`id`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- MySQL Script generated by MySQL Workbench
+-- Wed Mar  6 20:20:29 2019
+-- Model: New Model    Version: 1.0
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema vms
+-- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `vms` ;
+
+-- -----------------------------------------------------
+-- Schema vms
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `vms` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ;
+USE `vms` ;
+
+-- -----------------------------------------------------
+-- Table `vms`.`all_roles`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`all_roles` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`all_roles` (
+  `role_code` VARCHAR(10) NOT NULL,
+  `role_description` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`role_code`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`images`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`images` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`images` (
+  `image_id` INT(11) NOT NULL,
+  `image_data` LONGTEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`image_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`employee`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`employee` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`employee` (
+  `id` INT(10) NOT NULL,
+  `name` VARCHAR(50) NULL DEFAULT NULL,
+  `email` VARCHAR(50) NULL DEFAULT NULL,
+  `mobile` VARCHAR(20) NULL DEFAULT NULL,
+  `photo` INT(11) NULL DEFAULT NULL,
+  `password` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `employee_images_photo` (`photo` ASC) VISIBLE,
+  CONSTRAINT `employee_images_photo`
+    FOREIGN KEY (`photo`)
+    REFERENCES `vms`.`images` (`image_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`employee_role`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`employee_role` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`employee_role` (
+  `emp_id` INT(10) NULL DEFAULT NULL,
+  `role_code` VARCHAR(10) NULL DEFAULT NULL,
+  INDEX `employee_role_employee_emp_id` (`emp_id` ASC) VISIBLE,
+  INDEX `employee_role_all_roles_role_code` (`role_code` ASC) VISIBLE,
+  CONSTRAINT `employee_role_all_roles_role_code`
+    FOREIGN KEY (`role_code`)
+    REFERENCES `vms`.`all_roles` (`role_code`),
+  CONSTRAINT `employee_role_employee_emp_id`
+    FOREIGN KEY (`emp_id`)
+    REFERENCES `vms`.`employee` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`security_locations`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`security_locations` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`security_locations` (
+  `location_code` INT(6) NOT NULL,
+  `description` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`location_code`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`security`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`security` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`security` (
+  `id` INT(10) NOT NULL,
+  `name` VARCHAR(50) NULL DEFAULT NULL,
+  `email` VARCHAR(50) NULL DEFAULT NULL,
+  `password` VARCHAR(50) NULL DEFAULT NULL,
+  `location_id` INT(6) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `security_security_locations_location_id` (`location_id` ASC) VISIBLE,
+  CONSTRAINT `security_security_locations_location_id`
+    FOREIGN KEY (`location_id`)
+    REFERENCES `vms`.`security_locations` (`location_code`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`security_role`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`security_role` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`security_role` (
+  `security_id` INT(10) NULL DEFAULT NULL,
+  `role_code` VARCHAR(10) NULL DEFAULT NULL,
+  INDEX `security_role_security_security_id` (`security_id` ASC) VISIBLE,
+  INDEX `security_role_all_roles_role_code` (`role_code` ASC) VISIBLE,
+  CONSTRAINT `security_role_all_roles_role_code`
+    FOREIGN KEY (`role_code`)
+    REFERENCES `vms`.`all_roles` (`role_code`),
+  CONSTRAINT `security_role_security_security_id`
+    FOREIGN KEY (`security_id`)
+    REFERENCES `vms`.`security` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`visitor_status`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`visitor_status` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`visitor_status` (
+  `status_code` INT(2) NOT NULL,
+  `description` VARCHAR(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`status_code`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`visitor_type`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`visitor_type` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`visitor_type` (
+  `visitor_type_cd` VARCHAR(10) NOT NULL,
+  `visitor_type_desc` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`visitor_type_cd`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`visitor`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`visitor` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`visitor` (
+  `id` INT(10) NOT NULL,
+  `visitor_type_cd` VARCHAR(10) NULL DEFAULT NULL,
+  `name` VARCHAR(50) NULL DEFAULT NULL,
+  `email` VARCHAR(50) NULL DEFAULT NULL,
+  `mobile` VARCHAR(20) NULL DEFAULT NULL,
+  `uploaded_photo` INT(11) NULL DEFAULT NULL,
+  `actual_photo` INT(11) NULL DEFAULT NULL,
+  `refered_by` INT(10) NULL DEFAULT NULL,
+  `expected_in_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `actual_in_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `expected_out_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `actual_out_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `status` INT(2) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `visitor_visitor_type_visitor_type_cd` (`visitor_type_cd` ASC) VISIBLE,
+  INDEX `visitor_images_uploaded_photo` (`uploaded_photo` ASC) VISIBLE,
+  INDEX `visitor_images_actual_photo` (`actual_photo` ASC) VISIBLE,
+  INDEX `visitor_employee_refered_by` (`refered_by` ASC) VISIBLE,
+  INDEX `visitor_visitor_status_status` (`status` ASC) VISIBLE,
+  CONSTRAINT `visitor_employee_refered_by`
+    FOREIGN KEY (`refered_by`)
+    REFERENCES `vms`.`employee` (`id`),
+  CONSTRAINT `visitor_images_actual_photo`
+    FOREIGN KEY (`actual_photo`)
+    REFERENCES `vms`.`images` (`image_id`),
+  CONSTRAINT `visitor_images_uploaded_photo`
+    FOREIGN KEY (`uploaded_photo`)
+    REFERENCES `vms`.`images` (`image_id`),
+  CONSTRAINT `visitor_visitor_status_status`
+    FOREIGN KEY (`status`)
+    REFERENCES `vms`.`visitor_status` (`status_code`),
+  CONSTRAINT `visitor_visitor_type_visitor_type_cd`
+    FOREIGN KEY (`visitor_type_cd`)
+    REFERENCES `vms`.`visitor_type` (`visitor_type_cd`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`visitor_access`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`visitor_access` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`visitor_access` (
+  `visitor_type_cd` VARCHAR(10) NOT NULL,
+  `location_code` INT(6) NULL,
+  INDEX `visitor_access_visitor_type_visitor_type_cd` (`visitor_type_cd` ASC) VISIBLE,
+  INDEX `fk_visitor_access_security_locations1_idx` (`location_code` ASC) VISIBLE,
+  CONSTRAINT `visitor_access_visitor_type_visitor_type_cd`
+    FOREIGN KEY (`visitor_type_cd`)
+    REFERENCES `vms`.`visitor_type` (`visitor_type_cd`),
+  CONSTRAINT `fk_visitor_access_security_locations1`
+    FOREIGN KEY (`location_code`)
+    REFERENCES `vms`.`security_locations` (`location_code`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`event_codes`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`event_codes` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`event_codes` (
+  `event_type` INT(2) NOT NULL,
+  `event_name` VARCHAR(45) NULL,
+  PRIMARY KEY (`event_type`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`visitor_movement_log`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`visitor_movement_log` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`visitor_movement_log` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `visitor_id` INT(10) NULL DEFAULT NULL,
+  `location_id` INT(6) NULL DEFAULT NULL,
+  `event_type` INT(2) NULL DEFAULT NULL,
+  `event_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `visitor_movement_log_visitor_visitor_id` (`visitor_id` ASC) VISIBLE,
+  INDEX `visitor_movement_log_security_locations_location_id` (`location_id` ASC) VISIBLE,
+  INDEX `fk_visitor_movement_log_event_codes1_idx` (`event_type` ASC) VISIBLE,
+  CONSTRAINT `visitor_movement_log_security_locations_location_id`
+    FOREIGN KEY (`location_id`)
+    REFERENCES `vms`.`security_locations` (`location_code`),
+  CONSTRAINT `visitor_movement_log_visitor_visitor_id`
+    FOREIGN KEY (`visitor_id`)
+    REFERENCES `vms`.`visitor` (`id`),
+  CONSTRAINT `fk_visitor_movement_log_event_codes1`
+    FOREIGN KEY (`event_type`)
+    REFERENCES `vms`.`event_codes` (`event_type`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `vms`.`admin`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`admin` ;
+
+CREATE TABLE IF NOT EXISTS `vms`.`admin` (
+  `user_id` VARCHAR(40) NOT NULL,
+  `password` VARCHAR(60) NOT NULL,
+  `last_logged_in` TIMESTAMP NULL,
+  PRIMARY KEY (`user_id`, `password`))
+ENGINE = InnoDB;
+
+USE `vms` ;
+
+-- -----------------------------------------------------
+-- Placeholder table for view `vms`.`vms_users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vms`.`vms_users` (`id` INT, `name` INT, `email` INT, `password` INT, `role_code` INT);
+
+-- -----------------------------------------------------
+-- View `vms`.`vms_users`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `vms`.`vms_users`;
+DROP VIEW IF EXISTS `vms`.`vms_users` ;
+USE `vms`;
+CREATE 
+     OR REPLACE ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `vms`.`vms_users` AS
+    SELECT 
+        `e`.`id` AS `id`,
+        `e`.`name` AS `name`,
+        `e`.`email` AS `email`,
+        `e`.`password` AS `password`,
+        `r`.`role_code` AS `role_code`
+    FROM
+        (`vms`.`employee` `e`
+        JOIN `vms`.`employee_role` `r`)
+    WHERE
+        (`e`.`id` = `r`.`emp_id`) 
+    UNION SELECT 
+        `s`.`id` AS `id`,
+        `s`.`name` AS `name`,
+        `s`.`email` AS `email`,
+        `s`.`password` AS `password`,
+        `r`.`role_code` AS `role_code`
+    FROM
+        (`vms`.`security` `s`
+        JOIN `vms`.`security_role` `r`)
+    WHERE
+        (`s`.`id` = `r`.`security_id`);
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
