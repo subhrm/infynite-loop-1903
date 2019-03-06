@@ -1,0 +1,29 @@
+{
+	"status": 1,
+	"message": "",
+	"data": {
+		"userId": 123,
+		"userName": "Test",
+		"email": "abc@test.com",
+		"userRole": "SEC_ADMIN",
+		"todaysVisitors": {
+			"total": 46,
+			"inside": 22,
+			"remaining": 24
+		},
+		"visitorLastDays": [
+			{
+				"date": "2019-03-06",
+				"count": 57
+			},
+			{
+				"date": "2019-03-05",
+				"count": 43
+			},
+			{
+				"date": "2019-03-04",
+				"count": 37
+			}
+		]
+	}
+}

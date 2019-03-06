@@ -1,0 +1,16 @@
+{
+	"status": 1,
+	"message": "",
+	"data": {
+		"visitorId": "",
+		"name": "",
+		"email": "",
+		"mobile": "",
+		"photo": "",
+		"referedBy": "",
+		"expectedEntry": "",
+		"actualEntry": "",
+		"expectedExit": "",
+		"visitorStatus": ""
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"status": 1,
+	"message": "",
+	"data": {
+		"visitorId": "",
+		"name": "",
+		"email": "",
+		"mobile": "",
+		"referedBy": "",
+		"photo": "base64 encoded image data, Optional",
+		"qrCodeImage": "base64 encoded QR code image"
+	}
+}

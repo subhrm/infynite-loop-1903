@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">VMS</string>
+    <string name="label.loading">Loading</string>
+    <string name="label.login">Login</string>
+    <string name="label.email">Email Id</string>
+    <string name="label.password">Password</string>
+    <string name="lbl.home">Home</string>
+    <string name="err_no_photo">No Photo</string>
+</resources>
