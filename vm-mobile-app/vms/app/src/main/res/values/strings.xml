@@ -6,4 +6,13 @@
     <string name="label.password">Password</string>
     <string name="lbl.home">Home</string>
     <string name="err_no_photo">No Photo</string>
+    <string name="lbl_scan_qr_code">Scan QR Code</string>
+    <string name="lbl_visitor_id">Visitor Id</string>
+    <string name="lbl_search">Search</string>
+    <string name="lbl_today_s_visitors">Today\'s Visitors</string>
+    <string name="lbl_total_visitors">Total Visitors</string>
+    <string name="lbl_inside_campus">Inside Campus</string>
+    <string name="lbl_yet_to_come">Yet to come</string>
+    <string name="lbl_visitors_in_last_days">Visitors in last 10 days</string>
+    <string name="lbl_logout">Logout</string>
 </resources>

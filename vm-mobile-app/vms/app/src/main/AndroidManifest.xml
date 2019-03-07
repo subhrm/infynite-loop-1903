@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".VerifyPhoto"></activity>
+        <activity android:name=".SecurityStaffDashboard"></activity>
+        <activity android:name=".VerifyPhoto" />
 
         <meta-data
             android:name="com.google.android.actions"
