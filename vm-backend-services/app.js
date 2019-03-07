@@ -4,40 +4,44 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors=require('cors');
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var Tasks=require('./routes/Tasks');
+// var routes = require('./routes/index');
+// var users = require('./routes/users');
+// var Tasks=require('./routes/Tasks');
 var app = express();
 var mysql = require('mysql');
-require('dotenv').config()
+var helmet = require('helmet');
+const morgan = require('morgan');
+const jwt = require('jsonwebtoken');
+const config = require('./configurations/config');
+require('dotenv').config();
+var router = express.Router();
 
-var con = mysql.createConnection({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS
-});
+const  ProtectedRoutes = express.Router(); 
 
+app.use('/api', ProtectedRoutes);
+
+
+// var con = mysql.createConnection({
+//     host: process.env.DB_HOST,
+//     port: process.env.DB_PORT,
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASS
+// });
+app.set('Secret', config.secret);
+
+app.use(helmet());
 app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false }));
-
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use(express.static('/uploads/'));
 
-/*app.use('/resources',express.static(__dirname + '/images'));
-So now, you can use http://localhost:5000/resources/myImage.jpg to serve all the images instead of http://localhost:5000/images/myImage.jpg. */
-app.use('/', routes);
-app.use('/users', users);
-app.use('/Tasks',Tasks);
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// app.use(function(req, res, next) {
+//   var err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
 
 // error handlers
 
@@ -63,7 +67,94 @@ app.use(function(req, res, next) {
 //   // });
 // });
 
-app.listen(3000, () => {
+
+app.get('/test', function (req, res, next) {
+  // res.render('index', { title: 'Express' });
+  res.send("working")
+});
+
+app.post('/authenticate', (req, res) => {
+  if (req.body.username === "aymen") {
+
+    if (req.body.password === 123) {
+      //if eveything is okey let's create our token 
+
+      const payload = {
+        check: true
+      };
+
+      var token = jwt.sign(payload, app.get('Secret'), {
+        expiresIn: 28800 // expires in 8 hours
+      });
+      res.json({
+        message: 'authentication done ',
+        token: token
+      });
+    } else {
+      res.json({
+        message: "please check your password !"
+      })
+    }
+  } else {
+    res.json({
+      message: "user not found !"
+    })
+  }
+})
+
+
+ProtectedRoutes.use((req, res, next) =>{
+
+
+  // check header for the token
+  var token = req.headers['access-token'];
+
+  // decode token
+  if (token) {
+
+    // verifies secret and checks if the token is expired
+    jwt.verify(token, app.get('Secret'), (err, decoded) =>{      
+      if (err) {
+        res.statusCode = 401;
+        return res.json({ message: 'invalid token' });    
+      } else {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;    
+        next();
+      }
+    });
+
+  } else {
+
+    // if there is no token  
+    res.statusCode = 401
+    res.send({ 
+
+        message: 'No token provided.' 
+    });
+
+  }
+});
+
+ProtectedRoutes.get('/getAllProducts',(req,res)=>{
+  res.statusCode = 200;
+  let products = [
+      {
+          id: 1,
+          name:"cheese"
+      },
+      {
+         id: 2,
+         name:"carottes"
+     }
+  ]
+  res.json(products)
+});
+
+
+
+
+app.listen(process.env.PORT || 3000, () => {
   console.log('App listening on port 3000');
 });
 

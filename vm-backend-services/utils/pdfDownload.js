@@ -38,7 +38,7 @@ function generatePDF() {
         doc.fontSize(8).text(`Date: ${todayDate}`, 460, 120);
         doc.moveDown();
         doc.fontSize(10);
-        doc.text('Dear Visitor,', textMarginLeft, 150, {
+        doc.text(`Dear ${name},`, textMarginLeft, 150, {
             width:100,
             align: 'left'
         });
