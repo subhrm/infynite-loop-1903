@@ -212,3 +212,29 @@ exports.updateGatePass = function(req,res,visitorId,depositType){
         
     }
 }
+
+exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorType,IN,OUT) {
+    const query = `insert into visitor (visitor_type_cd,name,email,actual_photo,mobile,expected_in_time,expected_out_time) values ('${VisitorType}','${Name}','${Email}',${Photo},${Mobile},'${IN}','${OUT}')`;
+    console.log(query)
+    try {
+        con.query(query, function (err, result) {
+            if(err) throw err;
+            // const query1 = `select max(id),image_data from visitor v join images i on i.image_id=v.actual_photo having v.id=max(id)`;
+            // con.query(query1, function (err, result1){
+            //     if(err) throw err;
+            //     res.send(result1);
+            // });
+            res.send({
+                status:req.app.get('status-code').success,
+                message: "Success",
+                data: result
+            });
+        })
+    } catch (error) {
+        console.log(error)
+        res.send({
+            status: req.app.get('status-code').error,
+            message: "Failure"
+        })
+    }
+}
