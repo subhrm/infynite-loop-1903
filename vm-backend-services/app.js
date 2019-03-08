@@ -7,27 +7,25 @@ var cors=require('cors');
 // var routes = require('./routes/index');
 // var users = require('./routes/users');
 // var Tasks=require('./routes/Tasks');
+require('dotenv').config();
 var app = express();
-var mysql = require('mysql');
 var helmet = require('helmet');
 const morgan = require('morgan');
 const jwt = require('jsonwebtoken');
 const config = require('./configurations/config');
-require('dotenv').config();
 var router = express.Router();
 
 const  ProtectedRoutes = express.Router(); 
 
-app.use('/api', ProtectedRoutes);
 
 
-// var con = mysql.createConnection({
-//     host: process.env.DB_HOST,
-//     port: process.env.DB_PORT,
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASS
-// });
+
 app.set('Secret', config.secret);
+app.set('status-code', {
+  "success": 1,
+  "unauthorized": 0,
+  "error": -1
+});
 
 app.use(helmet());
 app.use(cors());
@@ -36,6 +34,11 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(require('./controllers'));
+
+// app.use('/api', ProtectedRoutes);
+
 
 // app.use(function(req, res, next) {
 //   var err = new Error('Not Found');
@@ -68,89 +71,94 @@ app.use(express.static(path.join(__dirname, 'public')));
 // });
 
 
-app.get('/test', function (req, res, next) {
-  // res.render('index', { title: 'Express' });
-  res.send("working")
-});
+// app.get('/test', function (req, res, next) {
+//   // res.render('index', { title: 'Express' });
+//   res.send("working")
+// });
 
-app.post('/authenticate', (req, res) => {
-  if (req.body.username === "aymen") {
+// app.post('/authenticate', (req, res) => {
+//   if (req.body.username === "aymen") {
 
-    if (req.body.password === 123) {
-      //if eveything is okey let's create our token 
+//     if (req.body.password === 123) {
+//       //if eveything is okey let's create our token 
 
-      const payload = {
-        check: true
-      };
+//       const payload = {
+//         check: true
+//       };
 
-      var token = jwt.sign(payload, app.get('Secret'), {
-        expiresIn: 28800 // expires in 8 hours
-      });
-      res.json({
-        message: 'authentication done ',
-        token: token
-      });
-    } else {
-      res.json({
-        message: "please check your password !"
-      })
-    }
-  } else {
-    res.json({
-      message: "user not found !"
-    })
-  }
-})
-
-
-ProtectedRoutes.use((req, res, next) =>{
+//       var token = jwt.sign(payload, app.get('Secret'), {
+//         expiresIn: 28800 // expires in 8 hours
+//       });
+//       res.json({
+//         message: 'authentication done ',
+//         token: token
+//       });
+//     } else {
+//       res.json({
+//         message: "please check your password !"
+//       })
+//     }
+//   } else {
+//     res.json({
+//       message: "user not found !"
+//     })
+//   }
+// })
 
 
-  // check header for the token
-  var token = req.headers['access-token'];
+// ProtectedRoutes.use((req, res, next) =>{
 
-  // decode token
-  if (token) {
+//   // check header for the token
+//   var token = req.headers['access-token'];
+//   // decode token
+//   if (token) {
+//     // verifies secret and checks if the token is expired
+//     jwt.verify(token, app.get('Secret'), (err, decoded) =>{      
+//       if (err) {
+//         res.statusCode = 401;
+//         return res.send({ status: 0, message: 'invalid token' });    
+//       } else {
+//         // if everything is good, save to request for use in other routes
+//         req.decoded = decoded;    
+//         next();
+//       }
+//     });
 
-    // verifies secret and checks if the token is expired
-    jwt.verify(token, app.get('Secret'), (err, decoded) =>{      
-      if (err) {
-        res.statusCode = 401;
-        return res.json({ message: 'invalid token' });    
-      } else {
-        // if everything is good, save to request for use in other routes
-        req.decoded = decoded;    
-        next();
-      }
-    });
+//   } else {
+//     // if there is no token  
+//     res.statusCode = 401
+//     res.send({ 
+//         status: 0,
+//         message: 'No token provided.' 
+//     });
+//   }
+// });
 
-  } else {
+// ProtectedRoutes.get('/getAllProducts',(req,res)=>{
+//   res.statusCode = 200;
+//   let products = [
+//       {
+//           id: 1,
+//           name:"cheese"
+//       },
+//       {
+//          id: 2,
+//          name:"carottes"
+//      }
+//   ]
+//   res.json(products);
+// });
 
-    // if there is no token  
-    res.statusCode = 401
-    res.send({ 
-
-        message: 'No token provided.' 
-    });
-
-  }
-});
-
-ProtectedRoutes.get('/getAllProducts',(req,res)=>{
-  res.statusCode = 200;
-  let products = [
-      {
-          id: 1,
-          name:"cheese"
-      },
-      {
-         id: 2,
-         name:"carottes"
-     }
-  ]
-  res.json(products)
-});
-
+// /* Bar code verification */
+// ProtectedRoutes.get('/verify', (req,res) => {
+//   // const encryptedVisitorId = req.body.visitorId;
+//   // const securityId = req.body.securityId;
+//   res.send({
+//     status: 1,
+//     message: "test",
+//     data: [{test: "test2"}]
+//   })
+// })
 
 
 
