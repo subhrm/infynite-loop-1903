@@ -21,6 +21,11 @@ const  ProtectedRoutes = express.Router();
 
 
 app.set('Secret', config.secret);
+app.set('status-code', {
+  "success": 1,
+  "unauthorized": 0,
+  "error": -1
+});
 
 app.use(helmet());
 app.use(cors());
