@@ -20,5 +20,11 @@
         "haarcascade_frontalface_alt.xml",
         "haarcascade_frontalface_alt_tree.xml"
     ],
-    "KEY_SIZE":640
+    "KEY_SIZE":640,
+
+    "SQL_SERVER_IP":"35.207.12.149",
+    "SQL_SERVER_PORT":"8306",
+    "DB_NAME" : "vms",
+    "SQL_SERVER_USER_ID": "SQL_SERVER_USER_ID",
+    "SQL_SERVER_USER_PWD": "SQL_SERVER_USER_PWD"
 }

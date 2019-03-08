@@ -24,7 +24,7 @@ class Config():
         self.ENABLE_CORS = config_json["ENABLE_CORS"]
 
         self.SQLITE_DB = config_json["SQLITE_DB"]
-        
+
         # Logger Configs
         self.LOG_DIR = abspath(config_json["LOG_DIR"])
         self.LOG_FORMAT = config_json["LOG_FORMAT"]
@@ -42,3 +42,9 @@ class Config():
         self.STATIC_DIR = config_json["STATIC_DIR"]
         self.FACE_CASCADE_MODELS = config_json["FACE_CASCADE_MODELS"]
         self.KEY_SIZE = config_json["KEY_SIZE"]
+
+        self.SQL_SERVER_IP = config_json["SQL_SERVER_IP"]
+        self.SQL_SERVER_PORT = config_json["SQL_SERVER_PORT"]
+        self.DB_NAME = config_json["DB_NAME"]
+        self.SQL_SERVER_USER_ID = config_json["SQL_SERVER_USER_ID"]
+        self.SQL_SERVER_USER_PWD = config_json["SQL_SERVER_USER_PWD"]

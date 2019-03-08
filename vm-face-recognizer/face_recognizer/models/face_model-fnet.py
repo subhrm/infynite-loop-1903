@@ -1,8 +1,9 @@
 import os
 import numpy as np
 import cv2
+import keras
 from keras.engine import Model
-from keras_vggface.vggface import VGGFace
+# from keras_vggface.vggface import VGGFace
 from sklearn.metrics.pairwise import cosine_similarity
 
 from face_recognizer import config, logger
@@ -13,10 +14,11 @@ class Face_Model:
     def __init__(self):
         ''' Initialize '''
         logger.info("Initializing model")
-        vggface = VGGFace(model='resnet50')
-        out = vggface.get_layer("flatten_1").output
-        self.model = Model(vggface.input, out)
-        logger.info("vggface model initialized")
+        # vggface = VGGFace(model='resnet50')
+        # out = vggface.get_layer("flatten_1").output
+        # self.model = Model(vggface.input, out)
+        self.model = keras.models.load_model(os.path.join(config.DATA_DIR, "facenet_keras.h5"))
+        logger.info("facenet model initialized")
 
         
         self.face_cascade_models = []
@@ -32,7 +34,7 @@ class Face_Model:
         '''
             Convert the given image to a vector form using trained resnet model
         '''
-        return self.model.predict(image.reshape((1, 224, 224, 3)))
+        return self.model.predict(image.reshape((1, 160, 160, 3)))
 
     def predict(self, image1_path, image2_path):
         '''
@@ -61,12 +63,12 @@ class Face_Model:
         faces = []
         for model in self.face_cascade_models:
             faces.extend(list(model.detectMultiScale(img)))
-        logger.info("# of faces found is %d", len(faces))
+        logger.info("# of faces found : %d", len(faces))
         
         face = image_utils.merge_faces(faces)
         x, y, w, h = face
         cropped_face = img[y:y + h, x:x + w]
         cropped_face = cv2.cvtColor(cropped_face, cv2.COLOR_BGR2RGB)
-        cropped_face = cv2.resize(cropped_face, (224, 224))
+        cropped_face = cv2.resize(cropped_face, (160, 160))
 
         return cropped_face
