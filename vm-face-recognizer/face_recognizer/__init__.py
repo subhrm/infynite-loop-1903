@@ -1,5 +1,5 @@
 
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, send_from_directory
 from flask_cors import CORS, cross_origin
 from gevent.pywsgi import WSGIServer, LoggingLogAdapter
 import os
@@ -46,9 +46,9 @@ if config.ENABLE_CORS:
     CORS(app)
 
 
-from face_recognizer.utils import sql_utils
-cnx = sql_utils.get_connection()
-logger.info("SQL Connection established")
+# from face_recognizer.utils import sql_utils
+# cnx = sql_utils.get_connection()
+# logger.info("SQL Connection established")
 
 '''
     Import all the API endpoints
@@ -56,8 +56,15 @@ logger.info("SQL Connection established")
 logger.info("Initializing all API endpoints. ")
 
 import face_recognizer.endpoints.__root__
+import face_recognizer.endpoints.get_images
+import face_recognizer.endpoints.upload_photo
 import face_recognizer.endpoints.face_similarity
 import face_recognizer.endpoints.code_validator
+
+# Serve Static Files
+@app.route('/static/<path:path>')
+def serve_static_file(path):
+    return send_from_directory(config.STATIC_DIR, path)
 
 logger.info("All API endpoints initialized. ")
 

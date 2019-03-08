@@ -1,3 +1,7 @@
+import cv2
+import numpy as np
+import base64
+
 def check_overlap(a,b):
     '''
        Check if two rectangular shapes overlap.
@@ -49,3 +53,19 @@ def merge_faces(faces):
             raise Exception("Found Two faces in the photograph")
             
     return res
+
+
+def read_b64(text):
+   # encoded_data = uri.split(',')[1]
+   encoded_data = str(text)
+   np_arr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
+   img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+   return img
+
+def read_from_file(file_path):
+    return cv2.imread(image_path)
+
+def image_to_b64(img):
+    _, buffer = cv2.imencode(".jpg", cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+    img_as_text = base64.b64encode(buffer)
+    return img_as_text.decode("utf-8")
