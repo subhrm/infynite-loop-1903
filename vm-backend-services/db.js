@@ -25,32 +25,95 @@ exports.login = function(req, res, email, password, requestedFrom) {
     con.connect(function(err){
         if(err) throw err;
         const query = `select * from vms_users where email="${email}" and password="${password}" LIMIT 0,1`
-        console.log(query)
-        con.query(query, function(err, result) {
-            if (err) throw err;
-            console.log(result);
-            con.end();
-
-            let data = result[0];
-            const payload = {
-                check: true
-            };
-            var token = jwt.sign(payload, req.app.get('Secret'), {
-                expiresIn: 28800 // expires in 8 hours
-            });
-
-            res.send({
-                status:1,
-                message: "Authentication Successful",
-                data: {
-                    "userId": data.id,
-                    "name": data.name,
-                    "email": data.email,
-                    "userRole": data.role_code,
-                    "token": token
+        // console.log(query)
+        try {
+            con.query(query, function(err, result) {
+                if (err) throw err;
+                // console.log(result);
+                if(result.length > 0) { 
+                    let data = result[0];
+                    const payload = {
+                        check: true
+                    };
+                    var token = jwt.sign(payload, req.app.get('Secret'), {
+                        expiresIn: 28800 // expires in 8 hours
+                    });
+    
+                    res.send({
+                        status:req.app.get('status-code').success,
+                        message: "Authentication Successful",
+                        data: {
+                            "userId": data.id,
+                            "name": data.name,
+                            "email": data.email,
+                            "userRole": data.role_code,
+                            "token": token
+                        }
+                    });
+                } else {
+                    res.send({
+                        status:req.app.get('status-code').unauthorized,
+                        message: "Invalid Credentials",
+                        data: {}
+                    });
                 }
+            });
+        } catch (error) {
+            console.log(error)
+            res.send({
+                status: req.app.get('status-code').error,
+                message: "Sorry some error occured"
             })
-            // return result;
-        });
+        } finally {
+            con.end();
+        }
+    });
+}
+
+
+exports.getVisitors = function(req,res) {
+    con.connect(function(err){
+        if(err) throw err;
+        const query = "";
+        try {
+            con.query(query, function (err, result) {
+                if(err) throw err;
+
+            })
+        } catch (error) {
+            console.log(error)
+            res.send({
+                status: req.app.get('status-code').error,
+                message: "Sorry some error occured"
+            })
+        } finally {
+            con.end();
+        }
+    });
+}
+
+
+exports.getVisitorType = function(req,res) {
+    con.connect(function(err){
+        if(err) throw err;
+        const query = "select * from visitor_type";
+        try {
+            con.query(query, function (err, result) {
+                if(err) throw err;
+                res.send({
+                    status:req.app.get('status-code').success,
+                    message: "Fetch Successful",
+                    data: result
+                });
+            })
+        } catch (error) {
+            console.log(error)
+            res.send({
+                status: req.app.get('status-code').error,
+                message: "Sorry some error occured"
+            })
+        } finally {
+            con.end();
+        }
     });
 }

@@ -2,7 +2,7 @@
   "name": "vm-backend-services",
   "version": "1.0.0",
   "description": "infynite-loop hackathon project 2019 March",
-  "main": "main.js",
+  "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
