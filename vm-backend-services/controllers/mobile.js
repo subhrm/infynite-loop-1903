@@ -16,14 +16,19 @@ let id = req.body.visitorId;
 router.get('/getVisitors', (req,res) => {
   db.getVisitors(req,res);
 })
-
-
-
-module.exports = router;
-
-
 router.post('/locationAccess',(req,res)=> {
   let visitorId = req.body.visitorId;
   let securityId = req.body.securityId;
   db.locationAccess(req,res,visitorId,securityId);
 })
+
+router.post('/updateGatePass',(req,res)=> {
+  let visitorId = req.body.visitorId;
+  let depositType = req.body.depositType;
+  db.updateGatePass(req,res,visitorId,depositType);
+})
+
+
+module.exports = router;
+
+

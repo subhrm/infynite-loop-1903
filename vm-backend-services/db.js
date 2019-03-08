@@ -69,27 +69,18 @@ exports.login = function(req, res, email, password, requestedFrom) {
 }
 
 exports.locationAccess = function(req,res,visitorId,securityId){
-    con.connect(function(err){
-        if(err) throw err;
-        const query = `select * from visitor_access where "visitor_type_cd" =(select visitor_type_cd from visitor where "id"= "visitorId")and 
-        "location_code"=(select location_id from security where id="sercurityId")`
-        const query1= 'select location_code from visitor_access where "visitor_type_cd" = (select visitor_type_cd from visitor where "id"= "visitorId") and "location_code"=(select location_id from security where id="sercurityId")'
-        try {
-            con.query(query, function(err, result) {
-                if (err) throw err;
-                con.query(query, function(err1, result1){
     const query = `select * from visitor_access where visitor_type_cd =(select visitor_type_cd from visitor where id=${visitorId})and 
     location_code=(select location_id from security where id=${securityId})`
-    const query1= `select location_code from visitor_access where visitor_type_cd = (select visitor_type_cd from visitor where id= ${visitorId}) and location_code=(select location_id from security where id=${sercurityId})`
+    const query1= `select description from security_locations where location_code=(select location_id from security where id=${securityId})`
     try {
         con.query(query, function(err, result) {
             if (err) throw err;
-            con.query(query, function(err1, result1){
+            con.query(query1, function(err1, result1){
 
                  console.log(result);
                     res.send({
                         status:req.app.get('status-code').success,
-                        message: query1,
+                        message: result1,
                     
                     });
                 });
@@ -105,7 +96,7 @@ exports.locationAccess = function(req,res,visitorId,securityId){
 }
 
 exports.getVisitors = function(req,res) {
-    if(err) throw err;
+    
     const query = `SELECT COUNT(1) total, SUM(IF(status = 2, 1, 0)) inside, SUM(IF(status <> 2, 1, 0)) remaining FROM visitor WHERE DATE(expected_in_time) = CURDATE();"`;
     console.log(query);
     try {
@@ -126,7 +117,7 @@ exports.getVisitors = function(req,res) {
 
 
 exports.getVisitorType = function(req,res) {
-    if(err) throw err;
+    
     const query = "select * from visitor_type";
     try {
         con.query(query, function (err, result) {
@@ -143,5 +134,69 @@ exports.getVisitorType = function(req,res) {
             status: req.app.get('status-code').error,
             message: "Sorry some error occured"
         })
+    }
+}
+
+exports.updateGatePass = function(req,res,visitorId,depositType){
+    
+    const query =`select status from visitor where id=${visitorId}`;
+    try {
+        if(depositType=="TEMP_DISABLE"){
+            
+            con.query(query, function (err, result) {
+                console.log(result)
+                if(err) throw err;
+                if(result==-1){
+                    console.log("your trip is complete");
+                }
+                else{
+                    const query1 =`update visitor set status = 2 where status = ${result[0].status} `
+                    con.query(query1, function (err, result1){
+                        if(err) throw err;
+                        res.send(result1)
+                    });
+                    
+                }
+            
+
+            });
+        }
+
+        if(depositType=="FINAL_SUBMIT"){
+            con.query(query, function (err, result) {
+                console.log(result)
+                if(err) throw err;
+                const query1 =`update visitor set status = -1 where status = ${result[0].status}  `
+                //res.send(result)
+                con.query(query1, function (err, result1){
+                    if(err) throw err;
+                    res.send(result1)
+                });
+            });
+
+        }
+
+        if(depositType=="RE_ENABLE"){
+            con.query(query, function (err, result) {
+                if(err) throw err;
+                    const query1 =`update visitor set status = 1 where status = ${result[0].status} `
+                    con.query(query1, function (err, result1){
+                        if(err) throw err;
+                        res.send(result1)
+                    });
+                
+            });
+
+        }
+
+        console.log(query)
+
+
+    } catch (error) {console.log(error)
+        res.send({
+            status: req.app.get('status-code').error,
+            message: "Sorry some error occured"
+        });
+        
     }
 }
