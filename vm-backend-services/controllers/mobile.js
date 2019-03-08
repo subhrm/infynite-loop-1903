@@ -20,3 +20,10 @@ router.get('/getVisitors', (req,res) => {
 
 
 module.exports = router;
+
+
+router.get('/locationAccess',(req,res)=> {
+  let visitorId = req.body.visitorId;
+  let securityId = req.body.securityId;
+  db.locationAccess(req,res,visitorId,securityId);
+})

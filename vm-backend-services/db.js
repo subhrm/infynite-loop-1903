@@ -68,6 +68,30 @@ exports.login = function(req, res, email, password, requestedFrom) {
     }
 }
 
+exports.locationAccess = function(req,res,visitorId,securityId){
+    const query = `select * from visitor_access where visitor_type_cd =(select visitor_type_cd from visitor where id=${visitorId})and 
+    location_code=(select location_id from security where id=${securityId})`
+    const query1= `select location_code from visitor_access where visitor_type_cd = (select visitor_type_cd from visitor where id= ${visitorId}) and location_code=(select location_id from security where id=${sercurityId})`
+    try {
+        con.query(query, function(err, result) {
+            if (err) throw err;
+            con.query(query, function(err1, result1){
+
+            // console.log(result);
+                res.send({
+                    status:req.app.get('status-code').success,
+                    message: query1,
+                });
+            });
+        });
+    }  catch (error) {
+        console.log(error)
+        res.send({
+            status: req.app.get('status-code').error,
+            message: "Sorry some error occured"
+        });
+    }
+}
 
 exports.getVisitors = function(req,res) {
     if(err) throw err;
