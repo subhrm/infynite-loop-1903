@@ -13,3 +13,6 @@ keras >= 2.2.4
 git+https://github.com/rcmalli/keras-vggface.git
 # for cryptography
 cryptography >= 2.6.1
+
+# for mysql
+mysql-connector-python >= 8.0.15
