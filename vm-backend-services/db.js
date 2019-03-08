@@ -75,15 +75,17 @@ exports.locationAccess = function(req,res,visitorId,securityId){
     try {
         con.query(query, function(err, result) {
             if (err) throw err;
-            con.query(query, function(err1, result1){
+            con.query(query1, function(err1, result1){
 
-            // console.log(result);
-                res.send({
-                    status:req.app.get('status-code').success,
-                    message: query1,
+                 console.log(result);
+                    res.send({
+                        status:req.app.get('status-code').success,
+                        message: result1,
+                    
+                    });
                 });
             });
-        });
+        
     }  catch (error) {
         console.log(error)
         res.send({
@@ -144,5 +146,101 @@ exports.getVisitorType = function(req,res) {
             status: req.app.get('status-code').error,
             message: "Sorry some error occured"
         })
+    }
+}
+
+
+exports.getVisitorDetail = async function(req,res, visitorId) {
+    const query = `SELECT
+    v.id visitor_id,
+    t.visitor_type_cd visitor_type,
+    v.name,
+    i.image_data photo,
+    e.name referred_by
+    FROM
+        visitor v
+    JOIN images i
+    ON
+        v.uploaded_photo = i.image_id
+    JOIN visitor_type t
+    ON
+        v.visitor_type_cd = t.visitor_type_cd
+    LEFT OUTER JOIN employee e
+    ON
+        v.refered_by = e.id
+    WHERE v.id= ${visitorId}`;
+
+    return new Promise(function(resolve, reject) {
+        con.query(query, function(err, result){
+            if (err) reject(err);
+            console.log(result)
+            // res.send(result);
+            resolve(result);
+        });
+    })
+}
+
+
+exports.updateGatePass = function(req,res,visitorId,depositType){
+    
+    const query =`select status from visitor where id=${visitorId}`;
+    try {
+        if(depositType=="TEMP_DISABLE"){
+            
+            con.query(query, function (err, result) {
+                console.log(result)
+                if(err) throw err;
+                if(result==-1){
+                    console.log("your trip is complete");
+                }
+                else{
+                    const query1 =`update visitor set status = 2 where status = ${result[0].status} `
+                    con.query(query1, function (err, result1){
+                        if(err) throw err;
+                        res.send(result1)
+                    });
+                    
+                }
+            
+
+            });
+        }
+
+        if(depositType=="FINAL_SUBMIT"){
+            con.query(query, function (err, result) {
+                console.log(result)
+                if(err) throw err;
+                const query1 =`update visitor set status = -1,expected_out_time= CURRENT_TIMESTAMP where status = ${result[0].status}  `
+                //res.send(result)
+                con.query(query1, function (err, result1){
+                    if(err) throw err;
+                    res.send(result1)
+                });
+            });
+
+        }
+
+        if(depositType=="RE_ENABLE"){
+            con.query(query, function (err, result) {
+                if(err) throw err;
+                    const query1 =`update visitor set status = 1 where status = ${result[0].status} `
+                    con.query(query1, function (err, result1){
+                        if(err) throw err;
+                        res.send(result1)
+                    });
+                
+            });
+
+        }
+
+        console.log(query)
+
+
+    } catch (error) {console.log(error)
+        res.send({
+            status: req.app.get('status-code').error,
+            message: "Sorry some error occured"
+        });
+        
     }
 }
