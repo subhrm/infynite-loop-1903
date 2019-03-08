@@ -79,7 +79,7 @@ exports.locationAccess = function(req,res,visitorId,securityId){
                 if (err) throw err;
                 con.query(query, function(err1, result1){
 
-                // console.log(result);
+                 console.log(result);
                     res.send({
                         status:req.app.get('status-code').success,
                         message: query1,
