@@ -46,6 +46,10 @@ if config.ENABLE_CORS:
     CORS(app)
 
 
+from face_recognizer.utils import sql_utils
+cnx = sql_utils.get_connection()
+logger.info("SQL Connection established")
+
 '''
     Import all the API endpoints
 '''
