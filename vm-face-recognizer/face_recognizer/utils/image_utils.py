@@ -63,7 +63,7 @@ def read_b64(text):
    return img
 
 def read_from_file(file_path):
-    return cv2.imread(image_path)
+    return cv2.imread(file_path)
 
 def image_to_b64(img):
     _, buffer = cv2.imencode(".jpg", cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
