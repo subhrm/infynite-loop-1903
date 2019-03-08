@@ -72,7 +72,7 @@ exports.login = function(req, res, email, password, requestedFrom) {
 exports.locationAccess = function(req,res,visitorId,securityId){
     const query = `select * from visitor_access where visitor_type_cd =(select visitor_type_cd from visitor where id=${visitorId})and 
                     location_code=(select location_id from security where id=${securityId})`
-    const query1= `select location_code from visitor_access where visitor_type_cd = (select visitor_type_cd from visitor where id= ${visitorId}) and location_code=(select location_id from security where id=${sercurityId})`
+    const query1= `select location_code from visitor_access where visitor_type_cd = (select visitor_type_cd from visitor where id= ${visitorId}) and location_code=(select location_id from security where id=${securityId})`
     try {
         con.query(query, function(err, result) {
             if (err) throw err;
