@@ -30,7 +30,6 @@ exports.login = function(req, res, email, password, requestedFrom) {
             con.query(query, function(err, result) {
                 if (err) throw err;
                 // console.log(result);
-                con.end();
                 if(result.length > 0) { 
                     let data = result[0];
                     const payload = {
@@ -65,6 +64,56 @@ exports.login = function(req, res, email, password, requestedFrom) {
                 status: req.app.get('status-code').error,
                 message: "Sorry some error occured"
             })
+        } finally {
+            con.end();
+        }
+    });
+}
+
+
+exports.getVisitors = function(req,res) {
+    con.connect(function(err){
+        if(err) throw err;
+        const query = "";
+        try {
+            con.query(query, function (err, result) {
+                if(err) throw err;
+
+            })
+        } catch (error) {
+            console.log(error)
+            res.send({
+                status: req.app.get('status-code').error,
+                message: "Sorry some error occured"
+            })
+        } finally {
+            con.end();
+        }
+    });
+}
+
+
+exports.getVisitorType = function(req,res) {
+    con.connect(function(err){
+        if(err) throw err;
+        const query = "select * from visitor_type";
+        try {
+            con.query(query, function (err, result) {
+                if(err) throw err;
+                res.send({
+                    status:req.app.get('status-code').success,
+                    message: "Fetch Successful",
+                    data: result
+                });
+            })
+        } catch (error) {
+            console.log(error)
+            res.send({
+                status: req.app.get('status-code').error,
+                message: "Sorry some error occured"
+            })
+        } finally {
+            con.end();
         }
     });
 }
