@@ -35,4 +35,8 @@ router.post('/addVisitorEmployee', (req,res) => {
   db.addVisitorEmployee(req,res,Name,Email,Photo,Mobile,VisitorType,IN,OUT);
 });
 
+router.get('/getApprovedVisitorsToday', (req,res) => {
+  db.getApprovedVisitorsToday(req,res);
+})
+
 module.exports = router;

@@ -291,3 +291,39 @@ exports.addVisitorEmployee = function(req,res,name,email,photo,mobile,visitorTyp
         });
     }
 }
+
+
+exports.getApprovedVisitorsToday = function(req,res){
+    const query = `SELECT
+        v.id visitor_id,
+        t.visitor_type_cd visitor_type,
+        v.name,
+        e.name referred_by
+        FROM
+            visitor v
+        JOIN visitor_type t
+        ON
+            v.visitor_type_cd = t.visitor_type_cd
+        LEFT OUTER JOIN employee e
+        ON
+            v.refered_by = e.id
+        WHERE DATE(expected_in_time) = CURDATE();`
+
+    try {
+        con.query(query, function (err, result) {
+            if(err) throw err;
+            console.log(result);
+            res.send({
+                status:req.app.get('status-code').success,
+                message: "Data fetched successfully",
+                data: result
+            })
+        });
+    } catch (error) {
+        console.log(error)
+        res.send({
+            status: req.app.get('status-code').error,
+            message: "Failure"
+        });
+    }
+}
