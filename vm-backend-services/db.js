@@ -349,3 +349,25 @@ exports.fetchEmployeeDetails = function(req,res,id) {
         });
     }
 }
+
+exports.getVisitorInsideCampus = function(req,res) {
+    const query = `select v.name,v.expected_out_time,v.mobile visitorPhNo,e.mobile refererPhNo from visitor v LEFT OUTER JOIN employee e on v.refered_by = e.id where v.status=1 `;
+    console.log(query);
+    try {
+        con.query(query, function (err, result) {
+            if(err) throw err;
+            console.log(result);
+            res.send({
+                status:req.app.get('status-code').success,
+                message: "Data fetched successfully",
+                data: result
+            })
+        });
+    } catch (error) {
+        console.log(error)
+        res.send({
+            status: req.app.get('status-code').error,
+            message: "Failure"
+        });
+    }
+}

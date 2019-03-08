@@ -45,6 +45,12 @@ router.post('/fetchEmployeeDetails', (req,res) => {
   const Id = req.body.Id;
   db.fetchEmployeeDetails(req,res,Id);
 })
+
+router.post('/getVisitorInsideCampus', (req,res) => {
+  const status = req.body.status;
+  db.getVisitorInsideCampus(req,res,status);
+})
+
 module.exports = router;
 
 
