@@ -76,7 +76,6 @@ exports.locationAccess = function(req,res,visitorId,securityId){
         con.query(query, function(err, result) {
             if (err) throw err;
             con.query(query1, function(err1, result1){
-
                  console.log(result);
                     res.send({
                         status:req.app.get('status-code').success,
@@ -256,6 +255,7 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
             //     if(err) throw err;
             //     res.send(result1);
             // });
+            console.log(result);
             res.send({
                 status:req.app.get('status-code').success,
                 message: "Success",
@@ -267,6 +267,27 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
         res.send({
             status: req.app.get('status-code').error,
             message: "Failure"
-        })
+        });
+    }
+}
+
+exports.addVisitorEmployee = function(req,res,name,email,photo,mobile,visitorType,in_time,out_time) {
+    const query = `insert into visitor (visitor_type_cd,name,email,actual_photo,mobile,expected_in_time,expected_out_time) values ('${visitorType}','${name}','${email}',${photo},${mobile},'${in_time}','${out_time}')`;
+    console.log(query);
+    try {
+        con.query(query, function (err, result) {
+            if(err) throw err;
+            console.log(result);
+            res.send({
+                status:req.app.get('status-code').success,
+                message: "Data fetched successfully",
+            })
+        });
+    } catch (error) {
+        console.log(error)
+        res.send({
+            status: req.app.get('status-code').error,
+            message: "Failure"
+        });
     }
 }

@@ -8,7 +8,7 @@ var request = require('request');
 console.log(process.env.email_id)
 
 var user_email = 'anubhab.mondal11@gmail.com';
-const infyLogo = fs.readFileSync('../assets/images/infosys-logo.png');
+const infyLogo = fs.readFileSync('./assets/images/infosys-logo.png');
 var todayDate = dateFormat(new Date(), "dd-mmm-yyyy");
 var date1 = "22 June 2019";
 var textMarginLeft = 30;
