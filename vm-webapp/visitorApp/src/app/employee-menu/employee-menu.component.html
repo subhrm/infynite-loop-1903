@@ -1,0 +1,46 @@
+<h2>New Visitor Request</h2>
+<div class="example-container">
+    <mat-form-field>
+      <input matInput placeholder="Name" required>
+    </mat-form-field>
+  
+    <mat-form-field>
+      <input matInput placeholder="Email" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Mobile" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Visitor Type" required>
+        <mat-option *ngFor="let visitor of visitorType" value="{{visitor.visitor_type_cd}}">
+          {{visitor.visitor_type_cd}}
+        </mat-option>
+        <mat-option value="option">1</mat-option>
+        <mat-option value="option">2</mat-option>
+        <mat-option value="option">3</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- <mat-form-field>
+      <input matInput placeholder="Photo" type="file" required>
+    </mat-form-field> -->
+
+    <mat-form-field>
+      <input matInput placeholder="Referred By" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="IN Time" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="OUT Time" required>
+    </mat-form-field>
+
+    <mat-card-actions>
+        <button mat-raised-button (click)="login()" color="primary">Submit Request</button>
+    </mat-card-actions>
+
+</div>
