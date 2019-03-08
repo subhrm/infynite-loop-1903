@@ -41,6 +41,10 @@ router.post('/generateGatePass', (req,res) => {
   generatePdf.generateGatePass(req,res, visitorId);
 })
 
+router.post('/fetchEmployeeDetails', (req,res) => {
+  const Id = req.body.Id;
+  db.fetchEmployeeDetails(req,res,Id);
+})
 module.exports = router;
 
 

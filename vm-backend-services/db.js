@@ -1,7 +1,8 @@
 require('dotenv').config();
+const qr_generation = require('./utils/qr_generation');
 
 var mysql = require('mysql');
-
+var request = require('request');
 var con = mysql.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -250,17 +251,51 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
     try {
         con.query(query, function (err, result) {
             if(err) throw err;
-            // const query1 = `select max(id),image_data from visitor v join images i on i.image_id=v.actual_photo having v.id=max(id)`;
-            // con.query(query1, function (err, result1){
-            //     if(err) throw err;
-            //     res.send(result1);
-            // });
-            console.log(result);
-            res.send({
-                status:req.app.get('status-code').success,
-                message: "Success",
-                data: result
+            
+            const query1 = `select image_data  from images where image_Id =${Photo}`;
+            con.query(query1, function (err, result1){
+                if(err) throw err;
+                
+            
+                const qrEncodeUrl = 'http://35.207.12.149:8000/api'
+                let cipher_response = request.post({
+                    "headers": {
+                        "content-type": "application/json"
+                    },
+                    "url": qrEncodeUrl + '/generate-code',
+                    "body": JSON.stringify({
+                        "plain_text": result.insertId.toString()
+                    })
+                }, function (error, response, body) {
+                    let cipher_id = JSON.parse(body).cipher_text;
+                    console.log(JSON.parse(body).cipher_text)
+
+                    qr_generation.getQrSvg(cipher_id).then(qrData => {
+                        res.send({
+                            status:req.app.get('status-code').success,
+                            message: "Success",
+                            data: {
+                                Name:Name,
+                                Photo:result1[0].image_data,
+                                QR_code: qrData
+                            }
+                        });
+                    })
             });
+
+                // res.send({
+                //     status:req.app.get('status-code').success,
+                //     message: "Success",
+                //     data: {
+                //         Name:Name,
+                //         Photo:result1[0],
+                //         QR_code=exports.getQrSvgO(cipher_id)
+
+                //     }
+                // });
+            });
+            
+           
         })
     } catch (error) {
         console.log(error)
@@ -270,6 +305,7 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
         });
     }
 }
+
 
 exports.addVisitorEmployee = function(req,res,name,email,photo,mobile,visitorType,in_time,out_time) {
     const query = `insert into visitor (visitor_type_cd,name,email,actual_photo,mobile,expected_in_time,expected_out_time) values ('${visitorType}','${name}','${email}',${photo},${mobile},'${in_time}','${out_time}')`;
@@ -308,7 +344,28 @@ exports.getApprovedVisitorsToday = function(req,res){
         ON
             v.refered_by = e.id
         WHERE DATE(expected_in_time) = CURDATE();`
+    try {
+        con.query(query, function (err, result) {
+            if(err) throw err;
+            console.log(result);
+            res.send({
+                status:req.app.get('status-code').success,
+                message: "Data fetched successfully",
+                data: result
+            })
+        });
+    } catch (error) {
+        console.log(error)
+        res.send({
+            status: req.app.get('status-code').error,
+            message: "Failure"
+        });
+    }
+}
 
+exports.fetchEmployeeDetails = function(req,res,id) {
+    const query = `Select id,name,email,mobile,image_data from employee e join images i on i.image_id=e.photo where id=${id}`;
+    console.log(query);
     try {
         con.query(query, function (err, result) {
             if(err) throw err;
