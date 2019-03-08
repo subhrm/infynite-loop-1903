@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mobileDB = require('../mobile-db');
 const db = require('../db');
+const generatePdf = require('../utils/generatePdf');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -19,13 +20,17 @@ router.get('/getVisitors', (req,res) => {
   db.getVisitors(req,res);
 })
 
-
-
-module.exports = router;
-
-
 router.get('/locationAccess',(req,res)=> {
   let visitorId = req.body.visitorId;
   let securityId = req.body.securityId;
   db.locationAccess(req,res,visitorId,securityId);
+});
+
+router.post('/generateGatePass', (req,res) => {
+  const visitorId = req.body.visitorId;
+  generatePdf.generateGatePass(req,res, visitorId);
 })
+
+module.exports = router;
+
+

@@ -146,3 +146,34 @@ exports.getVisitorType = function(req,res) {
         })
     }
 }
+
+
+exports.getVisitorDetail = async function(req,res, visitorId) {
+    const query = `SELECT
+    v.id visitor_id,
+    t.visitor_type_cd visitor_type,
+    v.name,
+    i.image_data photo,
+    e.name referred_by
+    FROM
+        visitor v
+    JOIN images i
+    ON
+        v.uploaded_photo = i.image_id
+    JOIN visitor_type t
+    ON
+        v.visitor_type_cd = t.visitor_type_cd
+    LEFT OUTER JOIN employee e
+    ON
+        v.refered_by = e.id
+    WHERE v.id= ${visitorId}`;
+
+    return new Promise(function(resolve, reject) {
+        con.query(query, function(err, result){
+            if (err) reject(err);
+            console.log(result)
+            // res.send(result);
+            resolve(result);
+        });
+    })
+}
