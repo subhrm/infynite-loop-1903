@@ -34,14 +34,14 @@ class Face_Model:
         '''
         return self.model.predict(image.reshape((1, 224, 224, 3)))
 
-    def predict(self, image1_path, image2_path):
+    def predict(self, face1, face2):
         '''
             Predict the similarity of faces in the two given images
         '''
-        img1 = cv2.imread(image1_path)
-        img2 = cv2.imread(image2_path)
-        face1 = self.get_face_from_image(img1)
-        face2 = self.get_face_from_image(img2)
+        # img1 = cv2.imread(image1_path)
+        # img2 = cv2.imread(image2_path)
+        # face1 = self.get_face_from_image(img1)
+        # face2 = self.get_face_from_image(img2)
 
         v1 = self.vectorize(face1)
         v2 = self.vectorize(face2)
