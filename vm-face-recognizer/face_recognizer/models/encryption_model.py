@@ -10,7 +10,7 @@ from face_recognizer import logger, config
 
 class Encryption_Model:
     def __init__(self):
-        self.altchars = "#!".encode("utf-8")
+        self.altchars = "()".encode("utf-8")
         self.private_key_file=os.path.join(
             config.DATA_DIR, "private_key.pem")
         self.public_key_file=os.path.join(config.DATA_DIR, "public_key.pem")

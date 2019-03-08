@@ -28,7 +28,7 @@ def find(img):
 
     logger.info("max simmilarity : {:.6f}".format(float(max_similarity)) )
 
-    if max_similarity >= 0.70:
+    if max_similarity >= 0.60:
         return visitor_ids[int(np.argmax(c))]
 
     raise Exception("No Match found")
