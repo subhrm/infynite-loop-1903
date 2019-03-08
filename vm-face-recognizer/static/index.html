@@ -12,8 +12,11 @@
     <script>
         function get_images(evt) {
             console.log("Getting images")
+            var container = $("#container")
+            var id = $("#image-id")
+            container.empty()
             $.ajax({
-                url: "/api/get-images",
+                url: "/api/get-images/"+id.val(),
                 // url: "http://35.196.31.164:8000/api/qa",
                 type: 'GET',
                 
@@ -49,7 +52,8 @@
 </head>
 
 <body>
-    <button onclick="get_images()" > Load Images </button>
+    Image Id : <input id="image-id" type="text"></input>
+    <button onclick="get_images()" > Show Images </button>
     <div id="container"></div>
 </body>
 

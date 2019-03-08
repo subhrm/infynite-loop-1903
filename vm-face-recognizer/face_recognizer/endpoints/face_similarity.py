@@ -6,6 +6,7 @@ from datetime import datetime
 
 from face_recognizer import __version__, app, logger, config
 from face_recognizer.models import FM
+from face_recognizer.utils import image_utils
 
 
 @app.route('/api/face-similarity', methods=['POST'])
@@ -53,7 +54,13 @@ def do_post(request):
     file_path1 = check_save_file(request, file_list[0], full_dir_name)
     file_path2 = check_save_file(request, file_list[1], full_dir_name)
 
-    score = FM.predict(file_path1, file_path2)
+    img1 = image_utils.read_from_file(file_path1)
+    face1 = FM.get_face_from_image(img1)
+
+    img2 = image_utils.read_from_file(file_path2)
+    face2 = FM.get_face_from_image(img2)
+
+    score = FM.predict(face1, face2)
     score = float(score)
     logger.info("Similarity of %s and %s is %f", file_path1, file_path2, score)
 

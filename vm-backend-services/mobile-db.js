@@ -9,10 +9,13 @@ var con = mysql.createConnection({
     password: process.env.DB_PASS,
     database: process.env.DB_NAME
 });
+con.connect(function(err){
+    if(err) throw err;
 
+});
 exports.fetchVisitorProfile = function(req, res, id, role) {
     let query = '';
-       if(role =='securityadmin'){
+       if(role =='SEC_ADM'){
         query= `SELECT
         v.id visitor_id,
         t.visitor_type_desc visitor_type,
@@ -42,14 +45,12 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
     LEFT OUTER JOIN vms.employee e
     ON
         v.refered_by = e.id
-    WHERE id="${id}"`;
+    WHERE v.id= ${id}`;
        }
        else{
 
        }
        try{
-        con.connect(function(err){
-            if(err) throw err;
             console.log(query);
             con.query(query, function(err, result) {
                 if (err) throw err;
@@ -80,15 +81,14 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
                 res.send(response);
                 // return result;
             });
-        });
+        // });
        }
        catch (e) {
-            response.send({
+            res.send({
                 "status": 0,
-                "message": "Failed to get data from DB"
+                "message": "Failed to get data from DB",
+                "error": e
             });
        }
-       finally{
-           con.end();
-       }
+       
 }

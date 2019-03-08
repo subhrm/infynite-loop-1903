@@ -70,8 +70,8 @@ exports.login = function(req, res, email, password, requestedFrom) {
 
 exports.locationAccess = function(req,res,visitorId,securityId){
     const query = `select * from visitor_access where visitor_type_cd =(select visitor_type_cd from visitor where id=${visitorId})and 
-    location_code=(select location_id from security where id=${securityId})`
-    const query1= `select description from security_locations where location_code=(select location_id from security where id=${securityId})`
+                    location_code=(select location_id from security where id=${securityId})`
+    const query1= `select location_code from visitor_access where visitor_type_cd = (select visitor_type_cd from visitor where id= ${visitorId}) and location_code=(select location_id from security where id=${sercurityId})`
     try {
         con.query(query, function(err, result) {
             if (err) throw err;
@@ -96,15 +96,28 @@ exports.locationAccess = function(req,res,visitorId,securityId){
 }
 
 exports.getVisitors = function(req,res) {
-    
-    const query = `SELECT COUNT(1) total, SUM(IF(status = 2, 1, 0)) inside, SUM(IF(status <> 2, 1, 0)) remaining FROM visitor WHERE DATE(expected_in_time) = CURDATE();"`;
+    const query = `SELECT COUNT(1) total, SUM(IF(status = 2, 1, 0)) inside, SUM(IF(status <> 2, 1, 0)) remaining FROM visitor WHERE DATE(expected_in_time) = CURDATE();`;
+    const query2 = `SELECT COUNT(1) as count, visitor_date as date FROM (
+        SELECT id visitor_id, DATE_FORMAT(expected_in_time, '%Y-%m-%d') visitor_date FROM visitor WHERE DATE(expected_in_time) BETWEEN date_sub(CURDATE(), INTERVAL 10 DAY) AND CURDATE()) v GROUP BY visitor_date;`
     console.log(query);
     try {
         con.query(query, function (err, result) {
             if(err) throw err;
             console.log(result);
+            con.query(query2, function(err2, result2) {
+                if(err) throw err;
+                console.log(result2);
+                res.send({
+                    status:req.app.get('status-code').success,
+                    message: "Data fetched successfully",
+                    data: {
+                        "todaysVisitors": result[0],
+                        "visitorLastDays": result2
+                    }
+                });
+            })
 
-            res.send(result);
+            
         })
     } catch (error) {
         console.log(error)
@@ -117,7 +130,6 @@ exports.getVisitors = function(req,res) {
 
 
 exports.getVisitorType = function(req,res) {
-    
     const query = "select * from visitor_type";
     try {
         con.query(query, function (err, result) {
