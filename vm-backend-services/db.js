@@ -306,6 +306,7 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
     }
 }
 
+
 exports.addVisitorEmployee = function(req,res,name,email,photo,mobile,visitorType,in_time,out_time) {
     const query = `insert into visitor (visitor_type_cd,name,email,actual_photo,mobile,expected_in_time,expected_out_time) values ('${visitorType}','${name}','${email}',${photo},${mobile},'${in_time}','${out_time}')`;
     console.log(query);
@@ -316,6 +317,28 @@ exports.addVisitorEmployee = function(req,res,name,email,photo,mobile,visitorTyp
             res.send({
                 status:req.app.get('status-code').success,
                 message: "Data fetched successfully",
+            })
+        });
+    } catch (error) {
+        console.log(error)
+        res.send({
+            status: req.app.get('status-code').error,
+            message: "Failure"
+        });
+    }
+}
+
+exports.fetchEmployeeDetails = function(req,res,id) {
+    const query = `Select id,name,email,mobile,image_data from employee e join images i on i.image_id=e.photo where id=${id}`;
+    console.log(query);
+    try {
+        con.query(query, function (err, result) {
+            if(err) throw err;
+            console.log(result);
+            res.send({
+                status:req.app.get('status-code').success,
+                message: "Data fetched successfully",
+                data: result
             })
         });
     } catch (error) {

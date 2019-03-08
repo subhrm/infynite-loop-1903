@@ -56,12 +56,6 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
                 if (err) throw err;
                 console.log(result);
                 let data = result[0];
-                const payload = {
-                    check: true
-                };
-                var token = jwt.sign(payload, req.app.get('Secret'), {
-                    expiresIn: 28800 // expires in 8 hours
-                });
                 let response = {
                     "status": 1,
                     "message": "",
@@ -85,7 +79,7 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
        }
        catch (e) {
             res.send({
-                "status": 0,
+                "status": -1,
                 "message": "Failed to get data from DB",
                 "error": e
             });
