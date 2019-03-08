@@ -19,12 +19,22 @@ router.post('/getVisitorProfile', function(req, res, next){
 router.get('/getVisitors', (req,res) => {
   db.getVisitors(req,res);
 })
+router.post('/locationAccess',(req,res)=> {
+  let visitorId = req.body.visitorId;
+  let securityId = req.body.securityId;
+  db.locationAccess(req,res,visitorId,securityId);
+})
 
 router.get('/locationAccess',(req,res)=> {
   let visitorId = req.body.visitorId;
   let securityId = req.body.securityId;
   db.locationAccess(req,res,visitorId,securityId);
 });
+router.post('/updateGatePass',(req,res)=> {
+  let visitorId = req.body.visitorId;
+  let depositType = req.body.depositType;
+  db.updateGatePass(req,res,visitorId,depositType);
+})
 
 router.post('/generateGatePass', (req,res) => {
   const visitorId = req.body.visitorId;
