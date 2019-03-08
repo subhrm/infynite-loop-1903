@@ -64,8 +64,6 @@ exports.login = function(req, res, email, password, requestedFrom) {
                 status: req.app.get('status-code').error,
                 message: "Sorry some error occured"
             })
-        } finally {
-            con.end();
         }
     });
 }
@@ -74,11 +72,17 @@ exports.login = function(req, res, email, password, requestedFrom) {
 exports.getVisitors = function(req,res) {
     con.connect(function(err){
         if(err) throw err;
-        const query = "";
+        let todayDate = new Date();
+        const todayStartDate = todayDate.setHours(0,0,0,0);
+        const todayEndDate = todayDate.setHours(24,0,0,0);
+        const query = `select count(*) total,  from visitor where expected_in_time>"${todayStartDate}" and expected_out_time<"${todayEndDate}"`;
+        console.log(query);
         try {
             con.query(query, function (err, result) {
                 if(err) throw err;
+                console.log(result);
 
+                res.send(result);
             })
         } catch (error) {
             console.log(error)
@@ -86,8 +90,6 @@ exports.getVisitors = function(req,res) {
                 status: req.app.get('status-code').error,
                 message: "Sorry some error occured"
             })
-        } finally {
-            con.end();
         }
     });
 }
@@ -112,8 +114,6 @@ exports.getVisitorType = function(req,res) {
                 status: req.app.get('status-code').error,
                 message: "Sorry some error occured"
             })
-        } finally {
-            con.end();
         }
     });
 }
