@@ -178,7 +178,7 @@ exports.updateGatePass = function(req,res,visitorId,depositType){
             con.query(query, function (err, result) {
                 console.log(result)
                 if(err) throw err;
-                const query1 =`update visitor set status = -1 where status = ${result[0].status}  `
+                const query1 =`update visitor set status = -1,expected_out_time= CURRENT_TIMESTAMP where status = ${result[0].status}  `
                 //res.send(result)
                 con.query(query1, function (err, result1){
                     if(err) throw err;
