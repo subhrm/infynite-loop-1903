@@ -7,9 +7,11 @@ const db = require('../db');
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
+
 router.post('/getVisitorProfile', function(req, res, next){
-let id = req.body.visitorId;
+  let id = req.body.visitorId;
   let role = req.body.securityRole;
+  console.log("req received:", typeof(id), typeof(role));
   mobileDB.fetchVisitorProfile(req, res, id, role);
 });
 
