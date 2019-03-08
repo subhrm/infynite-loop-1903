@@ -61,6 +61,7 @@ import face_recognizer.endpoints.upload_photo
 import face_recognizer.endpoints.face_similarity
 import face_recognizer.endpoints.face_similarity_b64
 import face_recognizer.endpoints.code_validator
+import face_recognizer.endpoints.find_visitor_by_face
 
 # Serve Static Files
 @app.route('/static/<path:path>')
