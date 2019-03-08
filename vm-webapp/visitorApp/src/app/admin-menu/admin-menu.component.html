@@ -1,43 +1,78 @@
 <mat-tab-group animationDuration="0ms">
+  
   <mat-tab label="Location Management">
+    <h2>Location Management</h2>
+
+    <div class="example-container">
+       <div>
+        <mat-form-field>
+          <input matInput placeholder="Location">
+        </mat-form-field>
       
+       </div>
+      <div>
+        <mat-form-field>
+          <input matInput placeholder="Textarea">
+        </mat-form-field>
+      </div>
+        <div>
+          <mat-form-field>
+          <mat-select placeholder="Type">
+            <mat-option value="option">Option</mat-option>
+            <mat-option value=""></mat-option>
+          </mat-select>
+        </mat-form-field>
+        </div>
+        <div>
+          <mat-card-actions>
+            <button mat-raised-button (click)="login()" color="primary">Submit Request</button>
+        </mat-card-actions>
+        </div>
+    </div>
   </mat-tab>
+
   <mat-tab label="Visitor Management">
-    
-  </mat-tab>
-  <mat-tab label="Security Management">
-    
-  </mat-tab>
-</mat-tab-group>
-<h2>Visitor Management</h2>
+    <h2>Enroll New Visitor</h2>
 <div class="example-container">
     <mat-form-field>
-      <input matInput placeholder="Name">
+      <input matInput placeholder="Name" [(ngModel)]='visitor.name' required>
     </mat-form-field>
   
     <mat-form-field>
-      <input matInput placeholder="Textarea">
+      <input matInput placeholder="Contact" [(ngModel)]='visitor.phone' pattern="[0-9]{10}" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Email Address" [(ngModel)]='visitor.email' required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Requested By" [(ngModel)]='visitor.referredBy'>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="date" placeholder="Start Date" [(ngModel)]='visitor.inDate'>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="date" placeholder="End Date" [(ngModel)]='visitor.outDate'>
     </mat-form-field>
   
     <mat-form-field>
-      <mat-select placeholder="Visitor Type">
-        <mat-option value="option">Option</mat-option>
+      <mat-select placeholder="Visitor Type" [(ngModel)]='visitor.type'>
+        <mat-option [value]="type.code" *ngFor="let type of visitorTypes">{{type.value}}</mat-option>
         <mat-option value="option"></mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-card-actions>
-        <button mat-raised-button (click)="login()" color="primary">Submit Request</button>
+        <button mat-raised-button (click)="submitVisitorData()" color="primary">Submit Request</button>
     </mat-card-actions>
 </div>
+  </mat-tab>
 
+  <mat-tab label="Security Management">
 <h2>Security Management</h2>
-
 <div class="example-container">
     <mat-form-field>
       <input matInput placeholder="Name">
     </mat-form-field>
-  
     <mat-form-field>
       <input matInput placeholder="Email">
     </mat-form-field>
@@ -61,26 +96,14 @@
         <button mat-raised-button (click)="login()" color="primary">Submit Request</button>
     </mat-card-actions>
 </div>
+  </mat-tab>
+</mat-tab-group>
 
-<h2>Location Management</h2>
-
-<div class="example-container">
-    <mat-form-field>
-      <input matInput placeholder="Location">
-    </mat-form-field>
-  
-    <mat-form-field>
-      <input matInput placeholder="Textarea">
-    </mat-form-field>
-  
-    <mat-form-field>
-      <mat-select placeholder="Type">
-        <mat-option value="option">Option</mat-option>
-        <mat-option value=""></mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-card-actions>
-        <button mat-raised-button (click)="login()" color="primary">Submit Request</button>
-    </mat-card-actions>
+<div class="whole-page" *ngIf='statusMessage!=""'>
+  <div class="spinner-container">
+      <mat-progress-spinner
+        class="example-margin"
+        mode="indeterminate">
+    </mat-progress-spinner>
+  </div>
 </div>

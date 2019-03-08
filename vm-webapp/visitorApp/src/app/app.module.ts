@@ -15,6 +15,8 @@ import { GuestPassComponent} from './security-menu/guest-pass/guest-pass.compone
 import { GuestPendingComponent} from './security-menu/guest-pending/guest-pending.component';
 import { EmployeeMenuComponent } from './employee-menu/employee-menu.component';
 
+import { HttpService } from './service/http.service';
+
 
 @NgModule({
   declarations: [
@@ -35,7 +37,7 @@ import { EmployeeMenuComponent } from './employee-menu/employee-menu.component';
     MaterialModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [HttpService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
