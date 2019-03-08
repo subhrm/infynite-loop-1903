@@ -99,3 +99,24 @@ def get_all_visitor_photos():
 
     return resp
 
+def approve_request(visitor_id):
+    '''
+        Set visitor status to approved
+    '''
+
+    logger.info("Trying to approve visitor request")
+
+    cnx = get_connection()
+    
+    try:
+        cursor = cnx.cursor()
+        query = '''update vms.visitor  set status = 0  where id = %s '''
+        cursor.execute(query, (visitor_id,))
+        cursor.close()
+        cnx.close()
+    except Exception as ex:
+        logger.exception(str(ex))
+        raise Exception("Could not approve this request")
+
+    return "sucess"
+

@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const db = require('../db');
+const pdfEmail = require('../utils/pdfEmail');
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -21,5 +23,8 @@ router.post('/addVisitorSecurity',(req,res)=> {
   let OUT = req.body.OUT;
   db.addVisitorSecurity(req,res,Name,Email,Photo,Mobile,VisitorType,IN,OUT);
 })
+router.post('/addVisitorEmp', (req,res) => {
+  pdfEmail.generateGatePass(req,res, userData);
+});
 
 module.exports = router;
