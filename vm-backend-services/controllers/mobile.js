@@ -11,9 +11,6 @@ router.get('/getVisitors', (req,res) => {
   db.getVisitors(req,res);
 })
 
-router.get('/getVisitorType', (req,res) => {
-  db.getVisitorType(req,res);
-})
 
 
 module.exports = router;
