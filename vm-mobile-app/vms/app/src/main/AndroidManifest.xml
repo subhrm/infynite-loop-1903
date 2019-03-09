@@ -20,8 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".CameraPhoto"></activity>
-        <activity android:name=".SecurityStaffDashboard" />
+        <activity android:name=".SecurityStaffDashboard"></activity>
         <activity android:name=".VerifyPhoto" />
 
         <meta-data
@@ -31,12 +30,8 @@
         <activity android:name=".ImageViewer" />
         <activity android:name=".VisitorProfile" />
         <activity android:name=".BarcodeScanner" />
-        <activity
-            android:name=".AdminDashboard"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".LoginActivity"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".AdminDashboard" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

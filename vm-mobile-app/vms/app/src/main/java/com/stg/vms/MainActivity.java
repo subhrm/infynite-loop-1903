@@ -1,10 +1,8 @@
 package com.stg.vms;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
-import com.stg.vms.data.VMSData;
+import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,8 +14,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    VMSData.getInstance().clear();
-                } catch (Exception e) {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 navigateToLogin();
@@ -25,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         });
         t.start();
     }
-
     private void navigateToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);

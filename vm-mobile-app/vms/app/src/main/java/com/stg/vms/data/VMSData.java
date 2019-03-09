@@ -1,21 +1,18 @@
 package com.stg.vms.data;
 
-import com.stg.vms.VisitorProfile;
+import com.stg.vms.model.TodaysVisitors;
 import com.stg.vms.model.UserProfile;
-import com.stg.vms.model.VisitorProfileResponse;
+import com.stg.vms.model.VisitorsLastDay;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class VMSData implements Serializable {
     private static final VMSData ourInstance = new VMSData();
-    private String visitorPhoto = null;
-    private String newPhoto = null;
+    private String qrCodeData = null;
     private UserProfile userProfile;
-    private String accessToken;
-    private String visitorId;
-    private boolean encrypted;
-    private boolean searchByPhoto;
-    private VisitorProfileResponse visitorProfile;
+    private TodaysVisitors todaysVisitors;
+    private List<VisitorsLastDay> visitorLastDays;
 
     private VMSData() {
     }
@@ -24,15 +21,16 @@ public class VMSData implements Serializable {
         return ourInstance;
     }
 
-    public void clear() {
-        visitorPhoto = null;
-        newPhoto = null;
-        userProfile = null;
-        accessToken = null;
-        visitorId = null;
-        encrypted = false;
-        searchByPhoto = false;
-        visitorProfile = null;
+    public static VMSData getOurInstance() {
+        return ourInstance;
+    }
+
+    public String getQrCodeData() {
+        return qrCodeData;
+    }
+
+    public void setQrCodeData(String qrCodeData) {
+        this.qrCodeData = qrCodeData;
     }
 
     public UserProfile getUserProfile() {
@@ -43,59 +41,19 @@ public class VMSData implements Serializable {
         this.userProfile = userProfile;
     }
 
-    public String getAccessToken() {
-        return accessToken;
+    public TodaysVisitors getTodaysVisitors() {
+        return todaysVisitors;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setTodaysVisitors(TodaysVisitors todaysVisitors) {
+        this.todaysVisitors = todaysVisitors;
     }
 
-    public String getVisitorPhoto() {
-        return visitorPhoto;
+    public List<VisitorsLastDay> getVisitorLastDays() {
+        return visitorLastDays;
     }
 
-    public void setVisitorPhoto(String visitorPhoto) {
-        this.visitorPhoto = visitorPhoto;
-    }
-
-    public String getNewPhoto() {
-        return newPhoto;
-    }
-
-    public void setNewPhoto(String newPhoto) {
-        this.newPhoto = newPhoto;
-    }
-
-    public String getVisitorId() {
-        return visitorId;
-    }
-
-    public void setVisitorId(String visitorId) {
-        this.visitorId = visitorId;
-    }
-
-    public boolean isEncrypted() {
-        return encrypted;
-    }
-
-    public void setEncrypted(boolean encrypted) {
-        this.encrypted = encrypted;
-    }
-
-    public boolean isSearchByPhoto() {
-        return searchByPhoto;
-    }
-
-    public void setSearchByPhoto(boolean searchByPhoto) {
-        this.searchByPhoto = searchByPhoto;
-    }
-
-    public VisitorProfileResponse getVisitorProfile() {
-        return visitorProfile;
-    }
-
-    public void setVisitorProfile(VisitorProfileResponse visitorProfile) {
-        this.visitorProfile = visitorProfile;
+    public void setVisitorLastDays(List<VisitorsLastDay> visitorLastDays) {
+        this.visitorLastDays = visitorLastDays;
     }
 }

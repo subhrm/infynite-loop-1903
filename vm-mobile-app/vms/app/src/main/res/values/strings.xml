@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">VMS</string>
-    <string name="label_loading">Loading</string>
-    <string name="label_login">Login</string>
-    <string name="label_email">Email Id</string>
-    <string name="label_password">Password</string>
-    <string name="lbl_home">Home</string>
+    <string name="label.loading">Loading</string>
+    <string name="label.login">Login</string>
+    <string name="label.email">Email Id</string>
+    <string name="label.password">Password</string>
+    <string name="lbl.home">Home</string>
     <string name="err_no_photo">No Photo</string>
     <string name="lbl_scan_qr_code">Scan QR Code</string>
     <string name="lbl_visitor_id">Visitor Id</string>
@@ -12,17 +12,7 @@
     <string name="lbl_today_s_visitors">Today\'s Visitors</string>
     <string name="lbl_total_visitors">Total Visitors</string>
     <string name="lbl_inside_campus">Inside Campus</string>
-    <string name="lbl_yet_to_come">Scheduled to come</string>
+    <string name="lbl_yet_to_come">Yet to come</string>
     <string name="lbl_visitors_in_last_days">Visitors in last 10 days</string>
     <string name="lbl_logout">Logout</string>
-    <string name="lbl_search_by_photo">Search By Photo</string>
-    <string name="lbl_final_exit">Final Exit</string>
-    <string name="lbl_temproray_exit">Temproray Exit</string>
-    <string name="lbl_verify_photo">Verify Photo</string>
-    <string name="lbl_expected_exit">Expected Exit</string>
-    <string name="lbl_expected_entry">Expected Entry</string>
-    <string name="lbl_re_enable">Re-Enable</string>
-    <string name="lbl_reject">Reject</string>
-    <string name="lbl_approve">Approve</string>
-    <string name="lbl_photo_match_by_system">Photo Match by System :</string>
 </resources>

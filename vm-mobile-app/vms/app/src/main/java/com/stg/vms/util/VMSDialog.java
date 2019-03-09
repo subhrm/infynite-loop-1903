@@ -14,10 +14,8 @@ public class VMSDialog {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
-                if (backOnOk) {
+                if (backOnOk)
                     context.onBackPressed();
-                    context.finish();
-                }
             }
         });
         errorDialogBuilder.create().show();
