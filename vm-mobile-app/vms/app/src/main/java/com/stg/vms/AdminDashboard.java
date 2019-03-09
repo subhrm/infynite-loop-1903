@@ -34,8 +34,8 @@ import java.util.List;
 
 public class AdminDashboard extends AppCompatActivity {
     private static final String TAG = "AppCompatActivity";
-    private boolean reloadVisitors = true, activityForResult = false;
     private static final int REQUEST_SCAN_QR_CODE = 1, REQUEST_CAMERA_PHOTO = 2;
+    private boolean reloadVisitors = true, activityForResult = false;
     private TextView totalVisitors, visitorInside, visitorRemaining, lblVisitorsLastDays;
     private EditText visitorId;
     private View visitorsToday, visitorsLastDay, loader;
@@ -48,6 +48,10 @@ public class AdminDashboard extends AppCompatActivity {
             finish();
             return;
         }
+        VMSData.getInstance().setVisitorProfile(null);
+        VMSData.getInstance().setNewPhoto(null);
+        VMSData.getInstance().setVisitorPhoto(null);
+        VMSData.getInstance().setSearchByPhoto(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
         ImageView btnSearchByPhoto = findViewById(R.id.adm_btn_searchByPhoto);

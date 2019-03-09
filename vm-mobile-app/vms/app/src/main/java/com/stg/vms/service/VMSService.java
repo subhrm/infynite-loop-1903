@@ -7,6 +7,7 @@ import android.util.Log;
 import com.stg.vms.data.AppConstants;
 import com.stg.vms.data.AppMessages;
 import com.stg.vms.data.VMSData;
+import com.stg.vms.model.ApproveVisitorRequest;
 import com.stg.vms.model.LocationAccessRequest;
 import com.stg.vms.model.LoginRequest;
 import com.stg.vms.model.LoginResponse;
@@ -20,6 +21,7 @@ import com.stg.vms.model.VisitorProfileResponse;
 import com.stg.vms.model.VisitorsResponse;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class VMSService {
@@ -147,6 +149,26 @@ public class VMSService {
 
     public static void locationAccess(LocationAccessRequest request, final Callback<ServiceResponse<Object>> callback) {
         Call<ServiceResponse<Object>> call = serviceInterface.locationAccess(request, VMSData.getInstance().getAccessToken());
+        call.enqueue(new retrofit2.Callback<ServiceResponse<Object>>() {
+            @Override
+            public void onResponse(Call<ServiceResponse<Object>> call, Response<ServiceResponse<Object>> response) {
+                if (response == null || response.body() == null)
+                    callback.onError(AppMessages.SERVICE_CALL_ERROR);
+                else if (response.body().getStatus() == AppConstants.SERVICE_STATUS_LOGIN_ERROR)
+                    callback.onLoginError(AppMessages.SERVICE_CALL_AUTH_ERROR);
+                else
+                    callback.onSuccess(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ServiceResponse<Object>> call, Throwable t) {
+                callback.onError(AppMessages.SERVICE_CALL_ERROR);
+            }
+        });
+    }
+
+    public static void approveVisitor(ApproveVisitorRequest request, final Callback<ServiceResponse<Object>> callback) {
+        Call<ServiceResponse<Object>> call = serviceInterface.approveVisitor(request, VMSData.getInstance().getAccessToken());
         call.enqueue(new retrofit2.Callback<ServiceResponse<Object>>() {
             @Override
             public void onResponse(Call<ServiceResponse<Object>> call, Response<ServiceResponse<Object>> response) {

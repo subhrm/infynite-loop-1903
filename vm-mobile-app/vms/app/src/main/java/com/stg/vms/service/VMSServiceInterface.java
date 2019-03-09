@@ -1,6 +1,7 @@
 package com.stg.vms.service;
 
 import com.stg.vms.data.AppConstants;
+import com.stg.vms.model.ApproveVisitorRequest;
 import com.stg.vms.model.LocationAccessRequest;
 import com.stg.vms.model.LoginRequest;
 import com.stg.vms.model.LoginResponse;
@@ -27,4 +28,7 @@ public interface VMSServiceInterface {
 
     @POST("mobile/locationAccess")
     Call<ServiceResponse<Object>> locationAccess(@Body LocationAccessRequest request, @Header(AppConstants.SERVICE_HEADER_TOKEN) String accessToken);
+
+    @POST("mobile/approveVisitor")
+    Call<ServiceResponse<Object>> approveVisitor(@Body ApproveVisitorRequest request, @Header(AppConstants.SERVICE_HEADER_TOKEN) String accessToken);
 }

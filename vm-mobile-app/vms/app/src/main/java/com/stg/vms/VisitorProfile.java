@@ -94,6 +94,7 @@ public class VisitorProfile extends AppCompatActivity {
             @Override
             public void onSuccess(VisitorProfileResponse data) {
                 try {
+                    VMSData.getInstance().setVisitorProfile(data);
                     VMSData.getInstance().setVisitorId(String.valueOf(data.getVisitorId()));
                     VMSData.getInstance().setVisitorPhoto(data.getPhoto());
                     visitorImage.setImageBitmap(ImageUtil.base642Bitmap(data.getPhoto()));

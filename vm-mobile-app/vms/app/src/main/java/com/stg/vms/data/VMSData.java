@@ -1,6 +1,8 @@
 package com.stg.vms.data;
 
+import com.stg.vms.VisitorProfile;
 import com.stg.vms.model.UserProfile;
+import com.stg.vms.model.VisitorProfileResponse;
 
 import java.io.Serializable;
 
@@ -13,6 +15,7 @@ public class VMSData implements Serializable {
     private String visitorId;
     private boolean encrypted;
     private boolean searchByPhoto;
+    private VisitorProfileResponse visitorProfile;
 
     private VMSData() {
     }
@@ -29,6 +32,7 @@ public class VMSData implements Serializable {
         visitorId = null;
         encrypted = false;
         searchByPhoto = false;
+        visitorProfile = null;
     }
 
     public UserProfile getUserProfile() {
@@ -85,5 +89,13 @@ public class VMSData implements Serializable {
 
     public void setSearchByPhoto(boolean searchByPhoto) {
         this.searchByPhoto = searchByPhoto;
+    }
+
+    public VisitorProfileResponse getVisitorProfile() {
+        return visitorProfile;
+    }
+
+    public void setVisitorProfile(VisitorProfileResponse visitorProfile) {
+        this.visitorProfile = visitorProfile;
     }
 }

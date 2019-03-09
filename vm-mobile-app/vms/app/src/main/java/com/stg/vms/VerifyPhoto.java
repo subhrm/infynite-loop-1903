@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,9 +22,7 @@ import com.stg.vms.util.VMSDialog;
 import java.text.DecimalFormat;
 
 public class VerifyPhoto extends AppCompatActivity {
-    private static final int REQUEST_TAKE_PHOTO = 1, MY_CAMERA_REQUEST_CODE = 100;
     private static final int REQUEST_CAMERA_PHOTO = 1;
-    String currentPhotoPath;
     ImageView newPhoto, existingPhoto;
     View loader, mainContainer;
     TextView matchPercent;
@@ -47,8 +46,23 @@ public class VerifyPhoto extends AppCompatActivity {
         newPhoto = findViewById(R.id.vp_newImage);
         matchPercent = findViewById(R.id.vp_val_match);
         loader = findViewById(R.id.vp_loader);
-        loader.setVisibility(View.VISIBLE);
+        Button btnApprove = findViewById(R.id.vp_btn_approve);
+        Button btnReject = findViewById(R.id.vp_btn_reject);
 
+        loader.setVisibility(View.VISIBLE);
+        btnApprove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        btnReject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(VerifyPhoto.this, AdminDashboard.class));
+                finish();
+            }
+        });
         if (VMSData.getInstance().isSearchByPhoto()) {
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -113,8 +127,14 @@ public class VerifyPhoto extends AppCompatActivity {
 
             @Override
             public void onLoginError(String errorMsg) {
-
+                Toast.makeText(VerifyPhoto.this, AppMessages.SERVICE_CALL_AUTH_ERROR, Toast.LENGTH_LONG).show();
+                startActivity(new Intent(VerifyPhoto.this, LoginActivity.class));
+                finish();
             }
         });
+    }
+
+    private void approveVisitor() {
+        VMSService.
     }
 }
