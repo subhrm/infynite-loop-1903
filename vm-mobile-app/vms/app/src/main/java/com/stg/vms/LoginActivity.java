@@ -70,15 +70,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResponse data) {
                 if (data != null) {
-                    VMSData.getInstance().setUserProfile(new UserProfile(data.getUserId(), data.getUserName(), data.getEmail(), data.getUserRole(), new Date()));
-                    VMSData.getInstance().setTodaysVisitors(data.getTodaysVisitors());
-                    VMSData.getInstance().setVisitorLastDays(data.getVisitorLastDays());
+                    VMSData.getInstance().setUserProfile(new UserProfile(data.getUserId(), data.getName(), data.getEmail(), data.getUserRole(), new Date()));
+
                     if (data.getUserRole().equalsIgnoreCase(AppConstants.ROLE_SECURITY_ADMIN)) {
+                        VMSData.getInstance().setAccessToken(data.getToken());
                         navigateTo(AdminDashboard.class);
                     } else if (data.getUserRole().equalsIgnoreCase(AppConstants.ROLE_SECURITY_STAFF)) {
+                        VMSData.getInstance().setAccessToken(data.getToken());
                         navigateTo(SecurityStaffDashboard.class);
                     } else {
-                        errorView.setText(AppMessages.ACCESS_ERROR);
+                        errorView.setText(AppMessages.SERVICE_CALL_AUTH_ERROR);
                         errorView.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -93,6 +94,11 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                 errorView.setText(errorMsg);
                 errorView.setVisibility(View.VISIBLE);
+                loader.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onLoginError(String errorMsg) {
                 loader.setVisibility(View.GONE);
             }
         });
