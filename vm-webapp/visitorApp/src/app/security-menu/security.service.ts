@@ -12,13 +12,13 @@ export class SecurityService {
 
   authToken:string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGVjayI6dHJ1ZSwiaWF0IjoxNTUyMTAyODMzLCJleHAiOjE1NTIxMzE2MzN9.8SWENZClaXtWXDFsV5d2r05M1HNhboFSTLLkHC0wmR8";
 
-  fetchEmployeeDetails(){
+  fetchEmployeeDetails(empPayload){
     const httpOptions = {
       headers: new HttpHeaders().set('Content-Type','application/json')
                                 .set('access-token',this.authToken)
     }
 
-    return this.http.get(environment.apiURL.employeeDetails,httpOptions);
+    return this.http.post(environment.apiURL.employeeDetails,empPayload,httpOptions);
   }
 
   requestGuestAccess(visitorPayload){
@@ -29,4 +29,15 @@ export class SecurityService {
 
     return this.http.post(environment.apiURL.addVisitorSecurity,visitorPayload,httpOptions);
   }
+
+  fetchApprovedVisitors(){
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type','application/json')
+                                .set('access-token',this.authToken)
+    }
+
+    return this.http.get(environment.apiURL.approvedVisitors,httpOptions);
+  }
+
+
 }

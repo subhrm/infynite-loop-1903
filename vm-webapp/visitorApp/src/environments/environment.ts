@@ -9,9 +9,9 @@ export const environment = {
     visitor: 'http://localhost:3000/web/getVisitorType',
     imageValidation:'http://35.207.12.149:8000/api/upload-photo-b64',
     addVisitorEmployee: 'http://localhost:3000/web/addVisitorEmployee',
-    employeeDetails:'',
+    employeeDetails:'http://localhost:3000/mobile/fetchEmployeeDetails',
     addVisitorSecurity:'http://localhost:3000/web/addVisitorSecurity',
-    approvedVisitors:''
+    approvedVisitors:'http://localhost:3000/web/getApprovedVisitorsToday'
   }
 };
 

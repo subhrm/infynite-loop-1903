@@ -1,7 +1,7 @@
 <h2>Enter Employee ID</h2>
 <div class="example-container">
     <mat-form-field>
-      <input matInput placeholder="ID" required>
+      <input matInput [(ngModel)]="id" placeholder="ID" required>
     </mat-form-field>
 
     <mat-card-actions style="margin-left:5%;">
@@ -11,14 +11,14 @@
   
 <div *ngIf="employeeData">
     <mat-form-field>
-      <input matInput placeholder="Name" required>
+      <input [(ngModel)]="name" matInput placeholder="Name" required>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Email" required>
+      <input [(ngModel)]="email" matInput placeholder="Email" required>
     </mat-form-field>
 
     <mat-form-field>
-        <input matInput placeholder="Mobile" required>
+        <input [(ngModel)]="mobile" matInput placeholder="Mobile" required>
     </mat-form-field>
 
     <!-- <mat-form-field>
