@@ -10,6 +10,7 @@ var con = mysql.createConnection({
     password: process.env.DB_PASS,
     database: process.env.DB_NAME
 });
+const qrEncodeUrl = 'http://35.207.12.149:8000/api'
 
 // con.connect(function(err){
 //     if(err) throw err;
@@ -257,7 +258,7 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
                 if(err) throw err;
                 
             
-                const qrEncodeUrl = 'http://35.207.12.149:8000/api'
+                
                 let cipher_response = request.post({
                     "headers": {
                         "content-type": "application/json"
