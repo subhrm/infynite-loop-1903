@@ -17,6 +17,7 @@ router.get('/', function (req, res, next) {
 router.post('/login', (req,res,next) => {
   let email = req.body.email;
   let pass = crypto.createHash('sha256').update(req.body.password).digest('hex');
+  console.log(pass);
   let requestedFrom = req.body.requestedFrom;
   db.login(req, res, email, pass, requestedFrom);
 })

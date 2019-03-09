@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 var mysql = require('mysql');
+var request = require('request');
 
 var con = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -13,6 +14,7 @@ con.connect(function(err){
     if(err) throw err;
 
 });
+// fetches visitor's details like name, email, photo etc
 exports.fetchVisitorProfile = function(req, res, id, role) {
     let query = '';
        if(role =='SEC_ADM'){
@@ -33,7 +35,8 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
             expected_out_time,
             "%Y-%m-%d %H:%i"
         ) expected_out_time,
-        v.status status
+        v.status status,
+        t.visitor_type_desc type
     FROM
         vms.visitor v
     JOIN vms.images i
@@ -51,10 +54,10 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
 
        }
        try{
-            console.log(query);
+            // console.log(query);
             con.query(query, function(err, result) {
-                if (err) throw err;
                 console.log(result);
+                if (err) throw err;
                 let data = result[0];
                 let response = {
                     "status": 1,
@@ -69,13 +72,12 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
                         "expectedEntry": data.expected_in_time,
                         "actualEntry": data.actual_in_time,
                         "expectedExit": data.expected_out_time,
-                        "visitorStatus": data.status
+                        "visitorStatus": data.status,
+                        "visitorType": data.type
                     }
                 }
                 res.send(response);
-                // return result;
             });
-        // });
        }
        catch (e) {
             res.send({

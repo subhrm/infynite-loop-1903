@@ -1,5 +1,6 @@
 require('dotenv').config();
 const qr_generation = require('./utils/qr_generation');
+const pdfEmail = require('./utils/pdfEmail');
 
 var mysql = require('mysql');
 var request = require('request');
@@ -10,6 +11,7 @@ var con = mysql.createConnection({
     password: process.env.DB_PASS,
     database: process.env.DB_NAME
 });
+const qrEncodeUrl = 'http://35.207.12.149:8000/api'
 
 // con.connect(function(err){
 //     if(err) throw err;
@@ -27,20 +29,20 @@ con.connect(function(err){
 exports.login = function(req, res, email, password, requestedFrom) {
 
     const query = `select * from vms_users where email="${email}" and password="${password}" LIMIT 0,1`
-    // console.log(query)
+    console.log(query)
     try {
         con.query(query, function(err, result) {
             if (err) throw err;
-            // console.log(result);
+            console.log(result);
             if(result.length > 0) { 
                 let data = result[0];
                 const payload = {
                     check: true
                 };
                 var token = jwt.sign(payload, req.app.get('Secret'), {
-                    expiresIn: 28800 // expires in 8 hours
+                    expiresIn: 86400 // expires in 8 hours
                 });
-
+                
                 res.send({
                     status:req.app.get('status-code').success,
                     message: "Authentication Successful",
@@ -77,7 +79,7 @@ exports.locationAccess = function(req,res,visitorId,securityId){
         con.query(query, function(err, result) {
             if (err) throw err;
             con.query(query1, function(err1, result1){
-                 console.log(result);
+                 console.log(result1);
                     res.send({
                         status:req.app.get('status-code').success,
                         message: result1[0]['visitor_type_desc'],
@@ -96,7 +98,7 @@ exports.locationAccess = function(req,res,visitorId,securityId){
 }
 
 exports.getVisitors = function(req,res) {
-    const query = `SELECT COUNT(1) total, SUM(IF(status = 2, 1, 0)) inside, SUM(IF(status <> 2, 1, 0)) remaining FROM visitor WHERE DATE(expected_in_time) = CURDATE();`;
+    const query = `SELECT COUNT(1) total, SUM(IF(status = 1, 1, 0)) inside, SUM(IF(status <> 1, 1, 0)) remaining FROM visitor WHERE DATE(expected_in_time) = CURDATE();`;
     const query2 = `SELECT COUNT(1) as count, visitor_date as date FROM (
         SELECT id visitor_id, DATE_FORMAT(expected_in_time, '%Y-%m-%d') visitor_date FROM visitor WHERE DATE(expected_in_time) BETWEEN date_sub(CURDATE(), INTERVAL 10 DAY) AND CURDATE()) v GROUP BY visitor_date;`
     console.log(query);
@@ -256,9 +258,6 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,refered_by
             const query1 = `select image_data  from images where image_Id =${Photo}`;
             con.query(query1, function (err, result1){
                 if(err) throw err;
-                
-            
-                const qrEncodeUrl = 'http://35.207.12.149:8000/api'
                 let cipher_response = request.post({
                     "headers": {
                         "content-type": "application/json"
@@ -272,7 +271,7 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,refered_by
                     console.log(JSON.parse(body).cipher_text)
 
                     qr_generation.getQrSvg(cipher_id).then(qrData => {
-                        res.send({
+                        const respData = {
                             status:req.app.get('status-code').success,
                             message: "Success",
                             data: {
@@ -280,7 +279,9 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,refered_by
                                 Photo:result1[0].image_data,
                                 QR_code: qrData
                             }
-                        });
+                        }
+                        const userObj = {name: Name, cipher_id: cipher_id, admin_email: 'anubhab.mondal11@gmail.com' }
+                        pdfEmail.isgApprovalMail(req,res, userObj, respData)
                     })
             });
 
@@ -306,10 +307,12 @@ exports.addVisitorEmployee = function(req,res,name,email,photo,mobile,refered_by
         con.query(query, function (err, result) {
             if(err) throw err;
             console.log(result);
-            res.send({
-                status:req.app.get('status-code').success,
-                message: "Data fetched successfully",
-            })
+            const userObj = {id: result.insertId, name: name, expected_in_time: in_time, email: email};
+            pdfEmail.sendEmail(req, res, userObj);
+            // res.send({
+            //     status:req.app.get('status-code').success,
+            //     message: "Data fetched successfully",
+            // })
         });
     } catch (error) {
         console.log(error)
@@ -389,6 +392,40 @@ exports.getVisitorInsideCampus = function(req,res) {
                 message: "Data fetched successfully",
                 data: result
             })
+        });
+    } catch (error) {
+        console.log(error)
+        res.send({
+            status: req.app.get('status-code').error,
+            message: "Failure"
+        });
+    }
+}
+
+exports.approveVisitor = function(req,res, visitorId, visitorPhoto) {
+    const query = "select(max(image_id))+1 new_id from images";
+    
+    try {
+        con.query(query, function (err, result) {
+            if(err) throw err;
+            console.log(result);
+            const newId = result[0].new_id;
+            const query1 = `INSERT into images VALUES(${newId}, "${visitorPhoto}")`
+            con.query(query1, function(err1, result1) {
+                if(err1) throw err1;
+                console.log(result1);
+                const query2 = `UPDATE visitor SET actual_photo=${newId},actual_in_time=CURRENT_TIMESTAMP, status=1 where id=${visitorId}`;
+                con.query(query2, function(err2, result2) {
+                    if(err2) throw err2;
+                    console.log(result2);
+                    res.send({
+                        status:req.app.get('status-code').success,
+                        message: "Data Saved successfully"
+                    });
+
+                })
+            })
+            
         });
     } catch (error) {
         console.log(error)
