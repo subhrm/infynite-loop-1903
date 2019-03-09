@@ -13,6 +13,7 @@ con.connect(function(err){
     if(err) throw err;
 
 });
+// fetches visitor's details like name, email, photo etc
 exports.fetchVisitorProfile = function(req, res, id, role) {
     let query = '';
        if(role =='SEC_ADM'){
@@ -33,7 +34,8 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
             expected_out_time,
             "%Y-%m-%d %H:%i"
         ) expected_out_time,
-        v.status status
+        v.status status,
+        v.visitor_type_cd type
     FROM
         vms.visitor v
     JOIN vms.images i
@@ -54,14 +56,7 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
             console.log(query);
             con.query(query, function(err, result) {
                 if (err) throw err;
-                console.log(result);
                 let data = result[0];
-                const payload = {
-                    check: true
-                };
-                var token = jwt.sign(payload, req.app.get('Secret'), {
-                    expiresIn: 28800 // expires in 8 hours
-                });
                 let response = {
                     "status": 1,
                     "message": "",
@@ -75,13 +70,12 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
                         "expectedEntry": data.expected_in_time,
                         "actualEntry": data.actual_in_time,
                         "expectedExit": data.expected_out_time,
-                        "visitorStatus": data.status
+                        "visitorStatus": data.status,
+                        "visitorType": data.type
                     }
                 }
                 res.send(response);
-                // return result;
             });
-        // });
        }
        catch (e) {
             res.send({

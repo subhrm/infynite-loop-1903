@@ -8,6 +8,7 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+//to fetch visitor details by passing visitor id and user type
 router.post('/getVisitorProfile', function(req, res, next){
   let id = req.body.visitorId;
   let role = req.body.securityRole;

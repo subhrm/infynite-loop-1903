@@ -1,0 +1,12 @@
+TYPE: post
+END-URL:
+    /mobile/getVisitorProfile
+BODY: 
+    {
+        "visitorId": 1,
+        "securityRole": "SEC_ADM"
+    }
+HEADERS: 
+    Content-Type:application/json
+    Accept:application/json
+    access-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGVjayI6dHJ1ZSwiaWF0IjoxNTUyMDYzMDYzLCJleHAiOjE1NTIwOTE4NjN9.IkZkMzNTpGsFhhnplgcAywoSs4zIeoBXiDQz7R_qRUE
