@@ -16,6 +16,7 @@ router.post('/getVisitorProfile', function(req, res, next){
   let id = req.body.visitorId;
   let role = req.body.securityRole;
   let encrypted = req.body.encrypted;
+  console.log(id, role, encrypted);
   if(encrypted == 1){
     let cipher_response = request.post({
       "headers": {
@@ -83,8 +84,7 @@ router.post('/fetchEmployeeDetails', (req,res) => {
 })
 
 router.post('/getVisitorInsideCampus', (req,res) => {
-  const status = req.body.status;
-  db.getVisitorInsideCampus(req,res,status);
+  db.getVisitorInsideCampus(req,res);
 })
 router.post('/approveVisitor', (req,res) => {
   const visitorId = req.body.visitorId;

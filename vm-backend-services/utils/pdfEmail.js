@@ -120,7 +120,7 @@ function generatePDF(req, res, userData) {
                 <p>Infosys Ltd.</p>
                 `
             };
-            console.log(mailOptions);
+            // console.log(mailOptions);
             // console.log(process.env.email_pass)
             // sendMail(mailOptions);
             transporter.sendMail(mailOptions, function (error, info) {
@@ -179,6 +179,56 @@ function generatePDF(req, res, userData) {
 // }).catch(err => {
 //     console.log(err);
 // });
+
+exports.isgApprovalMail = function(req,res, userObj, respData) {
+    // let cipher_response = request.post({
+    //     "headers": {
+    //         "content-type": "application/json"
+    //     },
+    //     "url": qrEncodeUrl + '/generate-code',
+    //     "body": JSON.stringify({
+    //         "plain_text": userObj.userId
+    //     })
+    // }, function (error, response, body) {
+    //     let cipher_id =  JSON.parse(body).cipher_text;
+    //     console.log(cipher_id);
+        const approve_link = `http://35.207.12.149:8000/api/approve-request?code=${userObj.cipher_id}`;
+        const mailOptions = {
+            from: process.env.email_id,
+            to: userObj.admin_email,
+            subject: `Visitor Approval Request for ${userObj.name}`,
+            attachments: [{
+                    filename: "infy-logo.png",
+                    content: infyLogo,
+                    cid: "infy-logo"
+                },
+            ],
+            html: `
+            <div><img src="cid:infy-logo" width="150" height="60" style="float:right"></div>
+            <br />
+            <p>Dear Admin,</p>
+            <p>  A visitor is waiting for you in the gate. Please approve by clicking the link. To reject ignore this mail.</p> 
+            <a href="${approve_link}">Approve</a><br />
+            <p>Security Team</p>
+            `
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+                res.send({
+                    status:req.app.get('status-code').error,
+                    message: "Some Error Occured",
+                    error: error
+                })
+            } else {
+                console.log('Email sent: ' + info.response);
+                res.send(respData);
+            }
+        });
+    // });
+   
+}
 
 
 function sendMail(mailOptions) {

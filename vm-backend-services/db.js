@@ -29,11 +29,11 @@ con.connect(function(err){
 exports.login = function(req, res, email, password, requestedFrom) {
 
     const query = `select * from vms_users where email="${email}" and password="${password}" LIMIT 0,1`
-    // console.log(query)
+    console.log(query)
     try {
         con.query(query, function(err, result) {
             if (err) throw err;
-            // console.log(result);
+            console.log(result);
             if(result.length > 0) { 
                 let data = result[0];
                 const payload = {
@@ -42,7 +42,7 @@ exports.login = function(req, res, email, password, requestedFrom) {
                 var token = jwt.sign(payload, req.app.get('Secret'), {
                     expiresIn: 28800 // expires in 8 hours
                 });
-
+                
                 res.send({
                     status:req.app.get('status-code').success,
                     message: "Authentication Successful",
@@ -256,9 +256,6 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
             const query1 = `select image_data  from images where image_Id =${Photo}`;
             con.query(query1, function (err, result1){
                 if(err) throw err;
-                
-            
-                
                 let cipher_response = request.post({
                     "headers": {
                         "content-type": "application/json"
@@ -272,7 +269,7 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
                     console.log(JSON.parse(body).cipher_text)
 
                     qr_generation.getQrSvg(cipher_id).then(qrData => {
-                        res.send({
+                        const respData = {
                             status:req.app.get('status-code').success,
                             message: "Success",
                             data: {
@@ -280,7 +277,9 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
                                 Photo:result1[0].image_data,
                                 QR_code: qrData
                             }
-                        });
+                        }
+                        const userObj = {name: Name, cipher_id: cipher_id, admin_email: 'anubhab.mondal11@gmail.com' }
+                        pdfEmail.isgApprovalMail(req,res, userObj, respData)
                     })
             });
 
