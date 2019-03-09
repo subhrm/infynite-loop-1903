@@ -308,7 +308,7 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
 
 
 exports.addVisitorEmployee = function(req,res,name,email,photo,mobile,visitorType,in_time,out_time) {
-    const query = `insert into visitor (visitor_type_cd,name,email,actual_photo,mobile,expected_in_time,expected_out_time) values ('${visitorType}','${name}','${email}',${photo},${mobile},'${in_time}','${out_time}')`;
+    const query = `insert into visitor (visitor_type_cd,name,email,uploaded_photo,mobile,expected_in_time,expected_out_time) values ('${visitorType}','${name}','${email}',${photo},${mobile},'${in_time}','${out_time}')`;
     console.log(query);
     try {
         con.query(query, function (err, result) {
