@@ -72,7 +72,7 @@ exports.login = function(req, res, email, password, requestedFrom) {
 exports.locationAccess = function(req,res,visitorId,securityId){
     const query = `select * from visitor_access where visitor_type_cd =(select visitor_type_cd from visitor where id=${visitorId})and 
                     location_code=(select location_id from security where id=${securityId})`
-    const query1= `select location_code from visitor_access where visitor_type_cd = (select visitor_type_cd from visitor where id= ${visitorId}) and location_code=(select location_id from security where id=${securityId})`
+    const query1= `select visitor_type_desc from visitor_type where visitor_type_cd =(select visitor_type_cd from visitor where id=${visitorId});`
     try {
         con.query(query, function(err, result) {
             if (err) throw err;
@@ -80,7 +80,7 @@ exports.locationAccess = function(req,res,visitorId,securityId){
                  console.log(result);
                     res.send({
                         status:req.app.get('status-code').success,
-                        message: result1,
+                        message: result1[0]['visitor_type_desc'],
                     
                     });
                 });
@@ -245,13 +245,14 @@ exports.updateGatePass = function(req,res,visitorId,depositType){
     }
 }
 
-exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorType,IN,OUT) {
-    const query = `insert into visitor (visitor_type_cd,name,email,actual_photo,mobile,expected_in_time,expected_out_time) values ('${VisitorType}','${Name}','${Email}',${Photo},${Mobile},'${IN}','${OUT}')`;
+exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,refered_by,VisitorType,IN,OUT) {
+    const query = `insert into visitor (visitor_type_cd,name,email,uploaded_photo,refered_by,mobile,expected_in_time,expected_out_time) values ('${VisitorType}','${Name}','${Email}',${Photo},${refered_by},${Mobile},'${IN}','${OUT}')`;
     console.log(query)
     try {
         con.query(query, function (err, result) {
             if(err) throw err;
-            
+            console.log(result)
+            res.send(result);
             const query1 = `select image_data  from images where image_Id =${Photo}`;
             con.query(query1, function (err, result1){
                 if(err) throw err;
@@ -283,16 +284,7 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
                     })
             });
 
-                // res.send({
-                //     status:req.app.get('status-code').success,
-                //     message: "Success",
-                //     data: {
-                //         Name:Name,
-                //         Photo:result1[0],
-                //         QR_code=exports.getQrSvgO(cipher_id)
-
-                //     }
-                // });
+                
             });
             
            
@@ -307,8 +299,8 @@ exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorTyp
 }
 
 
-exports.addVisitorEmployee = function(req,res,name,email,photo,mobile,visitorType,in_time,out_time) {
-    const query = `insert into visitor (visitor_type_cd,name,email,actual_photo,mobile,expected_in_time,expected_out_time) values ('${visitorType}','${name}','${email}',${photo},${mobile},'${in_time}','${out_time}')`;
+exports.addVisitorEmployee = function(req,res,name,email,photo,mobile,refered_by,visitorType,in_time,out_time) {
+    const query = `insert into visitor (visitor_type_cd,name,email,uploaded_photo,mobile,refered_by,expected_in_time,expected_out_time) values ('${visitorType}','${name}','${email}',${photo},${mobile},${refered_by},'${in_time}','${out_time}')`;
     console.log(query);
     try {
         con.query(query, function (err, result) {

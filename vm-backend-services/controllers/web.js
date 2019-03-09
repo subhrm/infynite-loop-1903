@@ -18,10 +18,11 @@ router.post('/addVisitorSecurity',(req,res)=> {
   let Email = req.body.Email;
   let Photo = req.body.Photo;
   let Mobile = req.body.Mobile;
+  let refered_by =req.body.refered_by;
   let VisitorType = req.body.VisitorType;
   let IN = req.body.IN;
   let OUT = req.body.OUT;
-  db.addVisitorSecurity(req,res,Name,Email,Photo,Mobile,VisitorType,IN,OUT);
+  db.addVisitorSecurity(req,res,Name,Email,Photo,Mobile,refered_by,VisitorType,IN,OUT);
 })
 router.post('/addVisitorEmployee', (req,res) => {
   // pdfEmail.generateGatePass(req,res, userData);
@@ -29,10 +30,11 @@ router.post('/addVisitorEmployee', (req,res) => {
   let Email = req.body.Email;
   let Photo = req.body.Photo;
   let Mobile = req.body.Mobile;
+  let refered_by =req.body.refered_by;
   let VisitorType = req.body.VisitorType;
   let IN = req.body.IN;
   let OUT = req.body.OUT;
-  db.addVisitorEmployee(req,res,Name,Email,Photo,Mobile,VisitorType,IN,OUT);
+  db.addVisitorEmployee(req,res,Name,Email,Photo,Mobile,refered_by,VisitorType,IN,OUT);
 });
 
 router.get('/getApprovedVisitorsToday', (req,res) => {
