@@ -17,7 +17,7 @@ export class SecurityService {
       headers: new HttpHeaders().set('Content-Type','application/json')
                                 .set('access-token',this.authToken)
     }
-
+    
     return this.http.post(environment.apiURL.employeeDetails,empPayload,httpOptions);
   }
 

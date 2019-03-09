@@ -12,7 +12,8 @@ export const environment = {
     employeeDetails:'http://localhost:3000/mobile/fetchEmployeeDetails',
     addVisitorSecurity:'http://localhost:3000/web/addVisitorSecurity',
     approvedVisitors:'http://localhost:3000/web/getApprovedVisitorsToday'
-  }
+  },
+  authToken:""
 };
 
 /*
