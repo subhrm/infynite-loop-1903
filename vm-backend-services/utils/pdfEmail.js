@@ -57,7 +57,7 @@ function generatePDF(req, res, userData) {
         },
         "url": qrEncodeUrl + '/generate-code',
         "body": JSON.stringify({
-            "plain_text": "12345678"
+            "plain_text": userData.id
         })
     }, function (error, response, body) {
         let cipher_id =  JSON.parse(body).cipher_text;
