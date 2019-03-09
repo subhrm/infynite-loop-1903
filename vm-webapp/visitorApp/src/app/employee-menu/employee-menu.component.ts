@@ -19,8 +19,8 @@ export class EmployeeMenuComponent implements OnInit {
   outTime: Date;
   photoID:string;
   selectedVisitorType:string;
-  photo: any;
   imageSource: any;
+  showSpinner:boolean = false;
 
 
   constructor(private empService:EmployeeService,private secService:SecurityService,private _sanitizer: DomSanitizer) { }
@@ -36,6 +36,7 @@ export class EmployeeMenuComponent implements OnInit {
 
   validateFile(event){
     let self = this;
+    self.showSpinner = true;
     let file = (<HTMLInputElement>document.getElementById('visitorImage')).files[0];
     console.log(file);
 
@@ -54,11 +55,14 @@ export class EmployeeMenuComponent implements OnInit {
       self.empService.validateImageBase64(filePayload)
       .subscribe((response)=>{
           console.log(response);
-          self.photoID = response["image_id"]
+          self.photoID = response["image_id"];
+          self.showSpinner = false;
+          alert("Image Validation successful");
+
         },(httpError)=>{
           console.log(httpError.error);
+          self.showSpinner = false;
           alert(httpError.error.error);
-          
         });
     }
   }
@@ -73,15 +77,15 @@ export class EmployeeMenuComponent implements OnInit {
     let visitorPayload = {
       "Name":this.name,
       "Email":this.email,
-      "Photo":this.photo,
+      "Photo":this.photoID,
       "Mobile":this.mobile,
       "VisitorType":this.selectedVisitorType,
       "Reffered":this.referredBy,
       "IN": in_time,
-      "OUT":this.outTime
+      "OUT":out_time
     };
     
-    this.secService.requestGuestAccess(visitorPayload)
+    this.empService.requestVisitorAccess(visitorPayload)
     .subscribe(response =>{
       this.imageSource = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' 
       + response['data']['Photo']);

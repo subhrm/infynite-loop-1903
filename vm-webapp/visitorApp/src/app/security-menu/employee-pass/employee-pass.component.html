@@ -8,7 +8,7 @@
       <button mat-raised-button (click)="getEmployeeDetails()" color="primary">Get Details</button>
     </mat-card-actions>
 </div>
-  
+
 <div *ngIf="employeeData">
     <mat-form-field>
       <input [(ngModel)]="name" matInput placeholder="Name" required>
@@ -21,13 +21,13 @@
         <input [(ngModel)]="mobile" matInput placeholder="Mobile" required>
     </mat-form-field>
 
-    <!-- <mat-form-field>
-      <input matInput placeholder="Photo" type="file" required>
-    </mat-form-field> -->
-    <input (change)="validateFile()" type="file" accept="image/png, image/jpeg">
+    <img [src]="image_data" alt="pic" style="width: 100px; height: 100px;"/>
 
-    <mat-card-actions>
-        <button mat-raised-button (click)="login()" color="primary">Submit Request</button>
+    <mat-card-actions style="margin-left:5%;">
+        <button mat-raised-button (click)="login()" color="primary">Print Pass</button>
     </mat-card-actions>
+</div>
 
+<div *ngIf="errorDiv">
+    <span style="color:red">No Details Found!</span>
 </div>

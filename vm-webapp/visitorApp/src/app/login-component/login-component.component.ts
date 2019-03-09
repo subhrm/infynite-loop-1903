@@ -37,23 +37,28 @@ export class LoginComponentComponent implements OnInit {
         console.log(responseData["data"]);
         let loginData = responseData["data"];
         
-        if (loginData.status === 1){
+        if (responseData["status"] === 1){
             //Updating the auth token.
             environment.authToken = loginData.token;
+
+            console.log(environment);
 
             switch(loginData.userRole){
               case "SEC_ADM":{
                 self.routerObj.navigateByUrl('security');
+                break;
               }
               case "EMPLOYEE":{
                 self.routerObj.navigateByUrl('employee');
+                break;
               }
               case "HRD":{
                 self.routerObj.navigateByUrl('admin');
+                break;
               }
             }
             self.errorDiv = false;
-        }else if(loginData.status === 0){
+        }else if(responseData["status"] === 0){
             self.routerObj.navigateByUrl('');
             self.errorDiv = true;
         }

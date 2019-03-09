@@ -1,44 +1,51 @@
 <h2>New Visitor Request</h2>
-<div class="example-container">
-    <mat-form-field>
-      <input matInput [(ngModel)]="name" placeholder="Name" required>
-    </mat-form-field>
-  
-    <mat-form-field>
-      <input matInput [(ngModel)]="email" placeholder="Email" type="email" required>
-    </mat-form-field>
+<div style="width: 100%; display:inline-flex;">
+    <div class="example-container">
+        <mat-form-field>
+          <input matInput placeholder="Name" [(ngModel)]="name" required>
+        </mat-form-field>
+      
+        <mat-form-field>
+          <input matInput placeholder="Email" [(ngModel)]="email" required>
+        </mat-form-field>
+    
+        <mat-form-field>
+            <input matInput placeholder="Mobile" [(ngModel)]="mobile" required>
+        </mat-form-field>
+    
+        <mat-form-field>
+            <mat-select [(ngModel)]="selectedVisitorType" placeholder="Visitor Type" required>
+              <mat-option *ngFor="let visitor of visitorType" value="{{visitor.visitor_type_cd}}">
+                {{visitor.visitor_type_cd}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+    
+        <!-- <mat-form-field>
+          <input matInput placeholder="Photo" type="file" required>
+        </mat-form-field> -->
+      <div class="file-input">
+          <input  (change)="validateFile()" type="file" accept="image/png, image/jpeg" id="visitorImage"/>
+      </div>
+      
+        <mat-form-field>
+          <input matInput placeholder="Referred By" [(ngModel)]="referredBy" required>
+        </mat-form-field>
+    
+        <mat-form-field>
+          <input matInput placeholder="IN Time" type="date" [(ngModel)]="inTime" required>
+        </mat-form-field>
+    
+        <mat-form-field>
+          <input matInput placeholder="OUT Time" type="date" [(ngModel)]="outTime" required>
+        </mat-form-field>
 
-    <mat-form-field>
-        <input matInput [(ngModel)]="mobile" placeholder="Mobile" required>
-    </mat-form-field>
+        <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+    
+        <mat-card-actions>
+            <button mat-raised-button (click)="submitRequest()" color="primary">Submit Request</button>
+        </mat-card-actions>
+    </div>
 
-    <mat-form-field>
-      <mat-select placeholder="Visitor Type" required>
-        <mat-option *ngFor="let visitor of visitorType" value="{{visitor.visitor_type_cd}}">
-          {{visitor.visitor_type_cd}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- <mat-form-field>
-      <input matInput placeholder="Photo" type="file" required>
-    </mat-form-field> -->
-    <input id="visitorImage" (change)="validateFile()" type="file" accept="image/png, image/jpeg">
-
-    <mat-form-field>
-      <input matInput [(ngModel)]="referredBy" placeholder="Referred By" required>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput [(ngModel)]="inTime" placeholder="IN Time" type="time" required>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput [(ngModel)]="outTime" placeholder="OUT Time" type="time" required>
-    </mat-form-field>
-
-    <mat-card-actions>
-        <button mat-raised-button (click)="submitRequest()" color="primary">Submit Request</button>
-    </mat-card-actions>
-
+ 
 </div>
