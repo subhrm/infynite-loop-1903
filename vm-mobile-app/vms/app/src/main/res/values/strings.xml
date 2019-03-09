@@ -12,7 +12,7 @@
     <string name="lbl_today_s_visitors">Today\'s Visitors</string>
     <string name="lbl_total_visitors">Total Visitors</string>
     <string name="lbl_inside_campus">Inside Campus</string>
-    <string name="lbl_yet_to_come">Scheduled to come</string>
+    <string name="lbl_yet_to_come">Scheduled</string>
     <string name="lbl_visitors_in_last_days">Visitors in last 10 days</string>
     <string name="lbl_logout">Logout</string>
     <string name="lbl_search_by_photo">Search By Photo</string>

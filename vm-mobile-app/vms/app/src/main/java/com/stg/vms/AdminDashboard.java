@@ -48,10 +48,6 @@ public class AdminDashboard extends AppCompatActivity {
             finish();
             return;
         }
-        VMSData.getInstance().setVisitorProfile(null);
-        VMSData.getInstance().setNewPhoto(null);
-        VMSData.getInstance().setVisitorPhoto(null);
-        VMSData.getInstance().setSearchByPhoto(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
         ImageView btnSearchByPhoto = findViewById(R.id.adm_btn_searchByPhoto);
@@ -111,6 +107,7 @@ public class AdminDashboard extends AppCompatActivity {
         if (requestCode == REQUEST_SCAN_QR_CODE) {
             if (resultCode == RESULT_OK) {
                 String visitorId = data.getStringExtra(BarcodeScanner.BAR_CODE_DATA);
+                Log.e(TAG, "Visitor Id: "+visitorId);
                 retrieveVisitorProfile(visitorId, 1);
             } else {
                 Toast.makeText(this, AppMessages.BARCODE_SCAN_ERROR, Toast.LENGTH_LONG).show();
@@ -181,6 +178,11 @@ public class AdminDashboard extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        VMSData.getInstance().setVisitorProfile(null);
+        VMSData.getInstance().setNewPhoto(null);
+        VMSData.getInstance().setVisitorPhoto(null);
+        VMSData.getInstance().setSearchByPhoto(false);
         InputValidation.hideKeyboard(AdminDashboard.this);
         if (!reloadVisitors)
             return;

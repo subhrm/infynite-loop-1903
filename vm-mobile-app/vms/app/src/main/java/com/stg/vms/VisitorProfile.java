@@ -40,6 +40,9 @@ public class VisitorProfile extends AppCompatActivity {
             finish();
             return;
         }
+
+        VMSData.getInstance().setNewPhoto(null);
+        VMSData.getInstance().setSearchByPhoto(false);
         setContentView(R.layout.activity_visitor_profile);
         mainContainer = findViewById(R.id.prof_container_main);
         mainContainer.setVisibility(View.GONE);
