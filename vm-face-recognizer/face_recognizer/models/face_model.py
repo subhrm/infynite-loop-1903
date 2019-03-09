@@ -28,23 +28,18 @@ class Face_Model:
 
         logger.info("OpenCV cascade models initialized. # of models : %d", len(self.face_cascade_models))
 
-    def vectorize(self, image):
+    def vectorize(self, x):
         '''
             Convert the given image to a vector form using trained resnet model
         '''
-        return self.model.predict(image.reshape((1, 224, 224, 3)))
+        return self.model.predict(x)
 
-    def predict(self, image1_path, image2_path):
+    def predict(self, face1, face2):
         '''
             Predict the similarity of faces in the two given images
         '''
-        img1 = cv2.imread(image1_path)
-        img2 = cv2.imread(image2_path)
-        face1 = self.get_face_from_image(img1)
-        face2 = self.get_face_from_image(img2)
-
-        v1 = self.vectorize(face1)
-        v2 = self.vectorize(face2)
+        v1 = self.vectorize(face1.reshape((1, 224, 224, 3)))
+        v2 = self.vectorize(face2.reshape((1, 224, 224, 3)))
 
         score = cosine_similarity(v1, v2).reshape((1,))
 

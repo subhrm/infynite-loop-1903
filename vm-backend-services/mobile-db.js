@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 var mysql = require('mysql');
+var request = require('request');
 
 var con = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -53,7 +54,7 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
 
        }
        try{
-            console.log(query);
+            // console.log(query);
             con.query(query, function(err, result) {
                 if (err) throw err;
                 let data = result[0];
@@ -79,7 +80,7 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
        }
        catch (e) {
             res.send({
-                "status": 0,
+                "status": -1,
                 "message": "Failed to get data from DB",
                 "error": e
             });

@@ -48,13 +48,15 @@ def add_photo(img):
 
     return image_id
 
-def get_photos():
+def get_photos(id=0):
+
+    logger.info("fetching image with id %s", id)
 
     cnx = get_connection()
     
     try:
         cursor = cnx.cursor()
-        cursor.execute("SELECT image_id,image_data FROM images ")
+        cursor.execute("SELECT image_id,image_data FROM images where image_id=%s", (int(id),))
         res = cursor.fetchall()
         resp = []
         for row in res:
@@ -66,4 +68,55 @@ def get_photos():
         raise Exception("Some thing went wrong")
 
     return resp
+
+def get_all_visitor_photos():
+    '''
+        Get photos of all visitors
+    '''
+
+    logger.info("Trying to fetch all visitor images")
+
+    cnx = get_connection()
+    
+    try:
+        cursor = cnx.cursor()
+        query = '''
+        select v.id, i.image_data
+        from visitor v,
+            images i
+        where v.uploaded_photo = i.image_id;
+        '''
+        cursor.execute(query)
+        res = cursor.fetchall()
+        resp = []
+        for row in res:
+            resp.append(row)
+        cursor.close()
+        cnx.close()
+    except Exception as ex:
+        logger.exception(str(ex))
+        raise Exception("Some thing went wrong")
+
+    return resp
+
+def approve_request(visitor_id):
+    '''
+        Set visitor status to approved
+    '''
+
+    logger.info("Trying to approve visitor request")
+
+    cnx = get_connection()
+    
+    try:
+        cursor = cnx.cursor()
+        query = '''update vms.visitor  set status = 0  where id = %s '''
+        cursor.execute(query, (visitor_id,))
+        cursor.close()
+        cnx.close()
+    except Exception as ex:
+        logger.exception(str(ex))
+        raise Exception("Could not approve this request")
+
+    return "sucess"
 

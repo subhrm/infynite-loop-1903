@@ -20,7 +20,7 @@ def upload_photo_b64():
     status = config.HTTP_STATUS_OK
     try:
         if(request.headers['Content-Type'] != 'application/json'):
-                return make_response('{"error":"unsupported content type"}', config.HTTP_STATUS_ERROR)
+            return make_response('{"error":"unsupported content type"}', config.HTTP_STATUS_ERROR)
 
         # Get POST parameters
         input_json = request.json
