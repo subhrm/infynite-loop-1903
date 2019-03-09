@@ -1,7 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
-
+body{
+    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255,255,255, 0.5)), url('assets/ccc-bg.jpg') no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    margin: 0;
+}
 
 
 .spinner-container{
