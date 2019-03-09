@@ -55,15 +55,26 @@ export class AdminMenuComponent implements OnInit {
   }
   submitVisitorData() {
     this.showSpinnerFlag = true;
+    let inTime = new Date(this.visitor.inDate).toISOString();
+    inTime = inTime.replace('Z','');
+    inTime = inTime.replace('T',' ');
+
+    let outTime = new Date(this.visitor.outDate).toISOString();
+    outTime = outTime.replace('Z','');
+    outTime = outTime.replace('T',' ');
+    let photo = '1';
+    if(this.visitor.photo!= ''){
+      photo = this.visitor.photo;
+    }
     const body = {
       "Name": this.visitor.name,
       "Email":this.visitor.email,
-      "Photo":this.visitor.photo,
+      "Photo": photo,
       "Mobile":this.visitor.phone,
       "VisitorType":this.visitor.type,
       "Reffered":this.visitor.referredBy,
-      "IN":this.visitor.inDate,
-      "OUT":this.visitor.outDate
+      "IN": inTime,
+      "OUT": outTime,
     };
     this._http.requestGuestAccess(body)
     .subscribe(response =>{
