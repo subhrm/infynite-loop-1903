@@ -10,7 +10,7 @@ export class EmployeeService {
 
   constructor(private http:HttpClient) { }
 
-  authToken:string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGVjayI6dHJ1ZSwiaWF0IjoxNTUyMDQ5NTk5LCJleHAiOjE1NTIwNzgzOTl9.qoso1U3IPN39hFfJUH7fIoD6LYpUA5I8bSwjoo3xGp0";
+  authToken:string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGVjayI6dHJ1ZSwiaWF0IjoxNTUyMTAyODMzLCJleHAiOjE1NTIxMzE2MzN9.8SWENZClaXtWXDFsV5d2r05M1HNhboFSTLLkHC0wmR8";
 
   getVisitorDetails(){
     const httpOptions = {
