@@ -14,6 +14,8 @@ export class LoginComponentComponent implements OnInit {
   role:string;
   email:string;
   password:string;
+  errorDiv:boolean;
+  showSpinner:boolean = false;
 
   constructor(private routerObj:Router,private loginService:LoginService) { 
   }
@@ -23,7 +25,7 @@ export class LoginComponentComponent implements OnInit {
 
   login(){
     let self = this;
-    
+    self.showSpinner = true;
     let loginArgs = {
       "email":this.email,
       "password":this.password
@@ -31,6 +33,7 @@ export class LoginComponentComponent implements OnInit {
 
     this.loginService.loginToApp(loginArgs)
     .subscribe((responseData) =>{
+        self.showSpinner = false;
         console.log(responseData["data"]);
         let loginData = responseData["data"];
         
@@ -49,8 +52,10 @@ export class LoginComponentComponent implements OnInit {
                 self.routerObj.navigateByUrl('admin');
               }
             }
+            self.errorDiv = false;
         }else if(loginData.status === 0){
-            self.routerObj.navigateByUrl('login');
+            self.routerObj.navigateByUrl('');
+            self.errorDiv = true;
         }
         
     });

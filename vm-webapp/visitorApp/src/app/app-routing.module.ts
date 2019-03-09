@@ -8,7 +8,7 @@ import { EmployeeMenuComponent } from './employee-menu/employee-menu.component';
 const appRoutes: Routes = [
   { path:'admin', component: AdminMenuComponent},
   { path:'security', component: SecurityMenuComponent},
-  { path:'login', component: LoginComponentComponent},
+  { path:'', component: LoginComponentComponent},
   { path:'employee', component: EmployeeMenuComponent}
 ];
 

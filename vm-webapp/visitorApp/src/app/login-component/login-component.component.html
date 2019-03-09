@@ -36,6 +36,9 @@
       </table>
     </form>
     <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+    <div *ngIf="errorDiv">
+      <span>Invalid UserName/Password.</span>
+    </div>
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button (click)="login()" color="primary">Login</button>
