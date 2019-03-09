@@ -41,6 +41,7 @@ var transporter = nodemailer.createTransport({
 exports.sendEmail = function (req, res, userData) {
     // console.log("Inside send Mail");
     // console.log(userData);
+    userData.expected_in_time = dateFormat(userData.expected_in_time,"dd-mmm-yyyy HH:MM");
     generatePDF(req, res, userData);
 }
 
