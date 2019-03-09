@@ -247,7 +247,7 @@ exports.updateGatePass = function(req,res,visitorId,depositType){
 }
 
 exports.addVisitorSecurity = function(req,res,Name,Email,Photo,Mobile,VisitorType,IN,OUT) {
-    const query = `insert into visitor (visitor_type_cd,name,email,actual_photo,mobile,expected_in_time,expected_out_time) values ('${VisitorType}','${Name}','${Email}',${Photo},${Mobile},'${IN}','${OUT}')`;
+    const query = `insert into visitor (visitor_type_cd,name,email,uploaded_photo,mobile,expected_in_time,expected_out_time) values ('${VisitorType}','${Name}','${Email}',${Photo},${Mobile},'${IN}','${OUT}')`;
     console.log(query)
     try {
         con.query(query, function (err, result) {
