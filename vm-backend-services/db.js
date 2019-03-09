@@ -72,14 +72,13 @@ exports.login = function(req, res, email, password, requestedFrom) {
 }
 
 exports.locationAccess = function(req,res,visitorId,securityId){
-    const query = `select * from visitor_access where visitor_type_cd =(select visitor_type_cd from visitor where id=${visitorId})and 
-                    location_code=(select location_id from security where id=${securityId})`
-    const query1= `select location_code from visitor_access where visitor_type_cd = (select visitor_type_cd from visitor where id= ${visitorId}) and location_code=(select location_id from security where id=${securityId})`
+    const query = `select * from visitor_access where visitor_type_cd =(select visitor_type_cd from visitor where id=$      {visitorId})and location_code=(select location_id from security where id=${securityId})`
+    const query1= `select location_code from visitor_access where visitor_type_cd = (select visitor_type_cd from visitor    where id= ${visitorId}) and location_code=(select location_id from security where id=${securityId})`
     try {
         con.query(query, function(err, result) {
             if (err) throw err;
             con.query(query1, function(err1, result1){
-                 console.log(result);
+                 console.log(result1);
                     res.send({
                         status:req.app.get('status-code').success,
                         message: result1,
@@ -423,7 +422,7 @@ exports.approveVisitor = function(req,res, visitorId, visitorPhoto) {
             con.query(query1, function(err1, result1) {
                 if(err1) throw err1;
                 console.log(result1);
-                const query2 = `UPDATE visitor SET actual_photo=${newId}, status=1 where id=${visitorId}`;
+                const query2 = `UPDATE visitor SET actual_photo=${newId},actual_in_time=CURRENT_TIMESTAMP, status=1 where id=${visitorId}`;
                 con.query(query2, function(err2, result2) {
                     if(err2) throw err2;
                     console.log(result2);
