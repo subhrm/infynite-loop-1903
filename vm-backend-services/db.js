@@ -410,3 +410,37 @@ exports.getVisitorInsideCampus = function(req,res) {
         });
     }
 }
+
+exports.approveVisitor = function(req,res, visitorId, visitorPhoto) {
+    const query = "select(max(image_id))+1 new_id from images";
+    
+    try {
+        con.query(query, function (err, result) {
+            if(err) throw err;
+            console.log(result);
+            const newId = result[0].new_id;
+            const query1 = `INSERT into images VALUES(${newId}, "${visitorPhoto}")`
+            con.query(query1, function(err1, result1) {
+                if(err1) throw err1;
+                console.log(result1);
+                const query2 = `UPDATE visitor SET actual_photo=${newId}, status=1 where id=${visitorId}`;
+                con.query(query2, function(err2, result2) {
+                    if(err2) throw err2;
+                    console.log(result2);
+                    res.send({
+                        status:req.app.get('status-code').success,
+                        message: "Data Saved successfully"
+                    });
+
+                })
+            })
+            
+        });
+    } catch (error) {
+        console.log(error)
+        res.send({
+            status: req.app.get('status-code').error,
+            message: "Failure"
+        });
+    }
+}

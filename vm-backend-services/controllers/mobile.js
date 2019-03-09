@@ -86,6 +86,11 @@ router.post('/getVisitorInsideCampus', (req,res) => {
   const status = req.body.status;
   db.getVisitorInsideCampus(req,res,status);
 })
+router.post('/approveVisitor', (req,res) => {
+  const visitorId = req.body.visitorId;
+  const visitorPhoto = req.body.visitorPhoto;
+  db.approveVisitor(req,res, visitorId, visitorPhoto);
+})
 
 module.exports = router;
 
