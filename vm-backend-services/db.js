@@ -97,7 +97,7 @@ exports.locationAccess = function(req,res,visitorId,securityId){
 }
 
 exports.getVisitors = function(req,res) {
-    const query = `SELECT COUNT(1) total, SUM(IF(status = 2, 1, 0)) inside, SUM(IF(status <> 2, 1, 0)) remaining FROM visitor WHERE DATE(expected_in_time) = CURDATE();`;
+    const query = `SELECT COUNT(1) total, SUM(IF(status = 1, 1, 0)) inside, SUM(IF(status <> 1, 1, 0)) remaining FROM visitor WHERE DATE(expected_in_time) = CURDATE();`;
     const query2 = `SELECT COUNT(1) as count, visitor_date as date FROM (
         SELECT id visitor_id, DATE_FORMAT(expected_in_time, '%Y-%m-%d') visitor_date FROM visitor WHERE DATE(expected_in_time) BETWEEN date_sub(CURDATE(), INTERVAL 10 DAY) AND CURDATE()) v GROUP BY visitor_date;`
     console.log(query);
