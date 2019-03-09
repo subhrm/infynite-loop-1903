@@ -1,6 +1,7 @@
 package com.stg.vms.data;
 
 public class AppMessages {
+    public static final String UNEXPECTED_ERROR = "Unexpected Error occurred !";
     public static final String IMAGE_LOAD_ERROR = "Error in loading Image.";
     public static final String PHOTO_SAVE_ERROR = "Error in saving photo.";
     public static final String SERVICE_CALL_ERROR = "Error in communication.";
@@ -16,5 +17,7 @@ public class AppMessages {
 
     public static final String INPUT_VALIDATION_ERROR_EMAIL = "Please enter valid email id.";
     public static final String INPUT_VALIDATION_ERROR_PASSWORD = "Please enter password.";
+
+    public static final String VISITOR_APPROVED = "Visitor has been allowed, gate pass has been sent to the visitor's Email id.";
 
 }

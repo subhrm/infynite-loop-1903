@@ -1,8 +1,10 @@
 package com.stg.vms;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.Toast;
 import com.stg.vms.data.AppConstants;
 import com.stg.vms.data.AppMessages;
 import com.stg.vms.data.VMSData;
+import com.stg.vms.model.ApproveVisitorRequest;
+import com.stg.vms.model.ServiceResponse;
 import com.stg.vms.model.VerifyPhotoRequest;
 import com.stg.vms.service.VMSService;
 import com.stg.vms.util.ImageUtil;
@@ -53,7 +57,24 @@ public class VerifyPhoto extends AppCompatActivity {
         btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(VerifyPhoto.this);
+                dialogBuilder.setTitle("Identity Verificaton");
+                dialogBuilder.setMessage("Have you verified Id proof of visitor?");
+                dialogBuilder.setCancelable(true);
+                dialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        approveVisitor();
+                    }
+                });
+                dialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+                dialogBuilder.create().show();
             }
         });
         btnReject.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +156,43 @@ public class VerifyPhoto extends AppCompatActivity {
     }
 
     private void approveVisitor() {
-        VMSService.
+        loader.setVisibility(View.VISIBLE);
+        VMSService.approveVisitor(new ApproveVisitorRequest(String.valueOf(VMSData.getInstance().getVisitorProfile().getVisitorId()), VMSData.getInstance().getNewPhoto()), new VMSService.Callback<ServiceResponse<Object>>() {
+            @Override
+            public void onSuccess(ServiceResponse<Object> data) {
+                if (data.getStatus() == AppConstants.SERVICE_STATUS_SUCCESS) {
+                    loader.setVisibility(View.GONE);
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(VerifyPhoto.this);
+                    dialogBuilder.setTitle("Success");
+                    dialogBuilder.setMessage(AppMessages.VISITOR_APPROVED);
+                    dialogBuilder.setCancelable(true);
+                    dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                            startActivity(new Intent(VerifyPhoto.this, AdminDashboard.class));
+                            finish();
+                        }
+                    });
+                    dialogBuilder.create().show();
+                } else {
+                    loader.setVisibility(View.GONE);
+                    VMSDialog.showErrorDialog(VerifyPhoto.this, "Error", AppMessages.UNEXPECTED_ERROR, false);
+                }
+            }
+
+            @Override
+            public void onError(String errorMsg) {
+                loader.setVisibility(View.GONE);
+                VMSDialog.showErrorDialog(VerifyPhoto.this, "Error", errorMsg, false);
+            }
+
+            @Override
+            public void onLoginError(String errorMsg) {
+                Toast.makeText(VerifyPhoto.this, AppMessages.SERVICE_CALL_AUTH_ERROR, Toast.LENGTH_LONG).show();
+                startActivity(new Intent(VerifyPhoto.this, LoginActivity.class));
+                finish();
+            }
+        });
     }
 }
