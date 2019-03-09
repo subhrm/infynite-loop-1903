@@ -1,14 +1,11 @@
 package com.stg.vms.model;
 
-import java.util.List;
-
 public class LoginResponse {
     private long userId;
-    private String userName;
+    private String name;
     private String email;
     private String userRole;
-    private TodaysVisitors todaysVisitors;
-    private List<VisitorsLastDay> visitorLastDays;
+    private String token;
 
     public long getUserId() {
         return userId;
@@ -18,12 +15,12 @@ public class LoginResponse {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -42,19 +39,11 @@ public class LoginResponse {
         this.userRole = userRole;
     }
 
-    public TodaysVisitors getTodaysVisitors() {
-        return todaysVisitors;
+    public String getToken() {
+        return token;
     }
 
-    public void setTodaysVisitors(TodaysVisitors todaysVisitors) {
-        this.todaysVisitors = todaysVisitors;
-    }
-
-    public List<VisitorsLastDay> getVisitorLastDays() {
-        return visitorLastDays;
-    }
-
-    public void setVisitorLastDays(List<VisitorsLastDay> visitorLastDays) {
-        this.visitorLastDays = visitorLastDays;
+    public void setToken(String token) {
+        this.token = token;
     }
 }
