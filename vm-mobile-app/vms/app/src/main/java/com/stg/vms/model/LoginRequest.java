@@ -3,6 +3,7 @@ package com.stg.vms.model;
 import com.stg.vms.data.AppConstants;
 
 public class LoginRequest {
+    private final String requestedFrom = AppConstants.LOGIN_REQ_REQUESTED_FROM;
     private String email;
     private String password;
 

@@ -26,7 +26,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:contentDescription="@string/label_login"
+                android:contentDescription="@string/label.login"
                 android:tint="@android:color/holo_blue_dark"
                 app:srcCompat="@drawable/ic_person" />
         </LinearLayout>
@@ -73,7 +73,7 @@
                         android:id="@+id/login.input.email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/label_email"
+                        android:hint="@string/label.email"
                         android:inputType="textEmailAddress" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -86,7 +86,7 @@
                         android:id="@+id/login.input.password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/label_password"
+                        android:hint="@string/label.password"
                         android:inputType="textPassword" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -111,7 +111,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_corner_button"
             android:elevation="5dp"
-            android:text="@string/label_login"
+            android:text="@string/label.login"
             android:textColor="@android:color/white" />
     </LinearLayout>
 

@@ -153,13 +153,19 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
+                    <ImageButton
+                        android:id="@+id/adm.btn.barcode"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/lbl_scan_qr_code"
+                        app:srcCompat="@drawable/ic_qr_code" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
                         android:layout_alignParentTop="false"
-                        android:layout_alignParentEnd="false"
-                        android:layout_centerInParent="true"
+                        android:layout_alignParentEnd="true"
                         android:background="@drawable/search_text"
                         android:orientation="horizontal"
                         android:paddingStart="10dp"
@@ -169,7 +175,7 @@
 
                         <EditText
                             android:id="@+id/adm_input_visitorId"
-                            android:layout_width="160dp"
+                            android:layout_width="200dp"
                             android:layout_height="32dp"
                             android:background="@android:color/transparent"
                             android:ems="10"
@@ -188,36 +194,7 @@
                             app:srcCompat="@drawable/search_btn" />
 
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageButton
-                            android:id="@+id/adm.btn.barcode"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginStart="0dp"
-                            android:layout_marginEnd="20dp"
-                            android:background="@android:color/transparent"
-                            android:contentDescription="@string/lbl_scan_qr_code"
-                            app:srcCompat="@drawable/ic_qr_code" />
-
-                        <ImageView
-                            android:id="@+id/adm.btn.searchByPhoto"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:contentDescription="@string/lbl_search_by_photo"
-                            android:tint="@color/colorPrimaryDark"
-                            app:srcCompat="@drawable/ic_camera" />
-                    </LinearLayout>
-
                 </RelativeLayout>
-
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
@@ -266,20 +243,5 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/adm.loader"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/darkTransparentBg"
-        android:elevation="20dp"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <ProgressBar
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
