@@ -99,7 +99,7 @@
   </mat-tab>
 </mat-tab-group>
 
-<div class="whole-page" *ngIf='statusMessage!=""'>
+<div class="whole-page" *ngIf='this.showSpinnerFlag'>
   <div class="spinner-container">
       <mat-progress-spinner
         class="example-margin"

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../service/http.service';
+import { SecurityService } from '../security-menu/security.service';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-admin-menu',
@@ -7,7 +9,8 @@ import { HttpService } from '../service/http.service';
   styleUrls: ['./admin-menu.component.css']
 })
 export class AdminMenuComponent implements OnInit {
-  statusMessage = '';
+  statusResponse = undefined;
+  showSpinnerFlag = false;
   visitor = {
     name: '',
     email: '',
@@ -20,20 +23,25 @@ export class AdminMenuComponent implements OnInit {
   }
   visitorTypes = [
     {
-      code: "c1",
-      value: "val 1"
+      code: 'B1GUEST',
+      value: 'Can Visit Only Building 1'
     },{
-      code: "c2",
-      value: "val 2"
+      code: 'B2GUEST',
+      value: 'Can Visist Only Building 2'
     },{
-      code: "c3",
-      value: "val 3"
+      code: 'B3GUEST',
+      value: 'Can Visist Only Building 3'
     },{
-      code: "c4",
-      value: "val 4"
+      code: 'EMPLOYEE',
+      value: 'Employee, Can visit all buildings'
+    },{
+      code: 'GEN',
+      value: 'General Visitor.Restricted Access'
     }
+
   ]
-  constructor(private _http: HttpService) { }
+
+  constructor(private _http: SecurityService) { }
 
   ngOnInit() {
   }
@@ -46,17 +54,28 @@ export class AdminMenuComponent implements OnInit {
     this.background = this.background ? '' : 'primary';
   }
   submitVisitorData() {
+    this.showSpinnerFlag = true;
     const body = {
-
+      "Name": this.visitor.name,
+      "Email":this.visitor.email,
+      "Photo":this.visitor.photo,
+      "Mobile":this.visitor.phone,
+      "VisitorType":this.visitor.type,
+      "Reffered":this.visitor.referredBy,
+      "IN":this.visitor.inDate,
+      "OUT":this.visitor.outDate
     };
-    // this._http.getRequest('submitNewUser', body).subscribe(data=>{
-
-    // });
-    this.statusMessage = 'msg';
-    console.log("Visitor data: ",this.visitor);
+    this._http.requestGuestAccess(body)
+    .subscribe(response =>{
+      this.showSpinnerFlag = false;
+    this.statusResponse = response;
     setTimeout(() => {
-      this.statusMessage = '';
-    }, 3000);
+      this.statusResponse = undefined;
+    }, 4000);
+    });
+    console.log("Visitor data: ",this.visitor);
+
+
   }
 
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule, MatCardModule,MatSelectModule, MatTabsModule,MatDialogModule, 
-  MatInputModule, MatTableModule,MatToolbarModule, MatMenuModule,MatIconModule, MatProgressSpinnerModule,
+  MatInputModule, MatTableModule,MatToolbarModule, MatMenuModule,MatIconModule,
   MatAutocompleteModule, MatProgressSpinnerModule} from '@angular/material';
 
 @NgModule({
