@@ -36,7 +36,7 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
             "%Y-%m-%d %H:%i"
         ) expected_out_time,
         v.status status,
-        v.visitor_type_cd type
+        t.visitor_type_desc type
     FROM
         vms.visitor v
     JOIN vms.images i
