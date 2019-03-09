@@ -6,7 +6,12 @@ export const environment = {
   production: false,
   apiURL:{
     login: 'http://localhost:3000/login',
-    visitor: 'http://localhost:3000/web/getVisitorType'
+    visitor: 'http://localhost:3000/web/getVisitorType',
+    imageValidation:'http://35.207.12.149:8000/api/upload-photo-b64',
+    addVisitorEmployee: 'http://localhost:3000/web/addVisitorEmployee',
+    employeeDetails:'',
+    addVisitorSecurity:'http://localhost:3000/web/addVisitorSecurity',
+    approvedVisitors:''
   }
 };
 

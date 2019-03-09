@@ -1,0 +1,33 @@
+<h2>Enter Employee ID</h2>
+<div class="example-container">
+    <mat-form-field>
+      <input matInput placeholder="ID" required>
+    </mat-form-field>
+
+    <mat-card-actions style="margin-left:5%;">
+      <button mat-raised-button (click)="getEmployeeDetails()" color="primary">Get Details</button>
+    </mat-card-actions>
+</div>
+  
+<div *ngIf="employeeData">
+    <mat-form-field>
+      <input matInput placeholder="Name" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Email" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Mobile" required>
+    </mat-form-field>
+
+    <!-- <mat-form-field>
+      <input matInput placeholder="Photo" type="file" required>
+    </mat-form-field> -->
+    <input (change)="validateFile()" type="file" accept="image/png, image/jpeg">
+
+    <mat-card-actions>
+        <button mat-raised-button (click)="login()" color="primary">Submit Request</button>
+    </mat-card-actions>
+
+</div>

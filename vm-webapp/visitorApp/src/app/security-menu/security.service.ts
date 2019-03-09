@@ -6,38 +6,27 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class EmployeeService {
+export class SecurityService {
 
   constructor(private http:HttpClient) { }
 
   authToken:string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGVjayI6dHJ1ZSwiaWF0IjoxNTUyMDQ5NTk5LCJleHAiOjE1NTIwNzgzOTl9.qoso1U3IPN39hFfJUH7fIoD6LYpUA5I8bSwjoo3xGp0";
 
-  getVisitorDetails(){
+  fetchEmployeeDetails(){
     const httpOptions = {
       headers: new HttpHeaders().set('Content-Type','application/json')
                                 .set('access-token',this.authToken)
     }
 
-    return this.http.get(environment.apiURL.visitor,httpOptions);
+    return this.http.get(environment.apiURL.employeeDetails,httpOptions);
   }
 
-  validateImageBase64(filePayload){
-
+  requestGuestAccess(visitorPayload){
     const httpOptions = {
       headers: new HttpHeaders().set('Content-Type','application/json')
                                 .set('access-token',this.authToken)
     }
 
-    return this.http.post(environment.apiURL.imageValidation,filePayload,httpOptions);
-  }
-
-  requestVisitorAccess(visitorPayload){
-
-    const httpOptions = {
-      headers: new HttpHeaders().set('Content-Type','application/json')
-                                .set('access-token',this.authToken)
-    }
-
-    return this.http.post(environment.apiURL.addVisitorEmployee,visitorPayload,httpOptions);
+    return this.http.post(environment.apiURL.addVisitorSecurity,visitorPayload,httpOptions);
   }
 }

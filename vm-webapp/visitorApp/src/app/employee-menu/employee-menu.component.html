@@ -1,15 +1,15 @@
 <h2>New Visitor Request</h2>
 <div class="example-container">
     <mat-form-field>
-      <input matInput placeholder="Name" required>
+      <input matInput [(ngModel)]="name" placeholder="Name" required>
     </mat-form-field>
   
     <mat-form-field>
-      <input matInput placeholder="Email" required>
+      <input matInput [(ngModel)]="email" placeholder="Email" type="email" required>
     </mat-form-field>
 
     <mat-form-field>
-        <input matInput placeholder="Mobile" required>
+        <input matInput [(ngModel)]="mobile" placeholder="Mobile" required>
     </mat-form-field>
 
     <mat-form-field>
@@ -17,30 +17,28 @@
         <mat-option *ngFor="let visitor of visitorType" value="{{visitor.visitor_type_cd}}">
           {{visitor.visitor_type_cd}}
         </mat-option>
-        <mat-option value="option">1</mat-option>
-        <mat-option value="option">2</mat-option>
-        <mat-option value="option">3</mat-option>
       </mat-select>
     </mat-form-field>
 
     <!-- <mat-form-field>
       <input matInput placeholder="Photo" type="file" required>
     </mat-form-field> -->
+    <input id="visitorImage" (change)="validateFile()" type="file" accept="image/png, image/jpeg">
 
     <mat-form-field>
-      <input matInput placeholder="Referred By" required>
+      <input matInput [(ngModel)]="referredBy" placeholder="Referred By" required>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="IN Time" required>
+      <input matInput [(ngModel)]="inTime" placeholder="IN Time" type="time" required>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="OUT Time" required>
+      <input matInput [(ngModel)]="outTime" placeholder="OUT Time" type="time" required>
     </mat-form-field>
 
     <mat-card-actions>
-        <button mat-raised-button (click)="login()" color="primary">Submit Request</button>
+        <button mat-raised-button (click)="submitRequest()" color="primary">Submit Request</button>
     </mat-card-actions>
 
 </div>

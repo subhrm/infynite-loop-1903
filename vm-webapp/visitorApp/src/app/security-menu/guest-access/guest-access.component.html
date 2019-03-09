@@ -13,7 +13,7 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-select placeholder="Visitor Type" required>
+      <mat-select [(ngModel)]="selectedVisitorType" placeholder="Visitor Type" required>
         <mat-option *ngFor="let visitor of visitorType" value="{{visitor.visitor_type_cd}}">
           {{visitor.visitor_type_cd}}
         </mat-option>
@@ -26,6 +26,7 @@
     <!-- <mat-form-field>
       <input matInput placeholder="Photo" type="file" required>
     </mat-form-field> -->
+    <input (change)="validateFile()" type="file" accept="image/png, image/jpeg">
 
     <mat-form-field>
       <input matInput placeholder="Referred By" required>
