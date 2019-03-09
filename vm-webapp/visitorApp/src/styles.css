@@ -27,3 +27,17 @@ body{
     top: 0;
     left: 0;
 }
+
+ table.mat-table{
+    width: -webkit-fill-available !important;
+    background: rgba(255,255,255,0.2);
+    text-align: left;
+}
+.example-container{
+    width: 50%;
+    padding-left: 20px;
+}
+.example-container[_ngcontent-c5] > *[_ngcontent-c5] {
+    width: -webkit-fill-available !important;
+    padding-left: 20px !important;
+}
