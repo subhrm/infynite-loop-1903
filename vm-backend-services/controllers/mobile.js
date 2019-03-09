@@ -15,8 +15,6 @@ router.post('/getVisitorProfile', function(req, res, next){
   let id = req.body.visitorId;
   let role = req.body.securityRole;
   let encrypted = req.body.encrypted;
-  console.log(req.body.encrypted);
-  // console.log("req received:", typeof(requestid), typeof(role));
   if(encrypted == 1){
     let cipher_response = request.post({
       "headers": {
@@ -38,11 +36,28 @@ router.post('/getVisitorProfile', function(req, res, next){
 
 router.get('/getVisitors', (req,res) => {
   db.getVisitors(req,res);
-})
+});
+
 router.post('/locationAccess',(req,res)=> {
   let visitorId = req.body.visitorId;
   let securityId = req.body.securityId;
-  db.locationAccess(req,res,visitorId,securityId);
+  let encrypted = req.body.encrypted;
+  if(encrypted == 1){
+    let cipher_response = request.post({
+      "headers": {
+          "content-type": "application/json"
+      },
+      "url": qrEncodeUrl + '/decrypt-code',
+      "body": JSON.stringify({
+          "cipher_text": visitorId
+      })
+    }, function (error, response, body) {
+        let cipher_id = JSON.parse(body).plain_text;
+        db.locationAccess(req,res,cipher_id,securityId);
+    });
+  } else{
+    db.locationAccess(req,res,visitorId,securityId);
+  }
 })
 
 router.get('/locationAccess',(req,res)=> {

@@ -52,7 +52,7 @@ exports.fetchVisitorProfile = function(req, res, id, role) {
 
        }
        try{
-            console.log(query);
+            // console.log(query);
             con.query(query, function(err, result) {
                 if (err) throw err;
                 console.log(result);
