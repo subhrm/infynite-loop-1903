@@ -3,7 +3,7 @@ const fs = require('fs');
 const qr_generation = require('./qr_generation');
 var nodemailer = require('nodemailer');
 var dateFormat = require('dateformat');
-require('dotenv').config();
+// require('dotenv').config();
 var request = require('request');
 console.log(process.env.email_id)
 
@@ -29,7 +29,9 @@ const qrEncodeUrl = 'http://35.207.12.149:8000/api'
 
 
 var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.email_id,
         pass: process.env.email_pass
@@ -37,6 +39,8 @@ var transporter = nodemailer.createTransport({
 });
 
 exports.sendEmail = function (req, res, userData) {
+    // console.log("Inside send Mail");
+    // console.log(userData);
     generatePDF(req, res, userData);
 }
 
@@ -55,7 +59,7 @@ function generatePDF(req, res, userData) {
             "plain_text": "12345678"
         })
     }, function (error, response, body) {
-        let cipher_id = body.cipher_text;
+        let cipher_id =  JSON.parse(body).cipher_text;
         console.log(cipher_id);
         const op = qr_generation.getQrSvg(cipher_id);
         op.then(qrData => {
@@ -94,7 +98,7 @@ function generatePDF(req, res, userData) {
             /* To write mail contents */
             const mailOptions = {
                 from: process.env.email_id,
-                to: user_email,
+                to: userData.email,
                 subject: 'Gate pass for your visit in Infosys',
                 attachments: [{
                         filename: "infy-logo.png",
@@ -115,7 +119,27 @@ function generatePDF(req, res, userData) {
                 <p>Infosys Ltd.</p>
                 `
             };
-            sendMail(mailOptions);
+            console.log(mailOptions);
+            // console.log(process.env.email_pass)
+            // sendMail(mailOptions);
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                    res.send({
+                        status:req.app.get('status-code').error,
+                        message: "Some Error Occured",
+                        error: error
+                    })
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    res.send({
+                        status:req.app.get('status-code').success,
+                        message: "Data Saved successfully",
+                    })
+                }
+            });
+
+            
         }).catch(err => {
             console.log(err);
         });

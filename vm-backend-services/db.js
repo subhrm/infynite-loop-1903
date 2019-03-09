@@ -1,5 +1,6 @@
 require('dotenv').config();
 const qr_generation = require('./utils/qr_generation');
+const pdfEmail = require('./utils/pdfEmail');
 
 var mysql = require('mysql');
 var request = require('request');
@@ -315,10 +316,12 @@ exports.addVisitorEmployee = function(req,res,name,email,photo,mobile,visitorTyp
         con.query(query, function (err, result) {
             if(err) throw err;
             console.log(result);
-            res.send({
-                status:req.app.get('status-code').success,
-                message: "Data fetched successfully",
-            })
+            const userObj = {id: result.insertId, name: name, expected_in_time: in_time, email: email};
+            pdfEmail.sendEmail(req, res, userObj);
+            // res.send({
+            //     status:req.app.get('status-code').success,
+            //     message: "Data fetched successfully",
+            // })
         });
     } catch (error) {
         console.log(error)
