@@ -7,6 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     private static Retrofit retrofit = null;
+    private static Retrofit retrofitFace = null;
 
     public static Retrofit getClient() {
         if (retrofit == null) {
@@ -16,5 +17,14 @@ public class ApiClient {
                     .build();
         }
         return retrofit;
+    }
+    public static Retrofit getFaceServiceClient() {
+        if (retrofitFace == null) {
+            retrofitFace = new Retrofit.Builder()
+                    .baseUrl(AppConstants.BASE_SERVICE_URL_SEARCH_BY_PHOTO)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofitFace;
     }
 }

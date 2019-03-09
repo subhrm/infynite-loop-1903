@@ -8,6 +8,7 @@
     tools:context=".VerifyPhoto">
 
     <ScrollView
+        android:id="@+id/vp.container.main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -107,14 +108,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="0dp"
                             android:layout_marginEnd="10dp"
-                            android:text="Photo Match by System :"
+                            android:text="@string/lbl_photo_match_by_system"
                             android:textSize="18sp" />
 
                         <TextView
                             android:id="@+id/vp.val.match"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="85.6%"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="18sp" />
                     </LinearLayout>
@@ -133,7 +133,7 @@
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="10dp"
                             android:background="@drawable/rounded_corner_button_red"
-                            android:text="Reject"
+                            android:text="@string/lbl_reject"
                             android:textColor="@android:color/white" />
 
                         <Button
@@ -144,7 +144,7 @@
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="10dp"
                             android:background="@drawable/rounded_corner_button_green"
-                            android:text="Approve"
+                            android:text="@string/lbl_approve"
                             android:textColor="@android:color/white" />
 
                     </RelativeLayout>

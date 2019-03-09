@@ -1,148 +1,120 @@
 package com.stg.vms;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
+import com.stg.vms.data.AppConstants;
 import com.stg.vms.data.AppMessages;
+import com.stg.vms.data.VMSData;
+import com.stg.vms.model.VerifyPhotoRequest;
+import com.stg.vms.service.VMSService;
 import com.stg.vms.util.ImageUtil;
 import com.stg.vms.util.VMSDialog;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.text.DecimalFormat;
 
 public class VerifyPhoto extends AppCompatActivity {
     private static final int REQUEST_TAKE_PHOTO = 1, MY_CAMERA_REQUEST_CODE = 100;
-
+    private static final int REQUEST_CAMERA_PHOTO = 1;
     String currentPhotoPath;
     ImageView newPhoto, existingPhoto;
-    View loader;
+    View loader, mainContainer;
+    TextView matchPercent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        final String visitorId = intent.getStringExtra(AppConstants.REQUEST_VISITOR_ID);
+        final int encrypted = intent.getIntExtra(AppConstants.REQUEST_ENCRYPTED, 0);
+        if (visitorId == null) {
+            Toast.makeText(this, AppMessages.VISITOR_PROFILE_DATA_ERROR, Toast.LENGTH_LONG).show();
+            onBackPressed();
+            finish();
+            return;
+        }
         setContentView(R.layout.activity_verify_photo);
+        mainContainer = findViewById(R.id.vp_container_main);
+        mainContainer.setVisibility(View.GONE);
         existingPhoto = findViewById(R.id.vp_uploadedImage);
         newPhoto = findViewById(R.id.vp_newImage);
+        matchPercent = findViewById(R.id.vp_val_match);
         loader = findViewById(R.id.vp_loader);
         loader.setVisibility(View.VISIBLE);
-        Picasso.get().load("https://scontent.fhyd1-2.fna.fbcdn.net/v/t1.0-0/p160x160/10924753_1061170647241868_1753486472586550907_n.jpg?_nc_cat=105&_nc_ht=scontent.fhyd1-2.fna&oh=e7253dfa0a03a1a8ef2c984ebbdea248&oe=5CDE02B3").placeholder(R.drawable.ic_photo).into(existingPhoto);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_DENIED)
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
-        else
-            dispatchTakePictureIntent();
-    }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        String imageFileName = "VISITOR_" + timeStamp;
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",    /* suffix */
-                storageDir      /* directory */
-        );
+        if (VMSData.getInstance().isSearchByPhoto()) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    existingPhoto.setImageBitmap(ImageUtil.base642Bitmap(VMSData.getInstance().getVisitorPhoto()));
+                    newPhoto.setImageBitmap(ImageUtil.base642Bitmap(VMSData.getInstance().getNewPhoto()));
+                    verifyPhoto();
 
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                Log.e(this.getClass().getSimpleName(), "Error while creating image file.", ex);
-                VMSDialog.showErrorDialog(this, "Error", "Error while creating image file.", true);
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.stg.vms.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
+                }
+            });
+            thread.start();
+        } else {
+            startActivityForResult(new Intent(this, CameraPhoto.class), REQUEST_CAMERA_PHOTO);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_TAKE_PHOTO) {
+        if (requestCode == REQUEST_CAMERA_PHOTO) {
             if (resultCode == RESULT_OK) {
+                final String currentPhotoPath = data.getStringExtra(CameraPhoto.PHOTO_PATH);
+                if (TextUtils.isEmpty(currentPhotoPath)) {
+                    VMSDialog.showErrorDialog(VerifyPhoto.this, "Error", AppMessages.PHOTO_SAVE_ERROR, true);
+                    return;
+                }
                 loader.setVisibility(View.VISIBLE);
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         final Bitmap imageBitmap = ImageUtil.processPhoto(currentPhotoPath);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                newPhoto.setImageBitmap(imageBitmap);
-                                loader.setVisibility(View.GONE);
-                            }
-                        });
+                        existingPhoto.setImageBitmap(ImageUtil.base642Bitmap(VMSData.getInstance().getVisitorPhoto()));
+                        newPhoto.setImageBitmap(imageBitmap);
+                        VMSData.getInstance().setNewPhoto(ImageUtil.bitmap2Base64(imageBitmap));
+                        verifyPhoto();
+
                     }
                 });
                 thread.start();
-                //saveBase64Data(ImageUtil.bitmap2Base64(imageBitmap));
             } else {
-                Toast.makeText(this, AppMessages.PHOTO_SAVE_ERROR, Toast.LENGTH_LONG).show();
-                onBackPressed();
+                VMSDialog.showErrorDialog(this, "Error", AppMessages.PHOTO_SAVE_ERROR, true);
+                loader.setVisibility(View.GONE);
             }
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_CAMERA_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                dispatchTakePictureIntent();
-            } else {
-                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_LONG).show();
-                onBackPressed();
+    private void verifyPhoto() {
+        VMSService.verifyPhoto(new VerifyPhotoRequest(VMSData.getInstance().getVisitorPhoto(), VMSData.getInstance().getNewPhoto()), new VMSService.Callback<Double>() {
+            @Override
+            public void onSuccess(Double data) {
+                DecimalFormat df = new DecimalFormat(".#");
+                String value = String.valueOf(df.format(data)) + "%";
+                matchPercent.setText(value);
+                mainContainer.setVisibility(View.VISIBLE);
+                loader.setVisibility(View.GONE);
             }
-        }
+
+            @Override
+            public void onError(String errorMsg) {
+                VMSDialog.showErrorDialog(VerifyPhoto.this, "Error", errorMsg, true);
+                loader.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onLoginError(String errorMsg) {
+
+            }
+        });
     }
-    /*private void saveBase64Data(String data) {
-        try {
-            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            File file = new File(storageDir, "base64.txt");
-            FileOutputStream stream = new FileOutputStream(file);
-            try {
-                stream.write(data.getBytes());
-            } finally {
-                stream.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 }
