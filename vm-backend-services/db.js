@@ -40,7 +40,7 @@ exports.login = function(req, res, email, password, requestedFrom) {
                     check: true
                 };
                 var token = jwt.sign(payload, req.app.get('Secret'), {
-                    expiresIn: 28800 // expires in 8 hours
+                    expiresIn: 86400 // expires in 8 hours
                 });
                 
                 res.send({
