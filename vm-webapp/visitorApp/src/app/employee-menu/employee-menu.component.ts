@@ -87,9 +87,9 @@ export class EmployeeMenuComponent implements OnInit {
     
     this.empService.requestVisitorAccess(visitorPayload)
     .subscribe(response =>{
-      this.imageSource = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' 
-      + response['data']['Photo']);
-      console.log(response);
+      // this.imageSource = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' 
+      // + response['data']['Photo']);
+      alert(response["message"]);
     });
   }
 

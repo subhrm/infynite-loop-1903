@@ -40,7 +40,8 @@
           <input matInput placeholder="OUT Time" type="date" [(ngModel)]="outTime" required>
         </mat-form-field>
 
-        <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+        <!-- <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner> -->
+        <mat-progress-spinner [style.display]="showSpinner ? 'block' : 'none'" mode="indeterminate"></mat-progress-spinner>
     
         <mat-card-actions>
             <button mat-raised-button (click)="submitRequest()" color="primary">Submit Request</button>

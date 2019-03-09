@@ -10,6 +10,7 @@ import { SecurityService } from '../security.service';
 })
 export class GuestAccessComponent implements OnInit {
   statusMessage: string;
+  showSpinner:boolean = false;
   flag = false;
   visitorType:any[];
   visitorTypes = [
@@ -82,6 +83,7 @@ export class GuestAccessComponent implements OnInit {
     let self = this;
     let file = (<HTMLInputElement>document.getElementById('visitorImage')).files[0];
     console.log(file);
+    self.showSpinner = true;
 
     let fileReader = new FileReader();
     fileReader.readAsDataURL(file);
@@ -99,10 +101,12 @@ export class GuestAccessComponent implements OnInit {
       .subscribe((response)=>{
           console.log(response);
           self.photo = response['image_id'];
+          self.showSpinner = false;
+          alert("Image Validation Complete");
         },(httpError)=>{
           console.log(httpError.error);
+          self.showSpinner = false;
           alert(httpError.error.error);
-          
         });
     }
   }

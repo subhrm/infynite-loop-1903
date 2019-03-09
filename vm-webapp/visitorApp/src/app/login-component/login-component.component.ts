@@ -39,7 +39,7 @@ export class LoginComponentComponent implements OnInit {
         
         if (responseData["status"] === 1){
             //Updating the auth token.
-            environment.authToken = loginData.token;
+            localStorage.setItem("token",loginData.token);
 
             console.log(environment);
 

@@ -25,6 +25,8 @@
       <div class="file-input">
           <input  (change)="validateFile()" type="file" accept="image/png, image/jpeg" id="visitorImage"/>
       </div>
+
+      <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
       
         <mat-form-field>
           <input matInput placeholder="Referred By" [(ngModel)]="referredBy" required>
@@ -57,11 +59,11 @@
               <span><strong>{{visitorName}}</strong></span>
           </div>
           <div class="inline-elem" style="display:inline-flex; width: 100%">
-              <img [src]="imageSource" alt="pic" style="width: 200px; height: 200px;"/>
+              <img [src]="imageSource" alt="pic" style="width: 100px; height: 100px;"/>
           </div>
-        <div class="inline-elem" style="width: 100%">
-        <img [src]="qrSource" alt="QR" style="width: 200px;height: 200px;" />
-        </div>
+          <div class="inline-elem" style="width: 100%">
+              <img [src]="qrSource" alt="QR" style="width: 100px;height: 100px;" />
+          </div>
       </div>
       <div style="padding: 5px 5px; margin: 10px 10px;">
           <mat-card-actions>

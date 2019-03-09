@@ -10,12 +10,12 @@ export class EmployeeService {
 
   constructor(private http:HttpClient) { }
 
-  authToken:string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGVjayI6dHJ1ZSwiaWF0IjoxNTUyMTAyODMzLCJleHAiOjE1NTIxMzE2MzN9.8SWENZClaXtWXDFsV5d2r05M1HNhboFSTLLkHC0wmR8";
+  authToken:string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGVjayI6dHJ1ZSwiaWF0IjoxNTUyMTMxODU4LCJleHAiOjE1NTIyMTgyNTh9.icvkokZZAt3ztyhelb5YWeC4KHP3t5ohadZd3nldYjc";
 
   getVisitorDetails(){
     const httpOptions = {
       headers: new HttpHeaders().set('Content-Type','application/json')
-                                .set('access-token',this.authToken)
+                                .set('access-token',localStorage.getItem("token"))
     }
 
     return this.http.get(environment.apiURL.visitor,httpOptions);
@@ -25,7 +25,7 @@ export class EmployeeService {
 
     const httpOptions = {
       headers: new HttpHeaders().set('Content-Type','application/json')
-                                .set('access-token',this.authToken)
+                                .set('access-token',localStorage.getItem("token"))
     }
 
     return this.http.post(environment.apiURL.imageValidation,filePayload,httpOptions);
@@ -35,7 +35,7 @@ export class EmployeeService {
 
     const httpOptions = {
       headers: new HttpHeaders().set('Content-Type','application/json')
-                                .set('access-token',this.authToken)
+                                .set('access-token',localStorage.getItem("token"))
     }
 
     return this.http.post(environment.apiURL.addVisitorEmployee,visitorPayload,httpOptions);
