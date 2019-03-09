@@ -16,7 +16,6 @@
         <mat-form-field>
           <mat-select [(ngModel)]="selectedVisitorType" placeholder="Visitor Type" required>
               <mat-option [value]="type.code" *ngFor="let type of visitorTypes">{{type.value}}</mat-option>
-    
           </mat-select>
         </mat-form-field>
     
@@ -40,9 +39,11 @@
         <mat-card-actions>
             <button mat-raised-button (click)="submitVisitorDetails()" color="primary">Submit Request</button>
         </mat-card-actions>
-    
     </div>
+
     <div style="width: 50%">
-        <img src="{{imageSource}}" alt="pic" style="width: 200px; height: 200px;"/>
+        <span>Name :  {{visitorName}}</span>
+        <img [src]="imageSource" alt="pic" style="width: 200px; height: 200px;"/>
+        <img [src]="qrSource" alt="QR" style="width: 200px;height: 200px;" />
     </div>
 </div>

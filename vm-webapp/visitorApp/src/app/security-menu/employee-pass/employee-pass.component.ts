@@ -28,11 +28,11 @@ export class EmployeePassComponent implements OnInit {
     this.secService.fetchEmployeeDetails(employeePayload)
     .subscribe((response)=>{
         console.log(response);
-        if (response.data.length>0){
+        if (response["data"].length>0){
           self.employeeData = true;
-          self.name = response.data[0].name;
-          self.mobile = response.data[0].mobile;
-          self.email = response.data[0].email;
+          self.name = response["data"][0].name;
+          self.mobile = response["data"][0].mobile;
+          self.email = response["data"][0].email;
         }else{
           self.employeeData = false;
         }

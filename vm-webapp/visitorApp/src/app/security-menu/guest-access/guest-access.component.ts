@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer} from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import { EmployeeService } from '../../employee-menu/employee.service';
 import { SecurityService } from '../security.service';
 
@@ -38,8 +38,10 @@ export class GuestAccessComponent implements OnInit {
   outTime: Date;
   photoID:string;
   selectedVisitorType:string;
+  visitorName: string;
   photo: any;
-  imageSource: any;
+  imageSource: SafeResourceUrl;
+  qrSource: SafeResourceUrl;
 
   constructor(private empService:EmployeeService,private secService:SecurityService, private _sanitizer: DomSanitizer) { }
 
@@ -103,7 +105,9 @@ export class GuestAccessComponent implements OnInit {
     .subscribe(response =>{
       this.imageSource = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' 
       + response['data']['Photo']);
+      this.qrSource = this._sanitizer.bypassSecurityTrustResourceUrl(response['data']['QR_code'])
       console.log(response);
+      this.visitorName = response["data"].Name;
     });
   }
 

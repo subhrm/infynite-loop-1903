@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from './employee.service';
+import { DomSanitizer} from '@angular/platform-browser';
+import { SecurityService } from '../security-menu/security.service';
 
 @Component({
   selector: 'app-employee-menu',
@@ -13,11 +15,15 @@ export class EmployeeMenuComponent implements OnInit {
   email:string;
   mobile:string;
   referredBy:string;
-  inTime:string;
-  outTime:string;
+  inTime: Date;
+  outTime: Date;
   photoID:string;
+  selectedVisitorType:string;
+  photo: any;
+  imageSource: any;
 
-  constructor(private empService:EmployeeService) { }
+
+  constructor(private empService:EmployeeService,private secService:SecurityService,private _sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     let self= this;
@@ -58,20 +64,28 @@ export class EmployeeMenuComponent implements OnInit {
   }
 
   submitRequest(){
+    let in_time = new Date(this.inTime).toISOString();
+    in_time = in_time.replace('Z', '');
+    in_time = in_time.replace('T', ' ');
+    let out_time = new Date(this.outTime).toISOString();
+    out_time = in_time.replace('Z', '');
+    out_time = in_time.replace('T', ' ');
     let visitorPayload = {
       "Name":this.name,
       "Email":this.email,
-      "Photo":this.photoID,
+      "Photo":this.photo,
       "Mobile":this.mobile,
-      "Visitor Type":"",
+      "VisitorType":this.selectedVisitorType,
       "Reffered":this.referredBy,
-      "IN":this.inTime,
+      "IN": in_time,
       "OUT":this.outTime
     };
-
-    this.empService.requestVisitorAccess(visitorPayload)
-    .subscribe((response) =>{
-        console.log(response);
+    
+    this.secService.requestGuestAccess(visitorPayload)
+    .subscribe(response =>{
+      this.imageSource = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' 
+      + response['data']['Photo']);
+      console.log(response);
     });
   }
 
