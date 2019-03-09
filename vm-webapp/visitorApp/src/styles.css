@@ -41,3 +41,7 @@ body{
     width: -webkit-fill-available !important;
     padding-left: 20px !important;
 }
+.mat-form-field{
+    width: -webkit-fill-available !important;
+    padding-left: 20px !important;
+}

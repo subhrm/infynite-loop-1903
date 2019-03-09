@@ -10,26 +10,50 @@ import { SecurityService } from '../security.service';
 })
 export class GuestAccessComponent implements OnInit {
   statusMessage: string;
+  flag = false;
   visitorType:any[];
   visitorTypes = [
     {
-      code: 'B1GUEST',
-      value: 'Can Visit Only Building 1'
-    },{
-      code: 'B2GUEST',
-      value: 'Can Visist Only Building 2'
-    },{
-      code: 'B3GUEST',
-      value: 'Can Visist Only Building 3'
-    },{
-      code: 'EMPLOYEE',
-      value: 'Employee, Can visit all buildings'
-    },{
-      code: 'GEN',
-      value: 'General Visitor.Restricted Access'
+      "code": "CLIENT",
+      "value": "Client"
+    },
+    {
+      "code": "CONF_ATN",
+      "value": "Conference Attendee"
+    },
+    {
+      "code": "EMPLOYEE",
+      "value": "Employee"
+    },
+    {
+      "code": "FAMILY",
+      "value": "Family Member of Employee"
+    },
+    {
+      "code": "GUEST",
+      "value": "Guest"
+    },
+    {
+      "code": "INTERV",
+      "value": "Interviewee"
+    },
+    {
+      "code": "NEW_JOINEE",
+      "value": "New Joinee"
+    },
+    {
+      "code": "VENDOR",
+      "value": "Vendor"
+    },
+    {
+      "code": "VIP",
+      "value": "Vip"
+    },
+    {
+      "code": "VISITOR",
+      "value": "Visitor"
     }
-
-  ]
+  ];
   name:string;
   email:string;
   mobile:string;
@@ -101,14 +125,25 @@ export class GuestAccessComponent implements OnInit {
       "OUT":this.outTime
     };
     
-    this.secService.requestGuestAccess(visitorPayload)
+    try{
+      this.secService.requestGuestAccess(visitorPayload)
     .subscribe(response =>{
+      this.flag = true;
       this.imageSource = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' 
       + response['data']['Photo']);
       this.qrSource = this._sanitizer.bypassSecurityTrustResourceUrl(response['data']['QR_code'])
       console.log(response);
       this.visitorName = response["data"].Name;
     });
+    }
+    catch(error){
+      alert(error);
+    }
+  }
+
+  toggle(){
+    this.flag =false;
+    window.location.reload();
   }
 
 }

@@ -22,8 +22,10 @@
         <!-- <mat-form-field>
           <input matInput placeholder="Photo" type="file" required>
         </mat-form-field> -->
-        <input (change)="validateFile()" type="file" accept="image/png, image/jpeg" id="visitorImage">
-    
+      <div class="file-input">
+          <input  (change)="validateFile()" type="file" accept="image/png, image/jpeg" id="visitorImage"/>
+      </div>
+      
         <mat-form-field>
           <input matInput placeholder="Referred By" [(ngModel)]="referredBy" required>
         </mat-form-field>
@@ -41,9 +43,30 @@
         </mat-card-actions>
     </div>
 
-    <div style="width: 50%">
-        <span>Name :  {{visitorName}}</span>
-        <img [src]="imageSource" alt="pic" style="width: 200px; height: 200px;"/>
+ 
+</div>
+<div class="modal-container" *ngIf="flag==true">
+    <div class="modal-elem" style="width: 400px; height: 600px;">
+      <div style="width: 100%; height: 30px; text-align: right; padding-top: 5px;"><span style="margin-top: 20px; border: 1px solid black;
+        padding: 0px 4px;  background: white; border-radius: 50%;" (click)='toggle()'>X</span></div>
+      <div class="name">
+        <span >Your request has been submitted, please find below the details:</span>
+      </div>
+      <div class="card">
+        <div class="inline-elem" style="display:inline-flex; width: 100%">
+              <span><strong>{{visitorName}}</strong></span>
+          </div>
+          <div class="inline-elem" style="display:inline-flex; width: 100%">
+              <img [src]="imageSource" alt="pic" style="width: 200px; height: 200px;"/>
+          </div>
+        <div class="inline-elem" style="width: 100%">
         <img [src]="qrSource" alt="QR" style="width: 200px;height: 200px;" />
+        </div>
+      </div>
+      <div style="padding: 5px 5px; margin: 10px 10px;">
+          <mat-card-actions>
+              <button mat-raised-button (click)="toggle()" color="secondary">Okay</button>
+          </mat-card-actions>
+      </div>
     </div>
 </div>
