@@ -65,7 +65,7 @@ export class GuestAccessComponent implements OnInit {
       "Email":this.email,
       "Photo":this.photoID,
       "Mobile":this.mobile,
-      "Visitor Type":this.selectedVisitorType,
+      "VisitorType":this.selectedVisitorType,
       "Reffered":this.referredBy,
       "IN":this.inTime,
       "OUT":this.outTime
