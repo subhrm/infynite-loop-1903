@@ -7,6 +7,7 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
@@ -20,7 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".CameraPhoto"></activity>
+        <activity android:name=".VisitorsInside"></activity>
+        <activity android:name=".BarcodeScanner" />
+        <activity android:name=".CameraPhoto" />
         <activity android:name=".SecurityStaffDashboard" />
         <activity android:name=".VerifyPhoto" />
 
@@ -30,7 +33,6 @@
 
         <activity android:name=".ImageViewer" />
         <activity android:name=".VisitorProfile" />
-        <activity android:name=".BarcodeScanner" />
         <activity
             android:name=".AdminDashboard"
             android:windowSoftInputMode="stateAlwaysHidden" />

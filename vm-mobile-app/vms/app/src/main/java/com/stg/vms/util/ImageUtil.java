@@ -1,5 +1,6 @@
 package com.stg.vms.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -7,6 +8,8 @@ import android.media.ExifInterface;
 import android.util.Base64;
 import android.util.Log;
 
+import com.rohitarya.picasso.facedetection.transformation.FaceCenterCrop;
+import com.rohitarya.picasso.facedetection.transformation.core.PicassoFaceDetector;
 import com.stg.vms.data.AppConstants;
 
 import java.io.ByteArrayOutputStream;
@@ -84,11 +87,20 @@ public class ImageUtil {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 85, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        String result = Base64.encodeToString(byteArray, Base64.DEFAULT);;
+        Log.e("ImageUtil", "Bitmap size: "+byteArray.length+" Base64 size: "+result.getBytes().length);
+        return result;
     }
 
     public static Bitmap base642Bitmap(String encodedImage) {
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+    }
+
+    public static Bitmap cropImage(Context context, Bitmap original, int width, int height) {
+        PicassoFaceDetector.initialize(context);
+        Bitmap result = new FaceCenterCrop(width, height).transform(Bitmap.createBitmap(original));
+        PicassoFaceDetector.releaseDetector();
+        return result;
     }
 }

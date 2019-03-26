@@ -25,4 +25,6 @@
     <string name="lbl_reject">Reject</string>
     <string name="lbl_approve">Approve</string>
     <string name="lbl_photo_match_by_system">Photo Match by System :</string>
+    <string name="lbl_not_approved">Not yet verified !</string>
+    <string name="lbl_visit_completed">Visit Completed !</string>
 </resources>

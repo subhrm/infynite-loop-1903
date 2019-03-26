@@ -14,6 +14,7 @@ public class AppMessages {
     public static final String LBL_EXPECTED_ENTRY = "Expected Entry";
     public static final String LBL_EXPECTED_EXIT = "Expected Exit";
     public static final String LBL_ACTUAL_ENTRY = "Actual Entry";
+    public static final String LBL_ACTUAL_EXIT = "Actual Exit";
 
     public static final String INPUT_VALIDATION_ERROR_EMAIL = "Please enter valid email id.";
     public static final String INPUT_VALIDATION_ERROR_PASSWORD = "Please enter password.";

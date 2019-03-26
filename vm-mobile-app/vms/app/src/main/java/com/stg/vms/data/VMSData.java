@@ -27,8 +27,6 @@ public class VMSData implements Serializable {
     public void clear() {
         visitorPhoto = null;
         newPhoto = null;
-        userProfile = null;
-        accessToken = null;
         visitorId = null;
         encrypted = false;
         searchByPhoto = false;

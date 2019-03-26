@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,23 +16,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.stg.vms.data.AppConstants;
 import com.stg.vms.data.AppMessages;
 import com.stg.vms.data.VMSData;
 import com.stg.vms.model.LocationAccessRequest;
+import com.stg.vms.model.LocationAccessResponse;
 import com.stg.vms.model.SearchByPhotoRequest;
 import com.stg.vms.model.SearchByPhotoResponse;
 import com.stg.vms.model.ServiceResponse;
 import com.stg.vms.service.VMSService;
 import com.stg.vms.util.ImageUtil;
 import com.stg.vms.util.VMSDialog;
+import com.stg.vms.util.VMSUtil;
+
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SecurityStaffDashboard extends AppCompatActivity {
     private static final String TAG = "SecurityStaffDashboard";
     private static final int REQUEST_SCAN_QR_CODE = 1, REQUEST_CAMERA_PHOTO = 2;
     private EditText visitorId;
-    private View loader, msgContainer;
-    private TextView userMessage;
+    private View loader, msgContainer, profContainer;
+    private TextView userMessage, name, visitorType, access;
+    private ImageView visitorImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +54,13 @@ public class SecurityStaffDashboard extends AppCompatActivity {
         userMessage = findViewById(R.id.stf_lbl_msg);
         loader.setVisibility(View.GONE);
         msgContainer.setVisibility(View.GONE);
+        profContainer = findViewById(R.id.stf_prof_container);
+        name = findViewById(R.id.stf_visitorName);
+        visitorType = findViewById(R.id.stf_visitorType);
+        access = findViewById(R.id.stf_access);
+        visitorImage = findViewById(R.id.stf_visitorImg);
+
+        profContainer.setVisibility(View.GONE);
         btnVisitorId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,24 +155,38 @@ public class SecurityStaffDashboard extends AppCompatActivity {
     }
 
     private void retrieveVisitorProfile(String visitorId, int encrypted) {
-        Toast.makeText(this, "VisitorId: " + visitorId, Toast.LENGTH_LONG).show();
+        profContainer.setVisibility(View.GONE);
         loader.setVisibility(View.VISIBLE);
-        VMSService.locationAccess(new LocationAccessRequest(visitorId, VMSData.getInstance().getUserProfile().getUserId(), encrypted), new VMSService.Callback<ServiceResponse<Object>>() {
+        VMSUtil.hideKeyboard(this);
+        VMSService.locationAccess(new LocationAccessRequest(visitorId, VMSData.getInstance().getUserProfile().getUserId(), encrypted), new VMSService.Callback<LocationAccessResponse>() {
             @Override
-            public void onSuccess(ServiceResponse<Object> data) {
-                userMessage.setText(data.getMessage());
-                if (data.getStatus() == AppConstants.SERVICE_STATUS_ERROR) {
-                    userMessage.setTextColor(Color.RED);
+            public void onSuccess(LocationAccessResponse data) {
+                Log.i(this.getClass().getSimpleName(), "Location Access Resp: "+ new Gson().toJson(data));
+                String text = "";
+                if (data.isAllowed()) {
+                    userMessage.setTextColor(ContextCompat.getColor(SecurityStaffDashboard.this, R.color.colorSuccess));
+                    text = VMSUtil.extractFirstName(data.getName())+" has access to "+data.getCurrentLocation()+" !";
                 } else {
-                    userMessage.setTextColor(Color.GREEN);
+                    userMessage.setTextColor(ContextCompat.getColor(SecurityStaffDashboard.this, R.color.colorError));
+                    text = VMSUtil.extractFirstName(data.getName())+" doesn't have access to "+data.getCurrentLocation()+" !";
                 }
+                userMessage.setText(text);
                 msgContainer.setVisibility(View.VISIBLE);
+
+                Picasso.get().load(data.getPhoto()).placeholder(R.drawable.ic_person).into(visitorImage);
+                name.setText(data.getName());
+                visitorType.setText(data.getVisitorType());
+                String visitorAccess = TextUtils.join("\n", data.getAllowedLocations());
+                access.setText(visitorAccess);
+                profContainer.setVisibility(View.VISIBLE);
                 loader.setVisibility(View.GONE);
             }
 
             @Override
             public void onError(String errorMsg) {
-                VMSDialog.showErrorDialog(SecurityStaffDashboard.this, "Error", errorMsg, false);
+                userMessage.setTextColor(Color.RED);
+                userMessage.setText(errorMsg);
+                msgContainer.setVisibility(View.VISIBLE);
                 loader.setVisibility(View.GONE);
             }
 

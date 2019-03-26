@@ -103,14 +103,79 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp">
 
-            <TextView
-                android:id="@+id/stf.lbl.msg"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:text="TextView"
-                android:textSize="18sp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/stf.lbl.msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="TextView"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:id="@+id/stf.prof.container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/stf.visitorImg"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@color/lightBackground"
+                        android:contentDescription="Visitor"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_weight="2"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/stf.visitorName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ravi Kant Pandey"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/stf.visitorType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Client"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="0dp"
+                            android:text="Access To"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/stf.access"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="TextView\nTextView2" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
         </android.support.v7.widget.CardView>
 
         <Button
@@ -135,7 +200,8 @@
         android:background="@color/darkTransparentBg"
         android:elevation="20dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ProgressBar
             style="?android:attr/progressBarStyle"

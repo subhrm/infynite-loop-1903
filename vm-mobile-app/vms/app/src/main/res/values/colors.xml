@@ -7,4 +7,6 @@
     <color name="bgColorEnd">#1fcbd0</color>
     <color name="lightBackground">#eeeeee</color>
     <color name="darkTransparentBg">#41000000</color>
+    <color name="colorSuccess">#11770E</color>
+    <color name="colorError">#E20E0E</color>
 </resources>

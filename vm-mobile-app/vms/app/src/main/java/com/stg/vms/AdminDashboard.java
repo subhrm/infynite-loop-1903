@@ -1,8 +1,13 @@
 package com.stg.vms;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -34,7 +39,7 @@ import java.util.List;
 
 public class AdminDashboard extends AppCompatActivity {
     private static final String TAG = "AppCompatActivity";
-    private static final int REQUEST_SCAN_QR_CODE = 1, REQUEST_CAMERA_PHOTO = 2;
+    private static final int REQUEST_SCAN_QR_CODE = 1, REQUEST_CAMERA_PHOTO = 2, MY_CAMERA_REQUEST_CODE = 100;
     private boolean reloadVisitors = true, activityForResult = false;
     private TextView totalVisitors, visitorInside, visitorRemaining, lblVisitorsLastDays;
     private EditText visitorId;
@@ -66,6 +71,13 @@ public class AdminDashboard extends AppCompatActivity {
         visitorsToday.setVisibility(View.GONE);
         visitorsLastDay.setVisibility(View.GONE);
 
+        visitorInside.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AdminDashboard.this, VisitorsInside.class));
+            }
+        });
+
         btnVisitorId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,8 +90,13 @@ public class AdminDashboard extends AppCompatActivity {
         barcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activityForResult = true;
-                startActivityForResult(new Intent(AdminDashboard.this, BarcodeScanner.class), REQUEST_SCAN_QR_CODE);
+                if (ContextCompat.checkSelfPermission(AdminDashboard.this, Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_DENIED)
+                    ActivityCompat.requestPermissions(AdminDashboard.this, new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+                else {
+                    activityForResult = true;
+                    startActivityForResult(new Intent(AdminDashboard.this, BarcodeScanner.class), REQUEST_SCAN_QR_CODE);
+                }
             }
         });
 
@@ -119,7 +136,6 @@ public class AdminDashboard extends AppCompatActivity {
                     Toast.makeText(this, AppMessages.PHOTO_SAVE_ERROR, Toast.LENGTH_LONG).show();
                     return;
                 }
-                //Toast.makeText(this, "Photo Path: " + currentPhotoPath, Toast.LENGTH_LONG).show();
                 loader.setVisibility(View.VISIBLE);
                 Thread thread = new Thread(new Runnable() {
                     @Override
@@ -178,11 +194,7 @@ public class AdminDashboard extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        VMSData.getInstance().setVisitorProfile(null);
-        VMSData.getInstance().setNewPhoto(null);
-        VMSData.getInstance().setVisitorPhoto(null);
-        VMSData.getInstance().setSearchByPhoto(false);
+        VMSData.getInstance().clear();
         InputValidation.hideKeyboard(AdminDashboard.this);
         if (!reloadVisitors)
             return;
@@ -232,5 +244,18 @@ public class AdminDashboard extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_CAMERA_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                activityForResult = true;
+                startActivityForResult(new Intent(AdminDashboard.this, BarcodeScanner.class), REQUEST_SCAN_QR_CODE);
+            } else {
+                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

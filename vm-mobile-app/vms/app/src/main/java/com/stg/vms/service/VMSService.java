@@ -8,20 +8,24 @@ import com.stg.vms.data.AppConstants;
 import com.stg.vms.data.AppMessages;
 import com.stg.vms.data.VMSData;
 import com.stg.vms.model.ApproveVisitorRequest;
+import com.stg.vms.model.InsideVisitor;
 import com.stg.vms.model.LocationAccessRequest;
+import com.stg.vms.model.LocationAccessResponse;
 import com.stg.vms.model.LoginRequest;
 import com.stg.vms.model.LoginResponse;
 import com.stg.vms.model.SearchByPhotoRequest;
 import com.stg.vms.model.SearchByPhotoResponse;
 import com.stg.vms.model.ServiceResponse;
+import com.stg.vms.model.UpdateStatusRequest;
 import com.stg.vms.model.VerifyPhotoRequest;
 import com.stg.vms.model.VerifyPhotoResponse;
 import com.stg.vms.model.VisitorProfileRequest;
 import com.stg.vms.model.VisitorProfileResponse;
 import com.stg.vms.model.VisitorsResponse;
 
+import java.util.List;
+
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class VMSService {
@@ -147,21 +151,23 @@ public class VMSService {
         });
     }
 
-    public static void locationAccess(LocationAccessRequest request, final Callback<ServiceResponse<Object>> callback) {
-        Call<ServiceResponse<Object>> call = serviceInterface.locationAccess(request, VMSData.getInstance().getAccessToken());
-        call.enqueue(new retrofit2.Callback<ServiceResponse<Object>>() {
+    public static void locationAccess(LocationAccessRequest request, final Callback<LocationAccessResponse> callback) {
+        Call<ServiceResponse<LocationAccessResponse>> call = serviceInterface.locationAccess(request, VMSData.getInstance().getAccessToken());
+        call.enqueue(new retrofit2.Callback<ServiceResponse<LocationAccessResponse>>() {
             @Override
-            public void onResponse(Call<ServiceResponse<Object>> call, Response<ServiceResponse<Object>> response) {
+            public void onResponse(Call<ServiceResponse<LocationAccessResponse>> call, Response<ServiceResponse<LocationAccessResponse>> response) {
                 if (response == null || response.body() == null)
                     callback.onError(AppMessages.SERVICE_CALL_ERROR);
                 else if (response.body().getStatus() == AppConstants.SERVICE_STATUS_LOGIN_ERROR)
                     callback.onLoginError(AppMessages.SERVICE_CALL_AUTH_ERROR);
+                else if (response.body().getStatus() == AppConstants.SERVICE_STATUS_ERROR)
+                    callback.onError(response.body().getMessage());
                 else
-                    callback.onSuccess(response.body());
+                    callback.onSuccess(response.body().getData());
             }
 
             @Override
-            public void onFailure(Call<ServiceResponse<Object>> call, Throwable t) {
+            public void onFailure(Call<ServiceResponse<LocationAccessResponse>> call, Throwable t) {
                 callback.onError(AppMessages.SERVICE_CALL_ERROR);
             }
         });
@@ -182,6 +188,53 @@ public class VMSService {
 
             @Override
             public void onFailure(Call<ServiceResponse<Object>> call, Throwable t) {
+                callback.onError(AppMessages.SERVICE_CALL_ERROR);
+            }
+        });
+    }
+
+    public static void updateStatus(UpdateStatusRequest request, final Callback<ServiceResponse<Object>> callback) {
+        Call<ServiceResponse<Object>> call = serviceInterface.updateStatus(request, VMSData.getInstance().getAccessToken());
+        call.enqueue(new retrofit2.Callback<ServiceResponse<Object>>() {
+            @Override
+            public void onResponse(Call<ServiceResponse<Object>> call, Response<ServiceResponse<Object>> response) {
+                if (response == null || response.body() == null)
+                    callback.onError(AppMessages.SERVICE_CALL_ERROR);
+                else if (response.body().getStatus() == AppConstants.SERVICE_STATUS_LOGIN_ERROR)
+                    callback.onLoginError(AppMessages.SERVICE_CALL_AUTH_ERROR);
+                else
+                    callback.onSuccess(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ServiceResponse<Object>> call, Throwable t) {
+                callback.onError(AppMessages.SERVICE_CALL_ERROR);
+            }
+        });
+    }
+
+    public static void getInsideVisitors(final Callback<List<InsideVisitor>> callback) {
+        if (TextUtils.isEmpty(VMSData.getInstance().getAccessToken())) {
+            callback.onLoginError(AppMessages.SERVICE_CALL_AUTH_ERROR);
+            return;
+        }
+        Call<ServiceResponse<List<InsideVisitor>>> call = serviceInterface.visitorsInside(VMSData.getInstance().getAccessToken());
+        call.enqueue(new retrofit2.Callback<ServiceResponse<List<InsideVisitor>>>() {
+            @Override
+            public void onResponse(Call<ServiceResponse<List<InsideVisitor>>> call, Response<ServiceResponse<List<InsideVisitor>>> response) {
+                ServiceResponse<List<InsideVisitor>> responseData = response.body();
+                if (responseData != null && responseData.getStatus() == AppConstants.SERVICE_STATUS_SUCCESS) {
+                    callback.onSuccess(responseData.getData());
+                } else if (responseData != null && responseData.getStatus() == AppConstants.SERVICE_STATUS_LOGIN_ERROR) {
+                    callback.onLoginError(AppMessages.SERVICE_CALL_AUTH_ERROR);
+                } else {
+                    callback.onError(responseData != null ? responseData.getMessage() : AppMessages.SERVICE_CALL_ERROR);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ServiceResponse<List<InsideVisitor>>> call, Throwable t) {
+                Log.e(TAG, "Error in service call.", t);
                 callback.onError(AppMessages.SERVICE_CALL_ERROR);
             }
         });

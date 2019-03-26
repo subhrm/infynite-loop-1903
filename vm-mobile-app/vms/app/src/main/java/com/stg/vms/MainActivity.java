@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     VMSData.getInstance().clear();
+                    VMSData.getInstance().setAccessToken(null);
+                    VMSData.getInstance().setUserProfile(null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

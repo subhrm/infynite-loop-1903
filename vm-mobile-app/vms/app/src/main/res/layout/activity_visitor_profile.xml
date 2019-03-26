@@ -161,6 +161,39 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/prof.lbl.visitComplete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/lbl_visit_completed"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/prof.lbl.notApproved"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/lbl_not_approved"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/prof.btn.approve"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_corner_button_green"
+                android:drawableStart="@drawable/ic_check"
+                android:drawablePadding="10dp"
+                android:elevation="5dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/lbl_approve"
+                android:textColor="@android:color/white" />
+
             <Button
                 android:id="@+id/prof.btn.verifyPhoto"
                 android:layout_width="200dp"
@@ -247,7 +280,8 @@
         android:background="@color/darkTransparentBg"
         android:elevation="20dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ProgressBar
             style="?android:attr/progressBarStyle"

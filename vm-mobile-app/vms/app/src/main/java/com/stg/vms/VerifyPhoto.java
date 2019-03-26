@@ -53,12 +53,32 @@ public class VerifyPhoto extends AppCompatActivity {
         Button btnApprove = findViewById(R.id.vp_btn_approve);
         Button btnReject = findViewById(R.id.vp_btn_reject);
 
+        existingPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(VerifyPhoto.this, ImageViewer.class);
+                intent.putExtra(AppConstants.VIEW_IMAGE_REQUEST_KEY, AppConstants.VIEW_IMAGE_REQUEST_EXISTING);
+                startActivity(intent);
+            }
+        });
+
+        newPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (VMSData.getInstance().getNewPhoto() == null || VMSData.getInstance().getNewPhoto().isEmpty())
+                    return;
+                Intent intent = new Intent(VerifyPhoto.this, ImageViewer.class);
+                intent.putExtra(AppConstants.VIEW_IMAGE_REQUEST_KEY, AppConstants.VIEW_IMAGE_REQUEST_NEW);
+                startActivity(intent);
+            }
+        });
+
         loader.setVisibility(View.VISIBLE);
         btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(VerifyPhoto.this);
-                dialogBuilder.setTitle("Identity Verificaton");
+                dialogBuilder.setTitle("Identity Verification");
                 dialogBuilder.setMessage("Have you verified Id proof of visitor?");
                 dialogBuilder.setCancelable(true);
                 dialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -89,9 +109,8 @@ public class VerifyPhoto extends AppCompatActivity {
                 @Override
                 public void run() {
                     existingPhoto.setImageBitmap(ImageUtil.base642Bitmap(VMSData.getInstance().getVisitorPhoto()));
-                    newPhoto.setImageBitmap(ImageUtil.base642Bitmap(VMSData.getInstance().getNewPhoto()));
+                    newPhoto.setImageBitmap(ImageUtil.cropImage(getApplicationContext(), ImageUtil.base642Bitmap(VMSData.getInstance().getNewPhoto()), AppConstants.PHOTO_WIDTH, AppConstants.PHOTO_WIDTH));
                     verifyPhoto();
-
                 }
             });
             thread.start();
@@ -115,10 +134,9 @@ public class VerifyPhoto extends AppCompatActivity {
                     public void run() {
                         final Bitmap imageBitmap = ImageUtil.processPhoto(currentPhotoPath);
                         existingPhoto.setImageBitmap(ImageUtil.base642Bitmap(VMSData.getInstance().getVisitorPhoto()));
-                        newPhoto.setImageBitmap(imageBitmap);
+                        newPhoto.setImageBitmap(ImageUtil.cropImage(getApplicationContext(), imageBitmap, AppConstants.PHOTO_WIDTH, AppConstants.PHOTO_WIDTH));
                         VMSData.getInstance().setNewPhoto(ImageUtil.bitmap2Base64(imageBitmap));
                         verifyPhoto();
-
                     }
                 });
                 thread.start();
@@ -133,7 +151,9 @@ public class VerifyPhoto extends AppCompatActivity {
         VMSService.verifyPhoto(new VerifyPhotoRequest(VMSData.getInstance().getVisitorPhoto(), VMSData.getInstance().getNewPhoto()), new VMSService.Callback<Double>() {
             @Override
             public void onSuccess(Double data) {
-                DecimalFormat df = new DecimalFormat(".#");
+                if (data == null)
+                    data = (double) 0;
+                DecimalFormat df = new DecimalFormat("##.#");
                 String value = String.valueOf(df.format(data)) + "%";
                 matchPercent.setText(value);
                 mainContainer.setVisibility(View.VISIBLE);
@@ -157,7 +177,7 @@ public class VerifyPhoto extends AppCompatActivity {
 
     private void approveVisitor() {
         loader.setVisibility(View.VISIBLE);
-        VMSService.approveVisitor(new ApproveVisitorRequest(String.valueOf(VMSData.getInstance().getVisitorProfile().getVisitorId()), VMSData.getInstance().getNewPhoto()), new VMSService.Callback<ServiceResponse<Object>>() {
+        VMSService.approveVisitor(new ApproveVisitorRequest(VMSData.getInstance().getVisitorProfile().getVisitorId(), VMSData.getInstance().getNewPhoto(), VMSData.getInstance().getUserProfile().getUserId()), new VMSService.Callback<ServiceResponse<Object>>() {
             @Override
             public void onSuccess(ServiceResponse<Object> data) {
                 if (data.getStatus() == AppConstants.SERVICE_STATUS_SUCCESS) {

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.aryarohit07:picasso-facedetection-transformation:0.3.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/picasso-facedetection-transformation-0.3.0.aar/d9af12ac25bb51ca1a35f0b7ad09a770/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/picasso-facedetection-transformation-0.3.0.aar/d9af12ac25bb51ca1a35f0b7ad09a770/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.aryarohit07/picasso-facedetection-transformation/0.3.0/c923698a119469c87f900231f93cebbc549e61c7/picasso-facedetection-transformation-0.3.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

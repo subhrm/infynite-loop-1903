@@ -11,7 +11,9 @@ public class VisitorProfileResponse {
     private String expectedEntry;
     private String actualEntry;
     private String expectedExit;
+    private String actualExit;
     private int visitorStatus;
+    private int spotRegistration;
 
     public long getVisitorId() {
         return visitorId;
@@ -93,11 +95,27 @@ public class VisitorProfileResponse {
         this.expectedExit = expectedExit;
     }
 
+    public String getActualExit() {
+        return actualExit;
+    }
+
+    public void setActualExit(String actualExit) {
+        this.actualExit = actualExit;
+    }
+
     public int getVisitorStatus() {
         return visitorStatus;
     }
 
     public void setVisitorStatus(int visitorStatus) {
         this.visitorStatus = visitorStatus;
+    }
+
+    public int getSpotRegistration() {
+        return spotRegistration;
+    }
+
+    public void setSpotRegistration(int spotRegistration) {
+        this.spotRegistration = spotRegistration;
     }
 }

@@ -3,54 +3,47 @@ package com.stg.vms;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.SparseArray;
+import android.util.Log;
 
-import com.google.android.gms.vision.barcode.Barcode;
+import com.google.zxing.Result;
 
-import java.util.List;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-import info.androidhive.barcode.BarcodeReader;
-
-public class BarcodeScanner extends AppCompatActivity implements BarcodeReader.BarcodeReaderListener {
+public class BarcodeScanner extends Activity implements ZXingScannerView.ResultHandler {
     public static final String BAR_CODE_DATA = "BAR_CODE_DATA";
-    BarcodeReader barcodeReader;
+    private final String TAG = BarcodeScanner.class.getSimpleName();
+    private ZXingScannerView mScannerView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_barcode_scanner);
-        barcodeReader = (BarcodeReader) getSupportFragmentManager().findFragmentById(R.id.barcode_scanner);
+    public void onCreate(Bundle state) {
+        super.onCreate(state);
+        mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
+        setContentView(mScannerView);                // Set the scanner view as the content view
+        mScannerView.setKeepScreenOn(true);
     }
 
     @Override
-    public void onScanned(Barcode barcode) {
-        barcodeReader.playBeep();
-        /*VMSData.getOurInstance().setQrCodeData(barcode.displayValue);
-        startActivity(new Intent(BarcodeScanner.this, VisitorProfile.class));*/
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
+        mScannerView.startCamera();          // Start camera on resume
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mScannerView.stopCamera();           // Stop camera on pause
+    }
+
+    @Override
+    public void handleResult(Result rawResult) {
+        // Do something with the result here
+        Log.v(TAG, rawResult.getText()); // Prints scan results
+        Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
+
         Intent intent = new Intent();
-        intent.putExtra(BAR_CODE_DATA, barcode.displayValue);
+        intent.putExtra(BAR_CODE_DATA, rawResult.getText());
         setResult(Activity.RESULT_OK, intent);
         finish();
-    }
-
-    @Override
-    public void onScannedMultiple(List<Barcode> barcodes) {
-
-    }
-
-    @Override
-    public void onBitmapScanned(SparseArray<Barcode> sparseArray) {
-
-    }
-
-    @Override
-    public void onScanError(String errorMessage) {
-
-    }
-
-    @Override
-    public void onCameraPermissionDenied() {
-
     }
 }

@@ -12,7 +12,7 @@ public class AppConstants {
     public static final String VISIBLE_DATE_TIME_FORMAT = "dd MMM yyyy HH:mm";
 
     // Rest service related
-    public static final String BASE_SERVICE_URL = "http://13.58.89.12:3000/";
+    public static final String BASE_SERVICE_URL = "https://stg-vms.herokuapp.com/";
     public static final String BASE_SERVICE_URL_SEARCH_BY_PHOTO = "http://35.207.12.149:8000/api/";
 
     public static final String SERVICE_HEADER_TOKEN = "access-token";
@@ -27,6 +27,10 @@ public class AppConstants {
     public static final int VISITOR_STATUS_INSIDE = 1;
     public static final int VISITOR_STATUS_INITIAL = 0;
     public static final int VISITOR_STATUS_TEMP_OUT = 2;
+    public static final int VISITOR_STATUS_PENDING_APPROVAL = -2;
+    public static final int VISITOR_STATUS_VISIT_COMPLETED = -1;
+    public static final int VISITOR_SPOT_REGISTRATION_YES = 1;
+    public static final int VISITOR_SPOT_REGISTRATION_NO = 0;
 
     public static final String VIEW_IMAGE_REQUEST_KEY = "VIEW_IMAGE_REQUEST";
     public static final String VIEW_IMAGE_REQUEST_EXISTING = "EXISTING";
