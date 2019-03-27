@@ -71,7 +71,7 @@ def get_photos(id=0):
 
 def get_all_visitor_photos():
     '''
-        Get photos of all visitors
+        Get photos of all visitors whose status is 0 
     '''
 
     logger.info("Trying to fetch all visitor images")
@@ -81,10 +81,11 @@ def get_all_visitor_photos():
     try:
         cursor = cnx.cursor()
         query = '''
-        select v.id, i.image_data
-        from visitor v,
-            images i
-        where v.uploaded_photo = i.image_id;
+            select v.id, i.image_data
+            from visitor v,
+                 images i
+            where v.status = 0
+            and   v.uploaded_photo = i.image_id;
         '''
         cursor.execute(query)
         res = cursor.fetchall()
